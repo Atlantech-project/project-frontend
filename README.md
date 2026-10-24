@@ -1,92 +1,91 @@
-<div align="center">
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset=".github/assets/logo-dark.png">
+    <img src=".github/assets/logo-light.png" alt="ATLANTECH, Intelligent Port Operations" width="340">
+  </picture>
+</p>
 
-# 🖥️ ATLANTECH — Web Dashboard
+<p align="center"><b>Web Dashboard</b> &nbsp;|&nbsp; the whole port on one screen</p>
+<p align="center"><i>Smarter coordination. Stronger ports.</i></p>
 
-### Port-Wide Operations Dashboard
+<p align="center">
+  <img src="https://img.shields.io/badge/status-in_development-A58D66?style=flat-square&labelColor=083A4F" alt="status">
+  <img src="https://img.shields.io/badge/part_of-ATLANTECH-407E8C?style=flat-square&labelColor=083A4F" alt="part of ATLANTECH">
+</p>
 
-![Status](https://img.shields.io/badge/status-in%20development-A58D66?style=for-the-badge)
-![Part of](https://img.shields.io/badge/part%20of-ATLANTECH-083A4F?style=for-the-badge)
+<p align="center">
+  <img src="https://img.shields.io/badge/Vue.js-framework-407E8C?style=flat-square&logo=vuedotjs&logoColor=E5E1DD&labelColor=083A4F" alt="Vue.js">
+  <img src="https://img.shields.io/badge/JavaScript-ES-407E8C?style=flat-square&logo=javascript&logoColor=E5E1DD&labelColor=083A4F" alt="JavaScript">
+  <img src="https://img.shields.io/badge/HTML5-markup-407E8C?style=flat-square&logo=html5&logoColor=E5E1DD&labelColor=083A4F" alt="HTML5">
+  <img src="https://img.shields.io/badge/CSS3-styles-407E8C?style=flat-square&logo=css&logoColor=E5E1DD&labelColor=083A4F" alt="CSS3">
+  <img src="https://img.shields.io/badge/REST-HTTPS-407E8C?style=flat-square&labelColor=083A4F" alt="REST">
+  <img src="https://img.shields.io/badge/SSE-realtime-407E8C?style=flat-square&labelColor=083A4F" alt="SSE">
+</p>
 
-![Vue.js](https://img.shields.io/badge/Vue.js-4FC08D?style=flat-square&logo=vuedotjs&logoColor=white)
-![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black)
-![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=flat-square&logo=html5&logoColor=white)
-![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=flat-square&logo=css3&logoColor=white)
-![REST API](https://img.shields.io/badge/REST%20API-083A4F?style=flat-square)
-![SSE](https://img.shields.io/badge/SSE-realtime-407E8C?style=flat-square)
+<img src=".github/assets/wave.svg" width="100%" alt="">
 
-</div>
+## What lives here
 
----
+This is the dashboard where port authority staff, terminal planners, marine safety officers and administrators spend their day. It runs inside the port's own network, talks to the Laravel Port API over HTTPS and stays live through **Server-Sent Events**, so a recommendation shows up the moment it's ready, without anyone hitting refresh.
 
-## 📖 Overview
+## What you can do with it
 
-The web dashboard is the main workspace for **Port Authority staff, terminal planners, marine safety officers and administrators**. It runs inside the port LAN and talks to the Laravel Port API over HTTPS, receiving live updates through **Server-Sent Events**.
+- **Berthing requests.** Submit, review, approve and follow each request through its lifecycle.
+- **Entry windows.** See the safe windows and blocked periods from AI Part 1, then confirm one. This is the first human checkpoint.
+- **Recommendations.** Compare the ranked berth, tug and pilot options side by side, read why each was chosen, then confirm the plan or override any part of it. This is the second checkpoint.
+- **BAPLIE and the yard.** Upload stowage files and review yard placement for the Container Terminal.
+- **Tracking.** Watch plans being carried out and catch deviations as they happen.
+- **People and access.** Users, roles and devices, with each terminal's data kept private from the others.
+- **License status.** A clear banner whenever the port is in `SETUP` or `READ_ONLY` mode.
 
-### Key features
-- 📝 **Berthing requests** — submit, review, approve and track through every lifecycle status.
-- 🌊 **Entry windows** — review AI Part 1 feasible windows and blocked periods, then confirm (human gate 1).
-- ⚓ **Recommendations** — compare ranked berth / tug / pilot options with rationale, confirm or override (human gate 2).
-- 📦 **BAPLIE & yard** — upload BAPLIE files and review container-yard placement for the Container Terminal.
-- 📡 **Tracking & deviations** — follow plan execution and actual status in real time.
-- 👥 **Users, roles & devices** — RBAC with terminal-level data isolation.
-- 🪪 **License status** — `SETUP` / `FULL` / `READ_ONLY` mode banners.
+## Look and feel
 
----
+<p align="center">
+  <img src=".github/assets/palette.svg" width="640" alt="ATLANTECH palette: Deep Navy #083A4F, Muted Gold #A58D66, Light Teal #C0D5D6, Mid Teal #407E8C, Off-White #E5E1DD">
+</p>
 
-## 🎨 Brand
+| Token | Hex | Feels like |
+|---|---|---|
+| Deep Navy | `#083A4F` | trust, stability |
+| Muted Gold | `#A58D66` | value, progress |
+| Light Teal | `#C0D5D6` | clarity, balance |
+| Mid Teal | `#407E8C` | innovation, growth |
+| Off-White | `#E5E1DD` | simplicity, focus |
 
-| Color | Hex |
-|---|---|
-| Deep Navy | `#083A4F` |
-| Muted Gold | `#A58D66` |
-| Light Teal | `#C0D5D6` |
-| Mid Teal | `#407E8C` |
-| Off-White | `#E5E1DD` |
+Type is set in **Montserrat**, with **Inter** for dense data. Shapes are clean and geometric, with the wave motif used here and there and open, round-jointed icons. Use the identity, but please don't redraw the logo.
 
-**Typography:** Montserrat (primary) · Inter (secondary)
-
----
-
-## 🛠️ Tech Stack
+## Stack
 
 | Area | Technology |
 |---|---|
 | Framework | Vue.js |
-| Communication | REST over HTTPS · Server-Sent Events |
-| Backend | [ATLANTECH Port API](https://github.com/Atlantech-project/project-backend) (Laravel) |
+| Talking to the server | REST over HTTPS, Server-Sent Events |
+| Backend | [ATLANTECH Port API](https://github.com/Atlantech-project/project-backend) |
 
----
-
-## 🚀 Getting Started
+## Getting started
 
 ```bash
 git clone https://github.com/Atlantech-project/project-frontend.git
 cd project-frontend
 ```
 
-> Setup instructions will be added once the project is scaffolded.
+Setup steps will be added here once the project is scaffolded.
 
----
+## Neighbours
 
-## 🔗 Related Repositories
+[PortHub](https://github.com/Atlantech-project/PortHub) &middot;
+[project-backend](https://github.com/Atlantech-project/project-backend) &middot;
+[project-ai](https://github.com/Atlantech-project/project-ai) &middot;
+[project-mobile](https://github.com/Atlantech-project/project-mobile)
 
-| | Repository |
-|---|---|
-| ⚓ Umbrella | [PortHub](https://github.com/Atlantech-project/PortHub) |
-| ⚙️ Backend | [project-backend](https://github.com/Atlantech-project/project-backend) |
-| 🧠 AI | [project-ai](https://github.com/Atlantech-project/project-ai) |
-| 📱 Mobile | [project-mobile](https://github.com/Atlantech-project/project-mobile) |
+## Crew
 
-## 👥 Frontend Team
+**Mostafa Safy Mostafa Soliman**, Frontend Engineer<br>
+**Mostafa El-Hassanen El-Hassanen El-Sharawey**, Frontend Engineer<br>
+**Menna-Allah Maged Nabil Mohamed**, UI/UX Designer
 
-- **Mostafa Safy Mostafa Soliman** — Frontend Engineer
-- **Mostafa El-Hassanen El-Hassanen El-Sharawey** — Frontend Engineer
-- **Menna-Allah Maged Nabil Mohamed** — UI/UX Designer
+<img src=".github/assets/wave.svg" width="100%" alt="">
 
----
-
-<div align="center">
-
-⚓ *ATLANTECH — Intelligent Port Operations* · Mansoura University · Graduation Project 2026
-
-</div>
+<p align="center">
+  <sub>ATLANTECH, Intelligent Port Operations &middot; Mansoura University &middot; Graduation Project 2026</sub>
+</p>
