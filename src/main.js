@@ -4,8 +4,9 @@ import { VueQueryPlugin, QueryClient } from '@tanstack/vue-query'
 import PrimeVue from 'primevue/config'
 
 import App from './App.vue'
+import { loadConfig } from './app/config'
 import { router } from './app/router'
-import { i18n } from './i18n'
+import { i18n, setLocale } from './i18n'
 import './styles/main.css'
 
 const queryClient = new QueryClient({
@@ -14,6 +15,9 @@ const queryClient = new QueryClient({
     queries: { refetchOnWindowFocus: false, retry: 1 },
   },
 })
+
+const config = await loadConfig()
+setLocale(config.defaultLocale)
 
 createApp(App)
   .use(createPinia())

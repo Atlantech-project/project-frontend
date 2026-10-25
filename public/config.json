@@ -1,0 +1,12 @@
+{
+  "environment": "local",
+  "apiBaseUrl": "/api/v1",
+  "eventsUrl": "/api/v1/events",
+  "defaultLocale": "en",
+  "features": {
+    "licenseMode": false,
+    "nctRecommendations": false,
+    "timingRecommendations": false,
+    "modelRetraining": false
+  }
+}
