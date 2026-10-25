@@ -26,4 +26,4 @@ General = Home (P-17), Port state (P-18), Environmental conditions (P-21) and No
 
 1. **DEC-48** (field roles on the web) is still open. The config follows the recommended option: no web menu, and FE-021 shows P-20 with a "use the mobile app" message.
 2. **CT-03 role name.** The login example in CT-03 returns `"role": "PORT_AUTHORITY_STAFF"`, but the database role is `PORT_STAFF`. The config uses `PORT_STAFF`; the backend team should confirm.
-3. **NCT Administrator.** It uses the same `TERMINAL_ADMIN` code in an NCT unit, and the login response has no terminal type. It would see the CT pages until the API says which terminal type the user belongs to. The Screens spec has no NCT pages yet.
+3. ~~**NCT Administrator.**~~ **Closed** (Moustafa, 2026-10-25). The NCT Administrator shares the `TERMINAL_ADMIN` code, so a terminal admin sees the terminal pages whatever the terminal type. This is intended; no terminal-type filter is needed.
