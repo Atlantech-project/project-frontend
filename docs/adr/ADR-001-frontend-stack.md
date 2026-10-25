@@ -16,7 +16,7 @@ Things the stack has to handle, taken from the docs:
 
 - **Auth:** a Sanctum cookie session (`GET /sanctum/csrf-cookie`, then login with the `X-XSRF-TOKEN` header) and a forced password change (CT-03).
 - **API:** everything is under `/api/v1`, times are UTC ISO 8601, errors follow RFC 9457 with a `code` and `message_key`, every edit sends back a `version` token (a stale one gets a 409), and lists are paginated with `page` and `per_page` (CT-01).
-- **Types:** the OpenAPI 3.0 file in PortHub `contracts/openapi/port-api.yaml` is the source of truth (CT-02). FE-035 generates types from it.
+- **Types:** the OpenAPI 3.0 file in PortHub `contracts/openapi/port-api.yaml` is the source of truth (CT-02). FE-035 generates JSDoc type definitions from it, so editors still autocomplete API shapes.
 - **Realtime:** `GET /api/v1/events` (SSE) with `Last-Event-ID` replay. An event only says that something changed, and the page refetches the details over REST (CT-05).
 - **Roles:** menus and route guards per role and terminal scope, with P-20 Access Denied on a 403 (FE-021/022, DEC-48).
 - **Screen states:** every page has Default, Loading, Empty, Error and Conflict states (CT-22).
@@ -31,7 +31,7 @@ Things the stack has to handle, taken from the docs:
 | Area | Choice | Why |
 |---|---|---|
 | Framework | **Vue 3** (Composition API, `<script setup>`) | Set by the architecture docs |
-| Language | **TypeScript** | FE-035 generates types from OpenAPI, and that only pays off in TS. *The README says "JavaScript", so this needs team agreement (see open point 1).* |
+| Language | **JavaScript** (ES modules) | Decided by the Frontend Team (open point 1), matches the README. API shapes are documented with JSDoc `@typedef`s generated from OpenAPI (FE-035) for editor help, with no compile step |
 | Build | **Vite** | Standard for Vue 3, fast, and produces a static build that NGINX serves |
 | Routing | **Vue Router 4** | Route `meta` holds `roles`, `terminalScoped` and `pageId` (`P-xx`), and one global guard handles auth, roles, P-20 and the forced password change |
 | State | **Pinia** | Only for app-wide state: session/user, port profile, SSE connection, notifications. Page data lives in composables (below) |
@@ -48,7 +48,7 @@ Things the stack has to handle, taken from the docs:
 | Charts | **ECharts** (`vue-echarts`), only where needed | Uses `tokens.js` `chartSeries` (P-21 environment, P-30 drift) |
 | Mocks | **MSW** for tests and offline dev (FE-034) | Shaped like the real responses (CT-19 scenarios) |
 | Tests | **Vitest** + Vue Test Utils (unit and component), **Playwright** (e2e, Chrome, Edge, Firefox) | FE-100. Playwright covers the DEC-46 browser matrix |
-| Quality | **ESLint** (flat config, `eslint-plugin-vue`) + **Prettier**, `vue-tsc` type check | FE-012 CI runs lint, type check, unit tests and build on every PR |
+| Quality | **ESLint** (flat config, `eslint-plugin-vue`) + **Prettier** | FE-012 CI runs lint, unit tests and build on every PR |
 | Package manager | **pnpm**, with Node 22 LTS pinned in `.nvmrc` and `engines` | Fast, strict lockfile |
 | Fonts and assets | Bundled locally from the brand kit, never from a CDN | The port LAN may have no internet |
 
@@ -58,9 +58,9 @@ Things the stack has to handle, taken from the docs:
 project-frontend/
 ├── public/brand/icons/          favicon, manifest (from brand kit)
 ├── src/
-│   ├── app/                     main.ts, App.vue, router/, guards, layouts (shell, auth)
+│   ├── app/                     main.js, App.vue, router/, guards, layouts (shell, auth)
 │   ├── brand/                   brand-kit web/brand copied as-is (tokens.css, logos, fonts, AtlantechLogo.vue)
-│   ├── api/                     http client, ApiError, generated OpenAPI types (FE-035), sse client
+│   ├── api/                     http client, ApiError, JSDoc typedefs generated from OpenAPI (FE-035), sse client
 │   ├── composables/             useResource, useList, useMutation, usePortTime, usePermissions
 │   ├── stores/                  session, port, events, notifications (Pinia)
 │   ├── components/              shared UI: AtlButton, AtlTable, AtlDialog, StatusBadge (FE-017), states (Loading/Empty/Error/Conflict)
@@ -75,7 +75,7 @@ project-frontend/
 │   │   ├── tugs/                P-45..P-47
 │   │   ├── terminal-ct/         P-48..P-51
 │   │   └── safety/              P-59
-│   │       └── (each: pages/, components/, api.ts, routes.ts, *.spec.ts)
+│   │       └── (each: pages/, components/, api.js, routes.js, *.spec.js)
 │   ├── i18n/                    en.json, ar.json
 │   └── styles/                  base.css (imports brand tokens + tailwind theme)
 ├── tests/e2e/                   Playwright
@@ -93,13 +93,13 @@ Rules:
 
 ## Consequences
 
-- Both frontend developers need TypeScript. In return, API changes in the OpenAPI file show up as type errors.
+- Plain JavaScript keeps the setup simple for the team. API changes in the OpenAPI file are not caught at build time, so they rely on the regenerated JSDoc typedefs, the CT-23 readiness packs and tests.
 - The UI library is more upfront work in Sprint 2 (FE-016), but we fully control the look and RTL.
 - No runtime dependency on the internet: fonts, icons and the brand all ship in the build.
 
 ## Open points for the team
 
-1. **TypeScript or JavaScript?** The README says JavaScript. This draft recommends TypeScript because of FE-035.
+1. ~~TypeScript or JavaScript?~~ **Decided: JavaScript** (Moustafa, 2026-10-25).
 2. **Own composables or TanStack Query** for server data and caching (FE-031)?
 3. **Headless primitives (Reka UI) or PrimeVue unstyled** under our own components?
 4. **Corner radii** in the brand kit (`tokens.css`: 8/12/16px) and the CT-22 `tokens.json` example (4/8px) disagree. Ask the brand owner (Marwan Nabil) and UI/UX which one wins.
