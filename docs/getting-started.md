@@ -18,6 +18,8 @@ pnpm dev                     # http://localhost:5173
 | `pnpm test` | Unit and component tests (Vitest) |
 | `pnpm lint` / `pnpm format` | ESLint and Prettier |
 
+Server settings (API URL, language, future-work flags) are in `public/config.json`; see [configuration.md](configuration.md).
+
 Every push and pull request to `develop`, `release` or `main` runs the same checks in GitHub Actions (`.github/workflows/ci.yml`): install, lint, format check, unit tests and build.
 
 ## Stack
