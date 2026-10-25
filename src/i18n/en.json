@@ -1,0 +1,56 @@
+{
+  "app": {
+    "name": "ATLANTECH",
+    "tagline": "Intelligent Port Operations"
+  },
+  "home": {
+    "title": "Web dashboard",
+    "body": "The workspace is ready. Pages arrive feature by feature from Sprint 2."
+  },
+  "notFound": {
+    "title": "Page not found",
+    "body": "The page you asked for doesn't exist.",
+    "back": "Back to home"
+  },
+  "language": {
+    "switch": "العربية"
+  },
+  "nav": {
+    "section": {
+      "general": "General",
+      "berthing": "Berthing",
+      "plans": "Plans",
+      "pilotage": "Pilotage",
+      "tugs": "Tugs",
+      "terminal": "Container terminal",
+      "safety": "Marine safety",
+      "admin": "Administration"
+    },
+    "home": "Home",
+    "portState": "Port state",
+    "environment": "Environmental conditions",
+    "notifications": "Notifications",
+    "berthingRequests": "Berthing requests",
+    "baplieFiles": "BAPLIE files",
+    "vessels": "Vessels and cargo",
+    "plans": "Operational plans",
+    "deviations": "Deviations",
+    "pilotRoster": "Pilot roster",
+    "pilotageAssignments": "Pilotage assignments",
+    "tugFleet": "Tugboat fleet",
+    "tugMasters": "Tug masters",
+    "tugAssignments": "Tug assignments",
+    "equipment": "Equipment and cranes",
+    "yard": "Container yard",
+    "yardRecommendations": "Yard placement",
+    "safetyConstraints": "Safety constraints",
+    "users": "Users",
+    "devices": "Registered devices",
+    "portProfile": "Port profile and channel",
+    "terminals": "Terminals",
+    "berths": "Berths",
+    "audit": "Audit log",
+    "aiModels": "AI models",
+    "settings": "Operational settings"
+  }
+}
