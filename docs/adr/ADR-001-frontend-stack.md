@@ -21,8 +21,8 @@ Things the stack has to handle, taken from the docs:
 - **Roles:** menus and route guards per role and terminal scope, with P-20 Access Denied on a 403 (FE-021/022, DEC-48).
 - **Screen states:** every page has Default, Loading, Empty, Error and Conflict states (CT-22).
 - **Language:** Arabic and English with RTL, and errors keyed by `message_key` (NFR-UX-4).
-- **Time:** times are shown in port time from `port_profile.timezone` (DEC-45, recommended option).
-- **Browsers:** the latest two versions of Chrome, Edge and Firefox, desktop from 1280px and tablet from 768px (DEC-46, recommended option).
+- **Time:** times are shown in port time from `port_profile.timezone` (DEC-45, decided: recommended option).
+- **Browsers:** the latest two versions of Chrome, Edge and Firefox, desktop from 1280px and tablet from 768px (DEC-46, decided: recommended option).
 - **Accessibility:** WCAG 2.1 AA contrast.
 - **Brand:** the brand kit `web/brand` is the official drop-in. It includes `tokens.css` (light and dark), a Tailwind v4 theme, `AtlantechLogo.vue` and bundled fonts.
 
@@ -104,4 +104,4 @@ Rules:
 3. ~~Reka UI or PrimeVue?~~ **Decided: PrimeVue** (Moustafa, 2026-10-25).
 4. ~~Corner radii?~~ **Decided: brand kit values, 8/12/16px** (Moustafa, 2026-10-25, "Style A · Softer"). The CT-22 `tokens.json` example (4/8px) should be updated to match; tell the brand owner (Marwan Nabil) and UI/UX.
 5. ~~Sign-in field?~~ **Decided: username** (Moustafa, 2026-10-25), matching the DEC-35 recommendation. P-16 shows username and password, not email.
-6. DEC-45 and DEC-46 close in Sprint 1. This draft assumes the recommended options.
+6. ~~DEC-45 and DEC-46?~~ **Decided: the recommended options** (Moustafa, 2026-10-25). DEC-45: all times are stored and sent in UTC and shown in port time from `port_profile.timezone`. DEC-46: the latest two versions of Chrome, Edge and Firefox; desktop from 1280px and tablet from 768px.
