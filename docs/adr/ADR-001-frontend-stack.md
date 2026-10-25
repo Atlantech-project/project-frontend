@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| Task | FE-001 (Sprint 1) |
+| Task | FE-001 (Sprint 1); also closes FE-006 (language, time zone, accessibility and browser scope, see Context) |
 | Status | **Draft**, for Frontend Team review |
 | Author | Moustafa (Frontend) |
 | Date | 2026-10-25 |
