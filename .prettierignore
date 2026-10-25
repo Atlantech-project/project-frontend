@@ -1,0 +1,6 @@
+dist
+coverage
+pnpm-lock.yaml
+src/brand
+public/brand
+*.md
