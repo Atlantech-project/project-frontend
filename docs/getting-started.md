@@ -20,6 +20,8 @@ pnpm dev                     # http://localhost:5173
 
 Server settings (API URL, language, future-work flags) are in `public/config.json`; see [configuration.md](configuration.md).
 
+The menu each role sees is set in `src/app/navigation.js`; see [navigation.md](navigation.md).
+
 Every push and pull request to `develop`, `release` or `main` runs the same checks in GitHub Actions (`.github/workflows/ci.yml`): install, lint, format check, unit tests and build.
 
 ## Stack

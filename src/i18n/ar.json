@@ -14,5 +14,43 @@
   },
   "language": {
     "switch": "English"
+  },
+  "nav": {
+    "section": {
+      "general": "عام",
+      "berthing": "الإرساء",
+      "plans": "الخطط",
+      "pilotage": "الإرشاد",
+      "tugs": "القاطرات",
+      "terminal": "محطة الحاويات",
+      "safety": "السلامة البحرية",
+      "admin": "الإدارة"
+    },
+    "home": "الرئيسية",
+    "portState": "حالة الميناء",
+    "environment": "الأحوال البيئية",
+    "notifications": "الإشعارات",
+    "berthingRequests": "طلبات الإرساء",
+    "baplieFiles": "ملفات BAPLIE",
+    "vessels": "السفن والبضائع",
+    "plans": "الخطط التشغيلية",
+    "deviations": "الانحرافات",
+    "pilotRoster": "جدول المرشدين",
+    "pilotageAssignments": "مهام الإرشاد",
+    "tugFleet": "أسطول القاطرات",
+    "tugMasters": "ربابنة القاطرات",
+    "tugAssignments": "مهام القاطرات",
+    "equipment": "المعدات والأوناش",
+    "yard": "ساحة الحاويات",
+    "yardRecommendations": "توزيع الساحة",
+    "safetyConstraints": "قيود السلامة",
+    "users": "المستخدمون",
+    "devices": "الأجهزة المسجلة",
+    "portProfile": "ملف الميناء والممر الملاحي",
+    "terminals": "المحطات",
+    "berths": "الأرصفة",
+    "audit": "سجل التدقيق",
+    "aiModels": "نماذج الذكاء الاصطناعي",
+    "settings": "الإعدادات التشغيلية"
   }
 }
