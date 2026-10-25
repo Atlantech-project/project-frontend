@@ -18,6 +18,8 @@ pnpm dev                     # http://localhost:5173
 | `pnpm test` | Unit and component tests (Vitest) |
 | `pnpm lint` / `pnpm format` | ESLint and Prettier |
 
+Every push and pull request to `develop`, `release` or `main` runs the same checks in GitHub Actions (`.github/workflows/ci.yml`): install, lint, format check, unit tests and build.
+
 ## Stack
 
 Vue 3 + Vite (JavaScript), Vue Router, Pinia, TanStack Query, PrimeVue 4 (unstyled, styled with the brand tokens), Tailwind CSS v4, vue-i18n (English and Arabic with RTL), axios, date-fns-tz. Decisions and folder rules: [`adr/ADR-001-frontend-stack.md`](adr/ADR-001-frontend-stack.md). Folder map: [`../src/README.md`](../src/README.md).
