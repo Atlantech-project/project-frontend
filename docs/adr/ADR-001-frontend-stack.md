@@ -31,15 +31,15 @@ Things the stack has to handle, taken from the docs:
 | Area | Choice | Why |
 |---|---|---|
 | Framework | **Vue 3** (Composition API, `<script setup>`) | Set by the architecture docs |
-| Language | **JavaScript** (ES modules) | Decided by the Frontend Team (open point 1), matches the README. API shapes are documented with JSDoc `@typedef`s generated from OpenAPI (FE-035) for editor help, with no compile step |
+| Language | **JavaScript** (ES modules) | Decided by the Frontend Team, matches the README. API shapes are documented with JSDoc `@typedef`s generated from OpenAPI (FE-035) for editor help, with no compile step |
 | Build | **Vite** | Standard for Vue 3, fast, and produces a static build that NGINX serves |
 | Routing | **Vue Router 4** | Route `meta` holds `roles`, `terminalScoped` and `pageId` (`P-xx`), and one global guard handles auth, roles, P-20 and the forced password change |
 | State | **Pinia** | Only for app-wide state: session/user, port profile, SSE connection, notifications. Page data lives in composables (below) |
-| Server data | **TanStack Query for Vue** (`@tanstack/vue-query`) on top of the HTTP client (FE-031) | Decided (open point 2). Gives caching, refetching and loading/error states out of the box. SSE events map to `invalidateQueries`, and the 409 version-token flow (FE-032) lives in a shared mutation helper |
+| Server data | **TanStack Query for Vue** (`@tanstack/vue-query`) on top of the HTTP client (FE-031) | Gives caching, refetching and loading/error states out of the box. SSE events map to `invalidateQueries`, and the 409 version-token flow (FE-032) lives in a shared mutation helper |
 | HTTP | **axios** with `withCredentials: true` | Reads the `XSRF-TOKEN` cookie and sends `X-XSRF-TOKEN` automatically, which is what Sanctum expects. One interceptor turns RFC 9457 bodies into a single `ApiError` (FE-030) |
 | Realtime | Native **`EventSource`** (`withCredentials`) wrapped in a `useEvents()` store | The browser sends `Last-Event-ID` on reconnect by itself. One map links each event (`RECOMMENDATION_READY` …) to the queries it refreshes (FE-033) |
 | Styling | **Brand-kit `tokens.css` + Tailwind CSS v4** (`tailwind-theme.css`) | Uses the kit as delivered, with light and dark themes. Pages use tokens only (FE-015). Logical properties (`ms-*`/`me-*`) for RTL. Corner radius follows the kit: `--atl-radius-sm` 8px, `--atl-radius` 12px, `--atl-radius-lg` 16px |
-| UI components | **PrimeVue 4** (MIT; unstyled / pass-through mode) styled with the brand-kit tokens, wrapped in our own `Atl*` components | Decided (open point 3). Ready, accessible components (DataTable, DatePicker, Dialog, Select) save time on table-heavy screens. RTL is supported. Stay on 4.x: PrimeVue 5 moved to the PrimeUI licence, which needs a licence key |
+| UI components | **PrimeVue 4** (MIT; unstyled / pass-through mode) styled with the brand-kit tokens, wrapped in our own `Atl*` components | Ready, accessible components (DataTable, DatePicker, Dialog, Select) save time on table-heavy screens. RTL is supported. Stay on 4.x: PrimeVue 5 moved to the PrimeUI licence, which needs a licence key |
 | Icons | **Lucide** (`lucide-vue-next`) | Open, round-jointed line icons, which matches the brand rule. To be confirmed against the approved icon set (DEC-49, FE-018) |
 | i18n | **vue-i18n** (`en`, `ar`), with `dir` switched on `<html>` | Backend `message_key` values map straight to translation keys |
 | Dates | **date-fns** + **date-fns-tz** | Converts UTC from the API to the port time zone in one `formatPortTime()` helper |
@@ -96,12 +96,3 @@ Rules:
 - Plain JavaScript keeps the setup simple for the team. API changes in the OpenAPI file are not caught at build time, so they rely on the regenerated JSDoc typedefs, the CT-23 readiness packs and tests.
 - PrimeVue speeds up Sprint 2 (FE-016), but its pass-through styles must be kept on the brand tokens so screens stay on brand.
 - No runtime dependency on the internet: fonts, icons and the brand all ship in the build.
-
-## Open points for the team
-
-1. ~~TypeScript or JavaScript?~~ **Decided: JavaScript** (Moustafa, 2026-10-25).
-2. ~~Own composables or TanStack Query?~~ **Decided: TanStack Query** (Moustafa, 2026-10-25).
-3. ~~Reka UI or PrimeVue?~~ **Decided: PrimeVue** (Moustafa, 2026-10-25).
-4. ~~Corner radii?~~ **Decided: brand kit values, 8/12/16px** (Moustafa, 2026-10-25, "Style A · Softer"). The CT-22 `tokens.json` example (4/8px) should be updated to match; tell the brand owner (Marwan Nabil) and UI/UX.
-5. ~~Sign-in field?~~ **Decided: username** (Moustafa, 2026-10-25), matching the DEC-35 recommendation. P-16 shows username and password, not email.
-6. ~~DEC-45 and DEC-46?~~ **Decided: the recommended options** (Moustafa, 2026-10-25). DEC-45: all times are stored and sent in UTC and shown in port time from `port_profile.timezone`. DEC-46: the latest two versions of Chrome, Edge and Firefox; desktop from 1280px and tablet from 768px.
