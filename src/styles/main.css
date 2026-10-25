@@ -1,0 +1,4 @@
+/* Global styles: Tailwind, then the brand kit (tokens + Tailwind theme). Pages use tokens only (FE-015). */
+@import 'tailwindcss';
+@import '../brand/css/tokens.css';
+@import '../brand/css/tailwind-theme.css';

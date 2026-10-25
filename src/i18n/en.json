@@ -1,0 +1,18 @@
+{
+  "app": {
+    "name": "ATLANTECH",
+    "tagline": "Intelligent Port Operations"
+  },
+  "home": {
+    "title": "Web dashboard",
+    "body": "The workspace is ready. Pages arrive feature by feature from Sprint 2."
+  },
+  "notFound": {
+    "title": "Page not found",
+    "body": "The page you asked for doesn't exist.",
+    "back": "Back to home"
+  },
+  "language": {
+    "switch": "العربية"
+  }
+}
