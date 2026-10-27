@@ -21,15 +21,15 @@ const roles = [
         <h2 class="font-display text-3xl leading-tight font-semibold tracking-tight sm:text-4xl">
           {{ t('landing.roles.title') }}
         </h2>
-        <p class="mt-3 text-lg text-offwhite/75">{{ t('landing.roles.body') }}</p>
+        <p class="mt-3 text-lg text-offwhite/90">{{ t('landing.roles.body') }}</p>
       </div>
-      <ul class="grid gap-x-8 sm:grid-cols-2">
+      <ul class="grid gap-3 sm:grid-cols-2">
         <li
           v-for="role in roles"
           :key="role.key"
-          class="flex items-center gap-4 border-b border-offwhite/15 py-4 text-lg"
+          class="flex items-center gap-4 rounded-[var(--atl-radius)] bg-offwhite/5 px-5 py-4 text-lg"
         >
-          <span class="grid size-10 place-items-center rounded-full bg-gold text-navy">
+          <span class="grid size-10 shrink-0 place-items-center rounded-full bg-gold text-navy">
             <AtlIcon :name="role.icon" :size="20" />
           </span>
           {{ t(`landing.roles.items.${role.key}`) }}

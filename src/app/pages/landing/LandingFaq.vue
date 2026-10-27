@@ -14,14 +14,19 @@ const questions = ['accounts', 'offline', 'languages', 'data', 'decisions']
       >
         {{ t('landing.faq.title') }}
       </h2>
-      <div class="divide-y divide-line border-y border-line">
-        <details v-for="(q, i) in questions" :key="q" class="atl-faq group" :open="i === 0">
+      <div class="grid gap-3">
+        <details
+          v-for="(q, i) in questions"
+          :key="q"
+          class="atl-faq group rounded-[var(--atl-radius-lg)] bg-surface px-6"
+          :open="i === 0"
+        >
           <summary
             class="flex cursor-pointer list-none items-center gap-6 py-6 font-display text-lg font-semibold text-text"
           >
             <span class="flex-1">{{ t(`landing.faq.items.${q}.q`) }}</span>
             <span
-              class="grid size-9 shrink-0 place-items-center rounded-full border border-line-strong text-teal transition-colors group-open:border-teal group-open:bg-teal group-open:text-offwhite"
+              class="grid size-9 shrink-0 place-items-center rounded-full bg-surface-3 text-teal transition-colors group-open:bg-teal group-open:text-offwhite"
               aria-hidden="true"
             >
               <svg
@@ -37,7 +42,7 @@ const questions = ['accounts', 'offline', 'languages', 'data', 'decisions']
               </svg>
             </span>
           </summary>
-          <p class="pe-16 pb-6 leading-relaxed text-muted">
+          <p class="pe-10 pb-6 leading-relaxed text-text">
             {{ t(`landing.faq.items.${q}.a`) }}
           </p>
         </details>

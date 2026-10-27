@@ -41,7 +41,7 @@ const sail = computed(() => {
       >
         <div>
           <h2
-            class="font-display text-4xl leading-tight font-semibold tracking-tight text-text sm:text-5xl"
+            class="font-display text-3xl leading-tight font-semibold tracking-tight text-text lg:text-5xl"
           >
             {{ t('landing.journey.title') }}
           </h2>
@@ -66,15 +66,14 @@ const sail = computed(() => {
                 aria-hidden="true"
               />
               <h3 class="font-display text-xl font-semibold text-text">
-                <span class="me-2 text-muted tabular-nums">0{{ i + 1 }}</span>
                 {{ t(`landing.journey.steps.${step}.title`) }}
               </h3>
               <div class="atl-journey__body grid" :class="{ 'is-open': i === active }">
                 <div class="overflow-hidden">
-                  <p class="pt-2 text-muted">{{ t(`landing.journey.steps.${step}.body`) }}</p>
+                  <p class="pt-2 text-text">{{ t(`landing.journey.steps.${step}.body`) }}</p>
                   <span
                     v-if="checkpoints.includes(step)"
-                    class="mt-3 inline-flex items-center gap-1 rounded-full bg-gold/15 px-2.5 py-0.5 text-xs font-semibold text-accent-text"
+                    class="mt-3 inline-flex items-center gap-1 rounded-full bg-gold/15 px-2.5 py-1 text-sm font-semibold text-accent-text"
                   >
                     <AtlIcon name="shield" :size="14" />
                     {{ t('landing.journey.checkpoint') }}
@@ -86,12 +85,13 @@ const sail = computed(() => {
         </div>
 
         <div
-          class="relative w-full max-w-[calc((100svh-9rem)*1.3)] justify-self-center overflow-hidden rounded-[var(--atl-radius-lg)] bg-navy p-3 text-offwhite shadow-2xl sm:p-4"
+          data-ui
+          class="relative w-full max-w-[calc((100svh-9rem)*1.3)] justify-self-center overflow-hidden rounded-[var(--atl-radius-lg)] bg-navy p-3 text-offwhite sm:p-4"
         >
           <Transition name="atl-chip" mode="out-in">
             <p
               :key="active"
-              class="absolute top-5 start-5 z-10 flex items-center gap-2 rounded-full bg-offwhite px-3 py-1.5 text-xs font-semibold text-navy shadow-lg sm:text-sm"
+              class="absolute top-5 start-5 z-10 flex items-center gap-2 rounded-full bg-offwhite px-3 py-1.5 text-xs font-semibold text-navy sm:text-sm"
               aria-live="polite"
             >
               <AtlIcon :name="active === 3 ? 'check' : 'pulse'" :size="16" class="text-teal" />

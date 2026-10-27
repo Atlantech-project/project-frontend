@@ -1,6 +1,5 @@
 <script setup>
 import { useI18n } from 'vue-i18n'
-import AtlIcon from '@/components/AtlIcon.vue'
 
 const { t } = useI18n()
 
@@ -15,10 +14,10 @@ const options = [
   { berth: 'B-01', tugs: 3, score: 64 },
 ]
 const others = [
-  { key: 'requests', icon: 'ship', tile: 'bg-navy text-offwhite' },
-  { key: 'resources', icon: 'anchor', tile: 'bg-teal text-offwhite' },
-  { key: 'yard', icon: 'grid', tile: 'bg-gold text-navy' },
-  { key: 'tracking', icon: 'pulse', tile: 'bg-teal-light text-navy' },
+  { key: 'requests', swatch: 'bg-navy' },
+  { key: 'resources', swatch: 'bg-teal' },
+  { key: 'yard', swatch: 'bg-gold' },
+  { key: 'tracking', swatch: 'bg-teal-light' },
 ]
 </script>
 
@@ -32,15 +31,15 @@ const others = [
         >
           {{ t('landing.features.title') }}
         </h2>
-        <p class="mt-4 text-lg text-muted">{{ t('landing.features.body') }}</p>
+        <p class="mt-4 text-lg text-text">{{ t('landing.features.body') }}</p>
       </div>
 
       <div class="mt-14 grid gap-6 lg:grid-cols-2">
-        <article class="rounded-[var(--atl-radius-lg)] bg-navy p-8 text-offwhite">
+        <article data-ui class="rounded-[var(--atl-radius-lg)] bg-navy p-8 text-offwhite">
           <h3 class="font-display text-2xl font-semibold">
             {{ t('landing.features.items.windows.title') }}
           </h3>
-          <p class="mt-2 max-w-md text-offwhite/75">
+          <p class="mt-2 max-w-md text-offwhite/90">
             {{ t('landing.features.items.windows.body') }}
           </p>
           <div class="mt-10 flex h-28 items-end gap-1" dir="ltr" aria-hidden="true">
@@ -62,11 +61,11 @@ const others = [
           </div>
         </article>
 
-        <article class="rounded-[var(--atl-radius-lg)] bg-gold/15 p-8 text-text">
+        <article data-ui class="rounded-[var(--atl-radius-lg)] bg-gold/15 p-8 text-text">
           <h3 class="font-display text-2xl font-semibold">
             {{ t('landing.features.items.recommendations.title') }}
           </h3>
-          <p class="mt-2 max-w-md text-muted">
+          <p class="mt-2 max-w-md text-text">
             {{ t('landing.features.items.recommendations.body') }}
           </p>
           <ol class="mt-8 grid gap-4" aria-hidden="true">
@@ -98,15 +97,13 @@ const others = [
         </article>
       </div>
 
-      <ul class="mt-16 grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
-        <li v-for="f in others" :key="f.key">
-          <span class="grid size-12 place-items-center rounded-[var(--atl-radius)]" :class="f.tile">
-            <AtlIcon :name="f.icon" />
-          </span>
-          <h3 class="mt-4 font-display text-lg font-semibold text-text">
+      <ul class="mt-16 grid gap-x-10 gap-y-12 sm:grid-cols-2">
+        <li v-for="f in others" :key="f.key" class="max-w-sm">
+          <span class="block size-3 rounded-sm" :class="f.swatch" aria-hidden="true" />
+          <h3 class="mt-4 font-display text-xl font-semibold text-text">
             {{ t(`landing.features.items.${f.key}.title`) }}
           </h3>
-          <p class="mt-2 text-muted">{{ t(`landing.features.items.${f.key}.body`) }}</p>
+          <p class="mt-2 text-text">{{ t(`landing.features.items.${f.key}.body`) }}</p>
         </li>
       </ul>
     </div>

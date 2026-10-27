@@ -74,7 +74,7 @@
       "toastBody": "Berth, tugs and pilot for Nile Star",
       "window": "Next safe window"
     },
-    "statement": "A port is many independent parties sharing the same berths, channel, tugs and pilots. ATLANTECH looks at all of their requests together, recommends one coordinated plan, and people approve it before it runs.",
+    "statement": "A port is many parties sharing the same berths, tugs and pilots. ATLANTECH recommends one coordinated plan, and people approve it before it runs.",
     "journey": {
       "title": "From request to berth.",
       "checkpoint": "Human approval",
@@ -201,7 +201,7 @@
       }
     },
     "problem": {
-      "title": "Every party plans alone. The whole port pays for it.",
+      "title": "Every party plans alone. The port pays.",
       "body": "Port authority, pilotage, tugs and terminals each plan their own resources correctly, yet the port still suffers conflicts and delays.",
       "items": {
         "isolated": {
@@ -220,7 +220,7 @@
       "result": "The result: vessels wait, tidal windows are missed and one delay spreads to the next."
     },
     "systems": {
-      "title": "Works with the systems you already run.",
+      "title": "Works with your existing systems.",
       "body": "ATLANTECH sits above your terminal and port systems and never replaces them. People approve every plan before it is sent for execution.",
       "principle": "ATLANTECH recommends and coordinates. Your existing systems execute.",
       "layer": "Recommends and coordinates",

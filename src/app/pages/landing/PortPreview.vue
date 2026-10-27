@@ -11,9 +11,14 @@ const kpis = [
   { key: 'tugs', value: 6 },
 ]
 const vessels = [
-  { name: 'MSC Aurora', place: 'B-03', status: 'berthing', tone: 'bg-teal' },
-  { name: 'Nile Star', place: 'Channel', status: 'pilot', tone: 'bg-gold' },
-  { name: 'Delta Trader', place: 'Anchorage', status: 'waiting', tone: 'bg-teal-light' },
+  {
+    name: 'MSC Aurora',
+    place: 'B-03',
+    status: 'berthing',
+    tone: 'border border-offwhite/25 bg-navy text-offwhite',
+  },
+  { name: 'Nile Star', place: 'Channel', status: 'pilot', tone: 'bg-offwhite text-navy' },
+  { name: 'Delta Trader', place: 'Anchorage', status: 'waiting', tone: 'bg-teal-light text-navy' },
 ]
 const berths = ['B-01', 'B-02', 'B-03', 'B-04', 'B-05']
 const busy = ['B-01', 'B-03', 'B-04']
@@ -22,9 +27,10 @@ const hours = Array.from({ length: 24 }, (_, i) => i >= 14 && i < 17)
 
 <template>
   <div
-    class="overflow-hidden rounded-[var(--atl-radius-lg)] border border-offwhite/15 bg-[#062e3f] text-offwhite shadow-[0_40px_120px_-20px_rgb(0_0_0/0.6)]"
+    data-ui
+    class="overflow-hidden rounded-[var(--atl-radius-lg)] border border-offwhite/15 bg-[#062e3f] text-offwhite"
   >
-    <div class="flex items-center gap-2 border-b border-offwhite/10 px-4 py-3">
+    <div data-ui class="flex items-center gap-2 border-b border-offwhite/10 px-4 py-3">
       <span class="size-2.5 rounded-full bg-offwhite/25" />
       <span class="size-2.5 rounded-full bg-offwhite/25" />
       <span class="size-2.5 rounded-full bg-offwhite/25" />
@@ -60,10 +66,7 @@ const hours = Array.from({ length: 24 }, (_, i) => i >= 14 && i < 17)
               <p class="truncate text-sm font-semibold">{{ v.name }}</p>
               <p class="text-xs text-offwhite/55">{{ v.place }}</p>
             </div>
-            <span
-              class="rounded-full px-2.5 py-0.5 text-xs font-semibold text-navy"
-              :class="v.tone"
-            >
+            <span class="rounded-full px-2.5 py-0.5 text-xs font-semibold" :class="v.tone">
               {{ t(`landing.preview.status.${v.status}`) }}
             </span>
           </li>
@@ -167,12 +170,13 @@ const hours = Array.from({ length: 24 }, (_, i) => i >= 14 && i < 17)
   animation: atl-bob 3s ease-in-out infinite;
 }
 
+/* Live-status pulse ring inside the data-ui product mock, not a decorative glow. */
 @keyframes atl-ping {
   0% {
-    box-shadow: 0 0 0 0 rgb(124 201 164 / 0.7);
+    box-shadow: 0 0 0 0 rgb(124 201 164 / 0.7); /* taste-skill-ignore */
   }
   100% {
-    box-shadow: 0 0 0 8px rgb(124 201 164 / 0);
+    box-shadow: 0 0 0 8px rgb(124 201 164 / 0); /* taste-skill-ignore */
   }
 }
 

@@ -25,7 +25,7 @@ const facts = [
         <h2 class="font-display text-3xl leading-tight font-semibold tracking-tight sm:text-5xl">
           {{ t('landing.security.title') }}
         </h2>
-        <p class="mt-4 text-lg text-navy/80">{{ t('landing.security.body') }}</p>
+        <p class="mt-4 text-lg text-navy">{{ t('landing.security.body') }}</p>
       </div>
 
       <ul class="mt-14 grid gap-x-10 gap-y-10 sm:grid-cols-2">
@@ -39,7 +39,7 @@ const facts = [
             <h3 class="font-display text-xl font-semibold">
               {{ t(`landing.security.items.${p.key}.title`) }}
             </h3>
-            <p class="mt-1.5 leading-relaxed text-navy/80">
+            <p class="mt-1.5 leading-relaxed text-navy">
               {{ t(`landing.security.items.${p.key}.body`) }}
             </p>
           </div>
@@ -50,8 +50,12 @@ const facts = [
         class="mt-14 grid gap-6 rounded-[var(--atl-radius-lg)] bg-navy p-7 text-offwhite md:grid-cols-[1.2fr_2fr] md:items-center"
       >
         <p class="font-display text-lg font-semibold">{{ t('landing.security.reference') }}</p>
-        <dl class="grid grid-cols-3 divide-x divide-offwhite/15">
-          <div v-for="f in facts" :key="f.key" class="px-4 first:ps-0">
+        <dl class="grid grid-cols-3 gap-3">
+          <div
+            v-for="f in facts"
+            :key="f.key"
+            class="rounded-[var(--atl-radius)] bg-offwhite/10 px-4 py-3"
+          >
             <dt class="sr-only">{{ t(`landing.security.facts.${f.key}`) }}</dt>
             <dd class="font-display text-3xl font-semibold text-gold">
               <bdi dir="ltr">{{ f.value }}</bdi>

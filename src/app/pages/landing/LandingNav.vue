@@ -50,11 +50,7 @@ onBeforeUnmount(() => {
 <template>
   <header
     class="fixed inset-x-0 top-0 z-50 text-offwhite transition-[background-color,box-shadow] duration-300"
-    :class="
-      scrolled || open
-        ? 'bg-navy shadow-[0_1px_0_rgb(229_225_221/0.1),0_10px_30px_-12px_rgb(0_0_0/0.5)]'
-        : 'bg-transparent'
-    "
+    :class="scrolled || open ? 'bg-navy' : 'bg-transparent'"
   >
     <nav
       class="mx-auto grid h-[72px] max-w-6xl grid-cols-[auto_1fr_auto] items-center gap-4 px-4"
@@ -64,7 +60,7 @@ onBeforeUnmount(() => {
         <AtlantechLogo shape="wordmark" tone="reversed" :height="30" />
       </a>
 
-      <ul class="hidden items-center justify-center gap-1 md:flex">
+      <ul class="hidden items-center justify-center gap-1 lg:flex">
         <li v-for="link in links" :key="link">
           <a
             :href="`#${link}`"
@@ -92,7 +88,7 @@ onBeforeUnmount(() => {
         </button>
         <button
           type="button"
-          class="grid size-10 place-items-center rounded-full transition-colors hover:bg-offwhite/10 md:hidden"
+          class="grid size-10 place-items-center rounded-full transition-colors hover:bg-offwhite/10 lg:hidden"
           :aria-expanded="open"
           aria-controls="landing-menu"
           :aria-label="open ? t('landing.nav.close') : t('landing.nav.menu')"
@@ -115,11 +111,7 @@ onBeforeUnmount(() => {
       </div>
     </nav>
 
-    <ul
-      v-if="open"
-      id="landing-menu"
-      class="grid gap-1 border-t border-offwhite/10 px-4 pt-3 pb-5 md:hidden"
-    >
+    <ul v-if="open" id="landing-menu" class="grid gap-1 bg-black/15 px-4 pt-3 pb-5 lg:hidden">
       <li v-for="link in links" :key="link">
         <a
           :href="`#${link}`"

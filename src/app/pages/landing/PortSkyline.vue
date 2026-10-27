@@ -46,6 +46,16 @@ const ship = computed(() => `translate(${-props.progress * 220} ${props.progress
   <div class="pointer-events-none absolute inset-x-0 bottom-0" :style="fade" aria-hidden="true">
     <svg class="block h-[36svh] w-full" viewBox="0 0 1440 300" preserveAspectRatio="xMidYMax slice">
       <g :transform="far">
+        <circle cx="1120" cy="150" r="58" fill="var(--atl-muted-gold)" opacity="0.9" />
+        <circle
+          cx="1120"
+          cy="150"
+          r="82"
+          fill="none"
+          stroke="var(--atl-muted-gold)"
+          stroke-opacity="0.35"
+          stroke-width="10"
+        />
         <path
           d="M0 230 C 160 200, 280 214, 420 206 S 720 180, 900 200 S 1260 190, 1440 214 V300 H0Z"
           fill="#2c6b78"

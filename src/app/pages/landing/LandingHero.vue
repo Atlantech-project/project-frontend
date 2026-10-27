@@ -33,7 +33,6 @@ const toastShown = computed(() => progress.value > 0.64)
 <template>
   <section id="top" ref="section" class="atl-hero relative h-[240svh] text-offwhite">
     <div class="atl-hero__stage atl-sky sticky top-0 h-svh overflow-hidden">
-      <div class="atl-hero__sun" aria-hidden="true" />
       <PortSkyline class="atl-hero__skyline" :progress="progress" />
 
       <div
@@ -41,7 +40,7 @@ const toastShown = computed(() => progress.value > 0.64)
         :style="titleStyle"
       >
         <h1
-          class="font-display text-5xl leading-[1.04] font-semibold tracking-tight sm:text-7xl lg:text-8xl"
+          class="font-display text-4xl leading-[1.04] font-semibold tracking-tight sm:text-7xl lg:text-8xl"
         >
           <span class="atl-rise block" style="--atl-rise-delay: 120ms">
             {{ t('landing.hero.line1') }}
@@ -81,7 +80,7 @@ const toastShown = computed(() => progress.value > 0.64)
       >
         <PortPreview />
         <div
-          class="absolute -bottom-6 start-6 flex items-center gap-3 rounded-[var(--atl-radius)] bg-offwhite px-4 py-3 text-navy shadow-xl transition duration-700"
+          class="absolute -bottom-6 start-6 flex items-center gap-3 rounded-[var(--atl-radius)] bg-offwhite px-4 py-3 text-navy transition duration-700"
           :class="toastShown ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'"
         >
           <span class="grid size-9 place-items-center rounded-full bg-gold/20 text-accent-text">
@@ -89,7 +88,7 @@ const toastShown = computed(() => progress.value > 0.64)
           </span>
           <div>
             <p class="text-sm font-semibold">{{ t('landing.preview.toastTitle') }}</p>
-            <p class="text-xs text-navy/70">{{ t('landing.preview.toastBody') }}</p>
+            <p class="text-sm text-navy/70">{{ t('landing.preview.toastBody') }}</p>
           </div>
         </div>
       </div>
@@ -102,19 +101,9 @@ const toastShown = computed(() => progress.value > 0.64)
   will-change: transform;
 }
 
-/* Dusk over the port: deep navy overhead, teal at the horizon, a low gold sun. */
+/* Dusk over the port: flat deep navy sky, the sun drawn flat in the skyline scene. */
 .atl-sky {
-  background: linear-gradient(180deg, #083a4f 0%, #0b4a5f 52%, #407e8c 100%);
-}
-
-.atl-hero__sun {
-  position: absolute;
-  inset: auto 18% 24svh auto;
-  width: 34vmax;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgb(165 141 102 / 0.55), rgb(165 141 102 / 0) 60%);
-  pointer-events: none;
+  background: var(--atl-deep-navy);
 }
 
 .atl-rise {
