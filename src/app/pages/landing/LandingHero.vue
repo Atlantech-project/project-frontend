@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref } from 'vue'
+import { onBeforeUnmount, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { range, useScrollProgress } from '@/composables/useScrollProgress'
 import PortSkyline from './PortSkyline.vue'
@@ -13,13 +13,28 @@ const reduced =
 const smooth = (p) => p * p * (3 - 2 * p)
 
 // The headline stays while the scroll sails the ship across the harbour, from the open sea
-// on the right until it leaves the port on the left.
-const sail = computed(() => (reduced ? 1 : smooth(range(progress.value, 0.02, 0.92))))
+// on the right until it leaves the port on the left. The ship eases towards the scroll
+// position instead of jumping with it, so it glides at its own slow pace.
+const target = () => (reduced ? 1 : smooth(range(progress.value, 0.02, 0.92)))
+const sail = ref(target())
+let frame = 0
+
+function glide() {
+  const gap = target() - sail.value
+  sail.value = Math.abs(gap) < 0.0005 ? target() : sail.value + gap * 0.035
+  frame = sail.value === target() ? 0 : requestAnimationFrame(glide)
+}
+
+watch(progress, () => {
+  if (!frame) frame = requestAnimationFrame(glide)
+})
+
+onBeforeUnmount(() => cancelAnimationFrame(frame))
 </script>
 
 <!-- Hero: a tall section whose stage stays pinned while the scroll sails the ship. -->
 <template>
-  <section id="top" ref="section" class="atl-hero relative h-[200svh] text-offwhite">
+  <section id="top" ref="section" class="atl-hero relative h-[320svh] text-offwhite">
     <div class="atl-hero__stage atl-sky sticky top-0 h-svh overflow-hidden">
       <PortSkyline class="atl-hero__skyline" :sail="sail" />
 
