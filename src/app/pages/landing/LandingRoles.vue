@@ -15,23 +15,23 @@ const roles = [
 </script>
 
 <template>
-  <section class="bg-surface-2 px-4 py-24">
+  <section id="roles" class="scroll-mt-16 bg-navy px-4 py-24 text-offwhite">
     <div class="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[1fr_1.4fr] lg:items-start">
       <div>
-        <h2
-          class="font-display text-3xl leading-tight font-semibold tracking-tight text-text sm:text-4xl"
-        >
+        <h2 class="font-display text-3xl leading-tight font-semibold tracking-tight sm:text-4xl">
           {{ t('landing.roles.title') }}
         </h2>
-        <p class="mt-3 text-lg text-muted">{{ t('landing.roles.body') }}</p>
+        <p class="mt-3 text-lg text-offwhite/75">{{ t('landing.roles.body') }}</p>
       </div>
       <ul class="grid gap-x-8 sm:grid-cols-2">
         <li
           v-for="role in roles"
           :key="role.key"
-          class="flex items-center gap-3 border-b border-line py-4 text-lg text-text"
+          class="flex items-center gap-4 border-b border-offwhite/15 py-4 text-lg"
         >
-          <AtlIcon :name="role.icon" :size="20" class="text-teal" />
+          <span class="grid size-10 place-items-center rounded-full bg-gold text-navy">
+            <AtlIcon :name="role.icon" :size="20" />
+          </span>
           {{ t(`landing.roles.items.${role.key}`) }}
         </li>
       </ul>

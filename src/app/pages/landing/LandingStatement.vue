@@ -18,7 +18,7 @@ function opacity(i) {
 </script>
 
 <template>
-  <section ref="section" class="atl-statement relative h-[240svh] bg-navy text-offwhite">
+  <section ref="section" class="atl-statement relative h-[240svh] bg-teal-light text-navy">
     <div class="sticky top-0 grid h-svh place-items-center px-4">
       <p
         class="max-w-5xl font-display text-3xl leading-tight font-semibold tracking-tight sm:text-5xl lg:text-6xl"

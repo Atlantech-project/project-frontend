@@ -15,16 +15,16 @@ const options = [
   { berth: 'B-01', tugs: 3, score: 64 },
 ]
 const others = [
-  { key: 'requests', icon: 'ship' },
-  { key: 'resources', icon: 'anchor' },
-  { key: 'yard', icon: 'grid' },
-  { key: 'tracking', icon: 'pulse' },
+  { key: 'requests', icon: 'ship', tile: 'bg-navy text-offwhite' },
+  { key: 'resources', icon: 'anchor', tile: 'bg-teal text-offwhite' },
+  { key: 'yard', icon: 'grid', tile: 'bg-gold text-navy' },
+  { key: 'tracking', icon: 'pulse', tile: 'bg-teal-light text-navy' },
 ]
 </script>
 
 <!-- The two decisions ATLANTECH helps with most get a real product fragment; the rest are a plain list. -->
 <template>
-  <section id="features" class="scroll-mt-4 bg-bg px-4 py-24 sm:py-32">
+  <section id="features" class="scroll-mt-16 bg-surface px-4 py-24 sm:py-32">
     <div class="mx-auto max-w-6xl">
       <div class="max-w-2xl">
         <h2
@@ -62,7 +62,7 @@ const others = [
           </div>
         </article>
 
-        <article class="rounded-[var(--atl-radius-lg)] border border-line bg-surface p-8 text-text">
+        <article class="rounded-[var(--atl-radius-lg)] bg-gold/15 p-8 text-text">
           <h3 class="font-display text-2xl font-semibold">
             {{ t('landing.features.items.recommendations.title') }}
           </h3>
@@ -86,10 +86,10 @@ const others = [
                 </span>
                 <span class="ms-auto font-display font-semibold tabular-nums">{{ o.score }}</span>
               </div>
-              <div class="mt-2 h-1.5 overflow-hidden rounded-full bg-surface-3">
+              <div class="mt-2 h-1.5 overflow-hidden rounded-full bg-surface">
                 <span
                   class="block h-full rounded-full"
-                  :class="i === 0 ? 'bg-teal' : 'bg-line-strong'"
+                  :class="i === 0 ? 'bg-teal' : 'bg-gold'"
                   :style="{ width: `${o.score}%` }"
                 />
               </div>
@@ -99,9 +99,11 @@ const others = [
       </div>
 
       <ul class="mt-16 grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
-        <li v-for="f in others" :key="f.key" class="border-t border-line-strong pt-5">
-          <h3 class="flex items-center gap-2 font-display text-lg font-semibold text-text">
-            <AtlIcon :name="f.icon" :size="20" class="text-teal" />
+        <li v-for="f in others" :key="f.key">
+          <span class="grid size-12 place-items-center rounded-[var(--atl-radius)]" :class="f.tile">
+            <AtlIcon :name="f.icon" />
+          </span>
+          <h3 class="mt-4 font-display text-lg font-semibold text-text">
             {{ t(`landing.features.items.${f.key}.title`) }}
           </h3>
           <p class="mt-2 text-muted">{{ t(`landing.features.items.${f.key}.body`) }}</p>

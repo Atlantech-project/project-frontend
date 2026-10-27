@@ -4,6 +4,7 @@ import { useI18n } from 'vue-i18n'
 import AtlIcon from '@/components/AtlIcon.vue'
 import { range, useScrollProgress } from '@/composables/useScrollProgress'
 import PortPreview from './PortPreview.vue'
+import PortSkyline from './PortSkyline.vue'
 
 const { t } = useI18n()
 const section = ref(null)
@@ -19,47 +20,24 @@ const titleStyle = computed(() => {
 })
 
 const previewStyle = computed(() => {
-  const p = ease(range(progress.value, 0, 0.62))
+  const p = ease(range(progress.value, 0.08, 0.66))
   return {
-    transform: `perspective(1800px) translateY(${(1 - p) * 56}svh) rotateX(${(1 - p) * 26}deg) scale(${0.84 + 0.16 * p})`,
+    transform: `perspective(1800px) translateY(${(1 - p) * 80}svh) rotateX(${(1 - p) * 26}deg) scale(${0.84 + 0.16 * p})`,
   }
 })
 
-const toastShown = computed(() => progress.value > 0.6)
-
-// Depth contours, as on a nautical chart of the port approach.
-const contours = Array.from({ length: 10 }, (_, k) => {
-  const points = Array.from({ length: 73 }, (_, i) => {
-    const a = (i / 72) * Math.PI * 2
-    const r = 90 + k * 78 + 26 * Math.sin(a * 3 + k * 0.7) + 14 * Math.cos(a * 5 - k)
-    return `${(1180 + r * 1.35 * Math.cos(a)).toFixed(1)} ${(760 + r * Math.sin(a)).toFixed(1)}`
-  })
-  return `M${points.join(' L')} Z`
-})
+const toastShown = computed(() => progress.value > 0.64)
 </script>
 
 <!-- Hero: a tall section whose stage stays pinned while the scroll drives the reveal. -->
 <template>
-  <section id="top" ref="section" class="atl-hero relative h-[230svh] bg-navy text-offwhite">
-    <div class="atl-hero__stage sticky top-0 h-svh overflow-hidden">
-      <svg
-        class="absolute inset-0 size-full"
-        viewBox="0 0 1440 900"
-        preserveAspectRatio="xMidYMid slice"
-        aria-hidden="true"
-      >
-        <path
-          v-for="(d, k) in contours"
-          :key="k"
-          :d="d"
-          fill="none"
-          stroke="var(--atl-light-teal)"
-          :stroke-opacity="0.16 - k * 0.012"
-        />
-      </svg>
+  <section id="top" ref="section" class="atl-hero relative h-[240svh] text-offwhite">
+    <div class="atl-hero__stage atl-sky sticky top-0 h-svh overflow-hidden">
+      <div class="atl-hero__sun" aria-hidden="true" />
+      <PortSkyline class="atl-hero__skyline" :progress="progress" />
 
       <div
-        class="atl-hero__title absolute inset-x-0 top-[13svh] z-10 px-4 text-center"
+        class="atl-hero__title absolute inset-x-0 top-[15svh] z-10 px-4 text-center"
         :style="titleStyle"
       >
         <h1
@@ -124,6 +102,21 @@ const contours = Array.from({ length: 10 }, (_, k) => {
   will-change: transform;
 }
 
+/* Dusk over the port: deep navy overhead, teal at the horizon, a low gold sun. */
+.atl-sky {
+  background: linear-gradient(180deg, #083a4f 0%, #0b4a5f 52%, #407e8c 100%);
+}
+
+.atl-hero__sun {
+  position: absolute;
+  inset: auto 18% 24svh auto;
+  width: 34vmax;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgb(165 141 102 / 0.55), rgb(165 141 102 / 0) 60%);
+  pointer-events: none;
+}
+
 .atl-rise {
   animation: atl-rise 1.1s cubic-bezier(0.2, 0.7, 0.2, 1) both;
   animation-delay: var(--atl-rise-delay, 0ms);
@@ -148,6 +141,10 @@ const contours = Array.from({ length: 10 }, (_, k) => {
     display: grid;
     gap: 3rem;
     padding: 5rem 0 6rem;
+  }
+  .atl-hero__skyline {
+    position: relative;
+    order: 3;
   }
   .atl-hero__title,
   .atl-hero__preview {

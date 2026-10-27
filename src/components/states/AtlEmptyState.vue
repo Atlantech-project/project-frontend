@@ -13,21 +13,28 @@ const { t } = useI18n()
 <template>
   <div class="grid justify-items-center gap-3 px-4 py-12 text-center">
     <slot name="icon">
-      <svg
-        class="text-teal"
-        width="48"
-        height="48"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="1.6"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        aria-hidden="true"
-      >
-        <path d="M3 7l9-4 9 4-9 4-9-4z" />
-        <path d="M3 7v10l9 4 9-4V7" />
-        <path d="M12 11v10" />
+      <!-- An empty berth on calm water -->
+      <svg width="132" height="80" viewBox="0 0 132 80" fill="none" aria-hidden="true">
+        <rect x="4" y="58" width="124" height="18" rx="3" fill="var(--atl-light-teal)" />
+        <rect
+          x="38"
+          y="30"
+          width="56"
+          height="22"
+          rx="4"
+          stroke="var(--atl-mid-teal)"
+          stroke-width="2"
+          stroke-dasharray="5 5"
+        />
+        <circle cx="30" cy="54" r="3" fill="var(--atl-muted-gold)" />
+        <circle cx="102" cy="54" r="3" fill="var(--atl-muted-gold)" />
+        <path
+          d="M4 18 q8 -5 16 0 t16 0 M96 12 q8 -5 16 0 t16 0"
+          stroke="var(--atl-mid-teal)"
+          stroke-width="2"
+          stroke-linecap="round"
+          opacity="0.5"
+        />
       </svg>
     </slot>
     <h2 class="font-display text-lg font-semibold text-text">

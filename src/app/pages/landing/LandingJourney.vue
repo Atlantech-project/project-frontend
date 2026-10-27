@@ -99,7 +99,7 @@ const sail = computed(() => {
             </p>
           </Transition>
 
-          <svg class="block w-full" viewBox="0 0 400 300" dir="ltr" aria-hidden="true">
+          <svg class="block w-full" viewBox="0 0 400 300" direction="ltr" aria-hidden="true">
             <defs>
               <linearGradient id="atl-sea" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="0" stop-color="#0a4258" />

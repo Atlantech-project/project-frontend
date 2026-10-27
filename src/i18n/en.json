@@ -157,7 +157,40 @@
       "line2": "Stronger ports.",
       "top": "Back to top"
     },
-    "footer": "Mansoura University, Graduation Project 2026"
+    "footer": "Mansoura University, Graduation Project 2026",
+    "nav": {
+      "features": "Features",
+      "how": "How it works",
+      "roles": "Who it's for",
+      "faq": "Questions",
+      "menu": "Menu",
+      "close": "Close menu"
+    },
+    "faq": {
+      "title": "Questions ports ask us",
+      "items": {
+        "accounts": {
+          "q": "Who creates user accounts?",
+          "a": "Your port administrator creates every account and gives you a one-time password. You choose your own password the first time you sign in."
+        },
+        "offline": {
+          "q": "Does it work on the quay or at sea?",
+          "a": "Pilots, tug masters and supervisors use the tablet app. It keeps working without a connection and sends updates as soon as it's back online."
+        },
+        "languages": {
+          "q": "Which languages does it support?",
+          "a": "Arabic and English, with a right-to-left layout for Arabic. Anyone can switch language at any time."
+        },
+        "data": {
+          "q": "Where is our data kept?",
+          "a": "On your port's own servers, inside the port network. Each terminal operator sees only its own cargo, plans and costs."
+        },
+        "decisions": {
+          "q": "Does the system decide on its own?",
+          "a": "No. It recommends entry windows, berths, tugs and pilots and explains why, and port staff approve every plan before it runs."
+        }
+      }
+    }
   },
   "states": {
     "loading": "Loading…",

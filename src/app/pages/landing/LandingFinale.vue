@@ -7,12 +7,8 @@ const { t } = useI18n()
 </script>
 
 <template>
-  <section class="relative bg-navy px-4 pt-36 pb-28 text-center text-offwhite">
-    <AtlWave
-      animated
-      base="var(--atl-surface-2)"
-      class="absolute inset-x-0 top-0 h-14 rotate-180"
-    />
+  <section class="relative bg-teal px-4 pt-36 pb-28 text-center text-offwhite">
+    <AtlWave animated base="var(--atl-bg)" class="absolute inset-x-0 top-0 h-14 rotate-180" />
     <div class="mx-auto grid max-w-4xl justify-items-center gap-8">
       <AtlantechLogo shape="symbol" tone="reversed" :height="88" />
       <h2 class="font-display text-5xl leading-[1.05] font-semibold tracking-tight sm:text-7xl">
@@ -21,7 +17,7 @@ const { t } = useI18n()
       </h2>
       <a
         href="#top"
-        class="rounded-full border border-offwhite/30 px-6 py-3 font-semibold transition-colors hover:bg-offwhite/10"
+        class="rounded-full bg-offwhite px-6 py-3 font-semibold text-navy transition-colors hover:bg-white"
       >
         {{ t('landing.finale.top') }}
       </a>

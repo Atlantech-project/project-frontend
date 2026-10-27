@@ -6,6 +6,7 @@ export const routes = [
   {
     path: '/',
     name: 'landing',
+    meta: { ownHeader: true },
     component: () => import('@/app/pages/LandingPage.vue'),
   },
   {
