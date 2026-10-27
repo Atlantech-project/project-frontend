@@ -7,7 +7,7 @@ import { setLocale } from '@/i18n'
 
 const { t, locale } = useI18n()
 
-const links = ['why', 'how', 'features', 'security', 'faq']
+const links = ['how', 'features', 'security', 'faq']
 const scrolled = ref(false)
 const open = ref(false)
 const active = ref('')
@@ -86,6 +86,13 @@ onBeforeUnmount(() => {
           <AtlIcon name="globe" :size="16" />
           {{ t('language.switch') }}
         </button>
+        <!-- Leads to P-16 web login (/login), which arrives with the UI screens. -->
+        <RouterLink
+          to="/login"
+          class="rounded-full bg-gold px-5 py-2 text-sm font-semibold text-navy transition-colors hover:bg-offwhite"
+        >
+          {{ t('landing.nav.signIn') }}
+        </RouterLink>
         <button
           type="button"
           class="grid size-10 place-items-center rounded-full transition-colors hover:bg-offwhite/10 lg:hidden"

@@ -172,8 +172,8 @@
       "menu": "Menu",
       "close": "Close menu",
       "label": "Main",
-      "why": "The problem",
-      "security": "Security"
+      "security": "Security",
+      "signIn": "Sign in"
     },
     "faq": {
       "title": "Questions ports ask us",
@@ -199,25 +199,6 @@
           "a": "No. It recommends entry windows, berths, tugs and pilots and explains why, and port staff approve every plan before it runs."
         }
       }
-    },
-    "problem": {
-      "title": "Every party plans alone. The port pays.",
-      "body": "Port authority, pilotage, tugs and terminals each plan their own resources correctly, yet the port still suffers conflicts and delays.",
-      "items": {
-        "isolated": {
-          "title": "Isolated planning",
-          "body": "Each party optimises its own resources, so clashes over shared berths, tugs and pilots only show up on the day."
-        },
-        "future": {
-          "title": "No view of what is coming",
-          "body": "Upcoming arrivals, cargo needs and demand from other terminals are not anticipated."
-        },
-        "sea": {
-          "title": "Planning blind to the sea",
-          "body": "Tide, wind, waves and visibility change safe berthing limits by the hour, yet windows are rarely planned against forecasts."
-        }
-      },
-      "result": "The result: vessels wait, tidal windows are missed and one delay spreads to the next."
     },
     "systems": {
       "title": "Works with your existing systems.",

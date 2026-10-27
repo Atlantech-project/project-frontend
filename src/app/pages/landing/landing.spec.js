@@ -20,7 +20,6 @@ describe('landing page', () => {
     expect(w.find('#top').exists()).toBe(true)
     expect(w.find('#roles').exists()).toBe(true)
     expect(w.find('#faq').exists()).toBe(true)
-    expect(w.find('#why').exists()).toBe(true)
     expect(w.find('#security').exists()).toBe(true)
   })
 

@@ -7,7 +7,7 @@ import { setLocale } from '@/i18n'
 
 const { t, locale } = useI18n()
 
-const links = ['why', 'how', 'features', 'security', 'roles', 'faq']
+const links = ['how', 'features', 'security', 'roles', 'faq']
 
 function toggleLocale() {
   setLocale(locale.value === 'en' ? 'ar' : 'en')
