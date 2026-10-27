@@ -3,8 +3,8 @@ import { computed } from 'vue'
 import AtlWave from '@/components/AtlWave.vue'
 
 const props = defineProps({
-  // How far the ship has come in, from 0 (out at sea, to the right) to 1 (alongside the berth).
-  dock: { type: Number, default: 1 },
+  // How far the ship has sailed, from 0 (out at sea, to the right) to 1 (at the far left of the harbour).
+  sail: { type: Number, default: 1 },
 })
 
 const cranes = [
@@ -31,13 +31,12 @@ const cargo = Array.from({ length: 24 }, (_, i) => ({
   fill: palette[(i * 7 + 2) % palette.length],
 }))
 
-// Alongside, the ship sits in the middle of the scene so it stays in view on narrow screens.
-const ship = computed(() => `translate(${(1 - props.dock) * 640 - 130} 0)`)
+const ship = computed(() => `translate(${640 - props.sail * 1080} 0)`)
 // The wake shows only while the ship is moving.
-const wake = computed(() => (props.dock > 0.02 && props.dock < 0.98 ? 0.7 : 0))
+const wake = computed(() => (props.sail > 0.02 && props.sail < 0.98 ? 0.7 : 0))
 </script>
 
-<!-- The port at dusk: shore, cranes, container stacks and a ship sailing in to its berth. -->
+<!-- The port at dusk: shore, cranes, container stacks and a ship sailing across the harbour. -->
 <template>
   <div class="pointer-events-none absolute inset-x-0 bottom-0" aria-hidden="true">
     <svg
