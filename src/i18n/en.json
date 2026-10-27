@@ -173,7 +173,8 @@
       "close": "Close menu",
       "label": "Main",
       "security": "Security",
-      "signIn": "Sign in"
+      "signIn": "Sign in",
+      "top": "Home"
     },
     "faq": {
       "title": "Questions ports ask us",
