@@ -32,14 +32,18 @@ const cargo = Array.from({ length: 24 }, (_, i) => ({
   fill: palette[(i * 7 + 2) % palette.length],
 }))
 
+// The port sinks and fades as the product window rises, so the two never overlap.
+const fade = computed(() => ({
+  opacity: 1 - Math.min(1, Math.max(0, (props.progress - 0.1) / 0.3)),
+}))
 const far = computed(() => `translate(0 ${props.progress * 40})`)
-const near = computed(() => `translate(0 ${props.progress * 90})`)
+const near = computed(() => `translate(0 ${props.progress * 160})`)
 const ship = computed(() => `translate(${-props.progress * 220} ${props.progress * 60})`)
 </script>
 
 <!-- The port at dusk: shore, cranes, container stacks and a ship coming in. -->
 <template>
-  <div class="pointer-events-none absolute inset-x-0 bottom-0" aria-hidden="true">
+  <div class="pointer-events-none absolute inset-x-0 bottom-0" :style="fade" aria-hidden="true">
     <svg class="block h-[36svh] w-full" viewBox="0 0 1440 300" preserveAspectRatio="xMidYMax slice">
       <g :transform="far">
         <path

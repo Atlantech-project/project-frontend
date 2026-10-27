@@ -157,14 +157,24 @@
       "line2": "Stronger ports.",
       "top": "Back to top"
     },
-    "footer": "Mansoura University, Graduation Project 2026",
+    "footer": {
+      "about": "Intelligent port operations: one live picture for berths, tugs, pilots and terminals.",
+      "product": "Product",
+      "project": "Project",
+      "university": "Mansoura University",
+      "graduation": "Graduation Project 2026",
+      "language": "Language",
+      "rights": "© 2026 ATLANTECH. All rights reserved.",
+      "nav": "Footer"
+    },
     "nav": {
       "features": "Features",
       "how": "How it works",
       "roles": "Who it's for",
       "faq": "Questions",
       "menu": "Menu",
-      "close": "Close menu"
+      "close": "Close menu",
+      "label": "Main"
     },
     "faq": {
       "title": "Questions ports ask us",

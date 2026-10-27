@@ -1,9 +1,17 @@
 <script setup>
 import { useI18n } from 'vue-i18n'
 import AtlantechLogo from '@/brand/AtlantechLogo.vue'
+import AtlIcon from '@/components/AtlIcon.vue'
 import AtlWave from '@/components/AtlWave.vue'
+import { setLocale } from '@/i18n'
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
+
+const links = ['features', 'how', 'roles', 'faq']
+
+function toggleLocale() {
+  setLocale(locale.value === 'en' ? 'ar' : 'en')
+}
 </script>
 
 <template>
@@ -23,12 +31,52 @@ const { t } = useI18n()
       </a>
     </div>
   </section>
-  <footer class="border-t border-offwhite/10 bg-navy px-4 py-8 text-offwhite">
-    <div
-      class="mx-auto flex max-w-6xl flex-col items-center gap-4 text-center md:flex-row md:justify-between md:text-start"
-    >
-      <AtlantechLogo shape="wordmark" tone="reversed" :height="28" />
-      <p class="text-sm text-offwhite/70">{{ t('landing.footer') }}</p>
+  <footer class="bg-navy text-offwhite">
+    <div class="mx-auto grid max-w-6xl gap-12 px-4 py-16 md:grid-cols-[1.6fr_1fr_1fr]">
+      <div>
+        <AtlantechLogo shape="wordmark" tone="reversed" :height="34" />
+        <p class="mt-5 max-w-sm leading-relaxed text-offwhite/70">
+          {{ t('landing.footer.about') }}
+        </p>
+      </div>
+      <nav :aria-label="t('landing.footer.nav')">
+        <h3 class="font-display font-semibold">{{ t('landing.footer.product') }}</h3>
+        <ul class="mt-4 grid gap-3">
+          <li v-for="link in links" :key="link">
+            <a
+              :href="`#${link}`"
+              class="text-offwhite/70 transition-colors hover:text-offwhite hover:underline"
+            >
+              {{ t(`landing.nav.${link}`) }}
+            </a>
+          </li>
+        </ul>
+      </nav>
+      <div>
+        <h3 class="font-display font-semibold">{{ t('landing.footer.project') }}</h3>
+        <ul class="mt-4 grid gap-3 text-offwhite/70">
+          <li>{{ t('landing.footer.university') }}</li>
+          <li>{{ t('landing.footer.graduation') }}</li>
+          <li>
+            <button
+              type="button"
+              class="flex items-center gap-2 transition-colors hover:text-offwhite hover:underline"
+              @click="toggleLocale"
+            >
+              <AtlIcon name="globe" :size="16" />
+              {{ t('language.switch') }}
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="border-t border-offwhite/10">
+      <div
+        class="mx-auto flex max-w-6xl flex-col gap-2 px-4 py-6 text-sm text-offwhite/60 sm:flex-row sm:justify-between"
+      >
+        <p>{{ t('landing.footer.rights') }}</p>
+        <p>{{ t('landing.footer.university') }}, {{ t('landing.footer.graduation') }}</p>
+      </div>
     </div>
   </footer>
 </template>

@@ -11,4 +11,10 @@ describe('routes', () => {
   it('keeps the not-found catch-all last', () => {
     expect(routes.at(-1).name).toBe('not-found')
   })
+
+  it('keeps the public pages in the light brand look', () => {
+    for (const name of ['landing', 'error', 'not-found']) {
+      expect(routes.find((r) => r.name === name).meta.theme).toBe('light')
+    }
+  })
 })

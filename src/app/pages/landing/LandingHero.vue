@@ -37,7 +37,7 @@ const toastShown = computed(() => progress.value > 0.64)
       <PortSkyline class="atl-hero__skyline" :progress="progress" />
 
       <div
-        class="atl-hero__title absolute inset-x-0 top-[15svh] z-10 px-4 text-center"
+        class="atl-hero__title absolute inset-x-0 top-[max(15svh,5.5rem)] z-10 px-4 text-center"
         :style="titleStyle"
       >
         <h1
@@ -76,7 +76,7 @@ const toastShown = computed(() => progress.value > 0.64)
       </div>
 
       <div
-        class="atl-hero__preview absolute inset-x-0 top-1/2 z-20 mx-auto w-[min(1040px,92vw)] -translate-y-1/2"
+        class="atl-hero__preview absolute inset-x-0 top-[calc(50%+2rem)] z-20 mx-auto w-[min(1040px,92vw,150svh)] -translate-y-1/2"
         :style="previewStyle"
       >
         <PortPreview />

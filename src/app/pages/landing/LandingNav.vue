@@ -2,6 +2,7 @@
 import { onBeforeUnmount, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import AtlantechLogo from '@/brand/AtlantechLogo.vue'
+import AtlIcon from '@/components/AtlIcon.vue'
 import { setLocale } from '@/i18n'
 
 const { t, locale } = useI18n()
@@ -9,6 +10,8 @@ const { t, locale } = useI18n()
 const links = ['features', 'how', 'roles', 'faq']
 const scrolled = ref(false)
 const open = ref(false)
+const active = ref('')
+let observer = null
 
 function onScroll() {
   scrolled.value = window.scrollY > 24
@@ -21,64 +24,106 @@ function toggleLocale() {
 onMounted(() => {
   onScroll()
   window.addEventListener('scroll', onScroll, { passive: true })
+  if (typeof IntersectionObserver === 'undefined') return
+  // The link of the section crossing the middle of the screen is marked as current.
+  observer = new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) {
+        if (entry.isIntersecting) active.value = entry.target.id
+        else if (active.value === entry.target.id) active.value = ''
+      }
+    },
+    { rootMargin: '-45% 0px -50% 0px' },
+  )
+  for (const id of links) {
+    const el = document.getElementById(id)
+    if (el) observer.observe(el)
+  }
 })
-onBeforeUnmount(() => window.removeEventListener('scroll', onScroll))
+
+onBeforeUnmount(() => {
+  window.removeEventListener('scroll', onScroll)
+  observer?.disconnect()
+})
 </script>
 
-<!-- Landing navigation: clear over the hero sky, solid once the page scrolls. -->
 <template>
   <header
-    class="fixed inset-x-0 top-0 z-50 text-offwhite transition-colors duration-300"
-    :class="scrolled || open ? 'bg-navy/90 shadow-lg backdrop-blur' : 'bg-transparent'"
+    class="fixed inset-x-0 top-0 z-50 text-offwhite transition-[background-color,box-shadow] duration-300"
+    :class="
+      scrolled || open
+        ? 'bg-navy shadow-[0_1px_0_rgb(229_225_221/0.1),0_10px_30px_-12px_rgb(0_0_0/0.5)]'
+        : 'bg-transparent'
+    "
   >
-    <nav class="mx-auto flex h-16 max-w-6xl items-center gap-6 px-4">
-      <a href="#top" class="shrink-0" @click="open = false">
-        <AtlantechLogo shape="wordmark" tone="reversed" :height="28" />
+    <nav
+      class="mx-auto grid h-[72px] max-w-6xl grid-cols-[auto_1fr_auto] items-center gap-4 px-4"
+      :aria-label="t('landing.nav.label')"
+    >
+      <a href="#top" class="flex items-center" @click="open = false">
+        <AtlantechLogo shape="wordmark" tone="reversed" :height="30" />
       </a>
-      <ul class="ms-auto hidden items-center gap-6 md:flex">
+
+      <ul class="hidden items-center justify-center gap-1 md:flex">
         <li v-for="link in links" :key="link">
           <a
             :href="`#${link}`"
-            class="text-sm font-medium text-offwhite/80 transition-colors hover:text-offwhite"
+            class="block rounded-full px-4 py-2 text-[15px] font-medium transition-colors"
+            :class="
+              active === link
+                ? 'bg-offwhite/15 text-offwhite'
+                : 'text-offwhite/75 hover:bg-offwhite/5 hover:text-offwhite'
+            "
+            :aria-current="active === link ? 'true' : undefined"
           >
             {{ t(`landing.nav.${link}`) }}
           </a>
         </li>
       </ul>
-      <button
-        type="button"
-        class="ms-auto rounded-full border border-offwhite/40 px-4 py-1.5 text-sm font-medium transition-colors hover:bg-offwhite/10 md:ms-0"
-        @click="toggleLocale"
-      >
-        {{ t('language.switch') }}
-      </button>
-      <button
-        type="button"
-        class="grid size-10 place-items-center rounded-full hover:bg-offwhite/10 md:hidden"
-        :aria-expanded="open"
-        aria-controls="landing-menu"
-        :aria-label="open ? t('landing.nav.close') : t('landing.nav.menu')"
-        @click="open = !open"
-      >
-        <svg
-          width="22"
-          height="22"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
+
+      <div class="col-start-3 flex items-center gap-2">
+        <button
+          type="button"
+          class="flex items-center gap-2 rounded-full border border-offwhite/30 px-4 py-2 text-sm font-medium transition-colors hover:bg-offwhite/10"
+          @click="toggleLocale"
         >
-          <path v-if="open" d="M6 6l12 12M18 6L6 18" />
-          <path v-else d="M4 7h16M4 12h16M4 17h16" />
-        </svg>
-      </button>
+          <AtlIcon name="globe" :size="16" />
+          {{ t('language.switch') }}
+        </button>
+        <button
+          type="button"
+          class="grid size-10 place-items-center rounded-full transition-colors hover:bg-offwhite/10 md:hidden"
+          :aria-expanded="open"
+          aria-controls="landing-menu"
+          :aria-label="open ? t('landing.nav.close') : t('landing.nav.menu')"
+          @click="open = !open"
+        >
+          <svg
+            width="22"
+            height="22"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            aria-hidden="true"
+          >
+            <path v-if="open" d="M6 6l12 12M18 6L6 18" />
+            <path v-else d="M4 7h16M4 12h16M4 17h16" />
+          </svg>
+        </button>
+      </div>
     </nav>
-    <ul v-if="open" id="landing-menu" class="grid gap-1 px-4 pb-4 md:hidden">
+
+    <ul
+      v-if="open"
+      id="landing-menu"
+      class="grid gap-1 border-t border-offwhite/10 px-4 pt-3 pb-5 md:hidden"
+    >
       <li v-for="link in links" :key="link">
         <a
           :href="`#${link}`"
-          class="block rounded-[var(--atl-radius-sm)] px-3 py-3 font-medium hover:bg-offwhite/10"
+          class="block rounded-[var(--atl-radius-sm)] px-3 py-3 text-lg font-medium hover:bg-offwhite/10"
           @click="open = false"
         >
           {{ t(`landing.nav.${link}`) }}

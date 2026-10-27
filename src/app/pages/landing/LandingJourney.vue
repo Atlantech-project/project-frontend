@@ -35,7 +35,7 @@ const sail = computed(() => {
 <!-- How it works, told as one vessel call while the reader scrolls. -->
 <template>
   <section id="how" ref="section" class="atl-journey relative h-[440svh] bg-bg">
-    <div class="atl-journey__stage sticky top-0 flex h-svh items-center overflow-hidden">
+    <div class="atl-journey__stage sticky top-0 flex h-svh items-center overflow-hidden pt-16">
       <div
         class="mx-auto grid w-full max-w-6xl items-center gap-8 px-4 md:grid-cols-[0.8fr_1.2fr] md:gap-14"
       >
@@ -86,7 +86,7 @@ const sail = computed(() => {
         </div>
 
         <div
-          class="relative overflow-hidden rounded-[var(--atl-radius-lg)] bg-navy p-3 text-offwhite shadow-2xl sm:p-4"
+          class="relative w-full max-w-[calc((100svh-9rem)*1.3)] justify-self-center overflow-hidden rounded-[var(--atl-radius-lg)] bg-navy p-3 text-offwhite shadow-2xl sm:p-4"
         >
           <Transition name="atl-chip" mode="out-in">
             <p

@@ -19,9 +19,9 @@ function opacity(i) {
 
 <template>
   <section ref="section" class="atl-statement relative h-[240svh] bg-teal-light text-navy">
-    <div class="sticky top-0 grid h-svh place-items-center px-4">
+    <div class="sticky top-0 grid h-svh place-items-center px-4 pt-16">
       <p
-        class="max-w-5xl font-display text-3xl leading-tight font-semibold tracking-tight sm:text-5xl lg:text-6xl"
+        class="max-w-5xl font-display text-[clamp(1.75rem,min(5vw,6.5svh),3.75rem)] leading-tight font-semibold tracking-tight"
       >
         <span v-for="(word, i) in words" :key="i" :style="{ opacity: opacity(i) }">
           {{ word }}{{ ' ' }}
