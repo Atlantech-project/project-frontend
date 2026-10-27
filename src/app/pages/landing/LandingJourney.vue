@@ -40,13 +40,8 @@ const sail = computed(() => {
         class="mx-auto grid w-full max-w-6xl items-center gap-8 px-4 md:grid-cols-[0.8fr_1.2fr] md:gap-14"
       >
         <div>
-          <p
-            class="text-sm font-semibold tracking-[0.25em] rtl:tracking-normal text-accent-text uppercase"
-          >
-            {{ t('landing.journey.eyebrow') }}
-          </p>
           <h2
-            class="mt-3 font-display text-4xl leading-tight font-semibold tracking-tight text-text sm:text-5xl"
+            class="font-display text-4xl leading-tight font-semibold tracking-tight text-text sm:text-5xl"
           >
             {{ t('landing.journey.title') }}
           </h2>

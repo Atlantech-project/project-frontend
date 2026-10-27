@@ -8,34 +8,3 @@
     scroll-behavior: smooth;
   }
 }
-
-/* v-reveal (src/composables/reveal.js) */
-.atl-reveal {
-  opacity: 0;
-  transform: translateY(40px) scale(0.98);
-  transition:
-    opacity 0.9s cubic-bezier(0.2, 0.7, 0.2, 1),
-    transform 0.9s cubic-bezier(0.2, 0.7, 0.2, 1);
-  transition-delay: var(--atl-reveal-delay, 0ms);
-}
-
-.atl-reveal.is-visible {
-  opacity: 1;
-  transform: none;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .atl-reveal {
-    opacity: 1;
-    transform: none;
-    transition: none;
-  }
-}
-
-/* Teal-to-gold text for large headlines on navy */
-.atl-gradient-text {
-  background: linear-gradient(90deg, var(--atl-light-teal), var(--atl-muted-gold));
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}

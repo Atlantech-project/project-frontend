@@ -26,31 +26,49 @@ const previewStyle = computed(() => {
 })
 
 const toastShown = computed(() => progress.value > 0.6)
+
+// Depth contours, as on a nautical chart of the port approach.
+const contours = Array.from({ length: 10 }, (_, k) => {
+  const points = Array.from({ length: 73 }, (_, i) => {
+    const a = (i / 72) * Math.PI * 2
+    const r = 90 + k * 78 + 26 * Math.sin(a * 3 + k * 0.7) + 14 * Math.cos(a * 5 - k)
+    return `${(1180 + r * 1.35 * Math.cos(a)).toFixed(1)} ${(760 + r * Math.sin(a)).toFixed(1)}`
+  })
+  return `M${points.join(' L')} Z`
+})
 </script>
 
 <!-- Hero: a tall section whose stage stays pinned while the scroll drives the reveal. -->
 <template>
   <section id="top" ref="section" class="atl-hero relative h-[230svh] bg-navy text-offwhite">
     <div class="atl-hero__stage sticky top-0 h-svh overflow-hidden">
-      <div class="atl-orb atl-orb--teal" aria-hidden="true" />
-      <div class="atl-orb atl-orb--gold" aria-hidden="true" />
+      <svg
+        class="absolute inset-0 size-full"
+        viewBox="0 0 1440 900"
+        preserveAspectRatio="xMidYMid slice"
+        aria-hidden="true"
+      >
+        <path
+          v-for="(d, k) in contours"
+          :key="k"
+          :d="d"
+          fill="none"
+          stroke="var(--atl-light-teal)"
+          :stroke-opacity="0.16 - k * 0.012"
+        />
+      </svg>
 
       <div
-        class="atl-hero__title absolute inset-x-0 top-[11svh] z-10 px-4 text-center"
+        class="atl-hero__title absolute inset-x-0 top-[13svh] z-10 px-4 text-center"
         :style="titleStyle"
       >
-        <p
-          class="atl-rise text-xs font-semibold tracking-[0.3em] rtl:tracking-normal text-gold uppercase sm:text-sm"
-        >
-          {{ t('landing.hero.eyebrow') }}
-        </p>
         <h1
-          class="mt-5 font-display text-5xl leading-[1.04] font-semibold tracking-tight sm:text-7xl lg:text-8xl"
+          class="font-display text-5xl leading-[1.04] font-semibold tracking-tight sm:text-7xl lg:text-8xl"
         >
           <span class="atl-rise block" style="--atl-rise-delay: 120ms">
             {{ t('landing.hero.line1') }}
           </span>
-          <span class="atl-rise atl-gradient-text block pb-2" style="--atl-rise-delay: 260ms">
+          <span class="atl-rise block" style="--atl-rise-delay: 260ms">
             {{ t('landing.hero.line2') }}
           </span>
         </h1>
@@ -66,14 +84,13 @@ const toastShown = computed(() => progress.value > 0.6)
         >
           <a
             href="#how"
-            class="inline-flex items-center gap-2 rounded-full bg-offwhite px-6 py-3 font-semibold text-navy transition hover:scale-[1.03] hover:bg-white"
+            class="rounded-full bg-offwhite px-6 py-3 font-semibold text-navy transition-colors hover:bg-white"
           >
             {{ t('landing.hero.ctaHow') }}
-            <AtlIcon name="arrow" :size="18" />
           </a>
           <a
             href="#features"
-            class="rounded-full border border-offwhite/30 px-6 py-3 font-semibold transition hover:bg-offwhite/10"
+            class="rounded-full border border-offwhite/30 px-6 py-3 font-semibold transition-colors hover:bg-offwhite/10"
           >
             {{ t('landing.hero.ctaFeatures') }}
           </a>
@@ -107,28 +124,6 @@ const toastShown = computed(() => progress.value > 0.6)
   will-change: transform;
 }
 
-.atl-orb {
-  position: absolute;
-  width: 55vmax;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  filter: blur(60px);
-  pointer-events: none;
-  animation: atl-drift 18s ease-in-out infinite alternate;
-}
-
-.atl-orb--teal {
-  inset: -25vmax auto auto -15vmax;
-  background: radial-gradient(circle, rgb(64 126 140 / 0.55), transparent 65%);
-}
-
-.atl-orb--gold {
-  inset: auto -20vmax -30vmax auto;
-  background: radial-gradient(circle, rgb(165 141 102 / 0.35), transparent 65%);
-  animation-duration: 22s;
-  animation-direction: alternate-reverse;
-}
-
 .atl-rise {
   animation: atl-rise 1.1s cubic-bezier(0.2, 0.7, 0.2, 1) both;
   animation-delay: var(--atl-rise-delay, 0ms);
@@ -139,12 +134,6 @@ const toastShown = computed(() => progress.value > 0.6)
     opacity: 0;
     transform: translateY(28px);
     filter: blur(8px);
-  }
-}
-
-@keyframes atl-drift {
-  to {
-    transform: translate(8vmax, 6vmax) scale(1.1);
   }
 }
 
@@ -168,7 +157,6 @@ const toastShown = computed(() => progress.value > 0.6)
     transform: none !important;
     translate: none;
   }
-  .atl-orb,
   .atl-rise {
     animation: none;
   }

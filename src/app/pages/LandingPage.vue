@@ -3,7 +3,6 @@ import LandingFeatures from './landing/LandingFeatures.vue'
 import LandingFinale from './landing/LandingFinale.vue'
 import LandingHero from './landing/LandingHero.vue'
 import LandingJourney from './landing/LandingJourney.vue'
-import LandingNumbers from './landing/LandingNumbers.vue'
 import LandingRoles from './landing/LandingRoles.vue'
 import LandingStatement from './landing/LandingStatement.vue'
 </script>
@@ -15,7 +14,6 @@ import LandingStatement from './landing/LandingStatement.vue'
     <LandingStatement />
     <LandingJourney />
     <LandingFeatures />
-    <LandingNumbers />
     <LandingRoles />
     <LandingFinale />
   </div>
