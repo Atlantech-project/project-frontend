@@ -13,7 +13,7 @@ const reduced =
 const smooth = (p) => p * p * (3 - 2 * p)
 
 // The headline stays while the scroll sails the ship across the harbour, from the open sea
-// on the right to the far left of the port.
+// on the right until it leaves the port on the left.
 const sail = computed(() => (reduced ? 1 : smooth(range(progress.value, 0.02, 0.92))))
 </script>
 
