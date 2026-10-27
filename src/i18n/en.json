@@ -3,10 +3,6 @@
     "name": "ATLANTECH",
     "tagline": "Intelligent Port Operations"
   },
-  "home": {
-    "title": "Web dashboard",
-    "body": "The workspace is ready. Pages arrive feature by feature from Sprint 2."
-  },
   "notFound": {
     "title": "Page not found",
     "body": "The page you asked for doesn't exist.",
@@ -52,5 +48,37 @@
     "audit": "Audit log",
     "aiModels": "AI models",
     "settings": "Operational settings"
+  },
+  "landing": {
+    "title": "The whole port on one screen",
+    "tagline": "Smarter coordination. Stronger ports.",
+    "body": "ATLANTECH brings berths, tugs, pilots and terminals together so every vessel call is planned once, safely, and kept up to date live.",
+    "points": {
+      "berthing": {
+        "title": "Berthing",
+        "body": "Requests, entry windows and plans in one flow."
+      },
+      "resources": {
+        "title": "Shared resources",
+        "body": "Berths, tugs and pilots without double booking."
+      },
+      "live": {
+        "title": "Live",
+        "body": "Changes show up the moment they happen."
+      }
+    }
+  },
+  "states": {
+    "loading": "Loading…",
+    "emptyTitle": "Nothing here yet",
+    "emptyBody": "There's nothing to show right now.",
+    "errorTitle": "Something went wrong",
+    "errorBody": "We couldn't load this. Check your connection and try again.",
+    "retry": "Try again"
+  },
+  "error": {
+    "title": "The page couldn't open",
+    "body": "Something went wrong on our side. Try again, or go back to the start.",
+    "back": "Back to home"
   }
 }
