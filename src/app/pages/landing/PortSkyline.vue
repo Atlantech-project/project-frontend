@@ -3,7 +3,7 @@ import { computed } from 'vue'
 import AtlWave from '@/components/AtlWave.vue'
 
 const props = defineProps({
-  // How far the ship has sailed, from 0 (out at sea, to the right) to 1 (gone past the left edge).
+  // How far the ship has sailed, from 0 (out of sight past the right edge) to 1 (gone past the left edge).
   sail: { type: Number, default: 1 },
 })
 
@@ -31,7 +31,7 @@ const cargo = Array.from({ length: 24 }, (_, i) => ({
   fill: palette[(i * 7 + 2) % palette.length],
 }))
 
-const ship = computed(() => `translate(${640 - props.sail * 1780} 0)`)
+const ship = computed(() => `translate(${860 - props.sail * 2000} 0)`)
 // The wake shows only while the ship is moving.
 const wake = computed(() => (props.sail > 0.02 && props.sail < 0.98 ? 0.7 : 0))
 </script>
