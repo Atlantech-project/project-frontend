@@ -7,7 +7,7 @@ import { setLocale } from '@/i18n'
 
 const { t, locale } = useI18n()
 
-const links = ['features', 'how', 'roles', 'faq']
+const links = ['why', 'how', 'features', 'security', 'roles', 'faq']
 
 function toggleLocale() {
   setLocale(locale.value === 'en' ? 'ar' : 'en')
@@ -56,6 +56,7 @@ function toggleLocale() {
         <h3 class="font-display font-semibold">{{ t('landing.footer.project') }}</h3>
         <ul class="mt-4 grid gap-3 text-offwhite/70">
           <li>{{ t('landing.footer.university') }}</li>
+          <li>{{ t('landing.footer.faculty') }}</li>
           <li>{{ t('landing.footer.graduation') }}</li>
           <li>
             <button

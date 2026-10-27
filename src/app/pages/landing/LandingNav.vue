@@ -7,7 +7,7 @@ import { setLocale } from '@/i18n'
 
 const { t, locale } = useI18n()
 
-const links = ['features', 'how', 'roles', 'faq']
+const links = ['why', 'how', 'features', 'security', 'faq']
 const scrolled = ref(false)
 const open = ref(false)
 const active = ref('')

@@ -28,7 +28,7 @@ function opacity(i) {
         </span>
       </p>
     </div>
-    <AtlWave animated base="var(--atl-bg)" class="absolute inset-x-0 bottom-0 h-16" />
+    <AtlWave animated base="var(--atl-surface)" class="absolute inset-x-0 bottom-0 h-16" />
   </section>
 </template>
 

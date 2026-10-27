@@ -74,7 +74,7 @@
       "toastBody": "Berth, tugs and pilot for Nile Star",
       "window": "Next safe window"
     },
-    "statement": "Ports still plan vessel calls by phone and spreadsheet. ATLANTECH puts every department on one live picture, so each call is planned once, approved by people, and kept up to date.",
+    "statement": "A port is many independent parties sharing the same berths, channel, tugs and pilots. ATLANTECH looks at all of their requests together, recommends one coordinated plan, and people approve it before it runs.",
     "journey": {
       "title": "From request to berth.",
       "checkpoint": "Human approval",
@@ -165,7 +165,8 @@
       "graduation": "Graduation Project 2026",
       "language": "Language",
       "rights": "© 2026 ATLANTECH. All rights reserved.",
-      "nav": "Footer"
+      "nav": "Footer",
+      "faculty": "Faculty of Computers and Information"
     },
     "nav": {
       "features": "Features",
@@ -174,7 +175,9 @@
       "faq": "Questions",
       "menu": "Menu",
       "close": "Close menu",
-      "label": "Main"
+      "label": "Main",
+      "why": "The problem",
+      "security": "Security"
     },
     "faq": {
       "title": "Questions ports ask us",
@@ -199,6 +202,67 @@
           "q": "Does the system decide on its own?",
           "a": "No. It recommends entry windows, berths, tugs and pilots and explains why, and port staff approve every plan before it runs."
         }
+      }
+    },
+    "problem": {
+      "title": "Every party plans alone. The whole port pays for it.",
+      "body": "Port authority, pilotage, tugs and terminals each plan their own resources correctly, yet the port still suffers conflicts and delays.",
+      "items": {
+        "isolated": {
+          "title": "Isolated planning",
+          "body": "Each party optimises its own resources, so clashes over shared berths, tugs and pilots only show up on the day."
+        },
+        "future": {
+          "title": "No view of what is coming",
+          "body": "Upcoming arrivals, cargo needs and demand from other terminals are not anticipated."
+        },
+        "sea": {
+          "title": "Planning blind to the sea",
+          "body": "Tide, wind, waves and visibility change safe berthing limits by the hour, yet windows are rarely planned against forecasts."
+        }
+      },
+      "result": "The result: vessels wait, tidal windows are missed and one delay spreads to the next."
+    },
+    "systems": {
+      "title": "Works with the systems you already run.",
+      "body": "ATLANTECH sits above your terminal and port systems and never replaces them. People approve every plan before it is sent for execution.",
+      "principle": "ATLANTECH recommends and coordinates. Your existing systems execute.",
+      "layer": "Recommends and coordinates",
+      "approved": "Approved plans",
+      "tos": "Terminal operating systems",
+      "tosExample": "such as Navis N4",
+      "pms": "Port management systems",
+      "pmsExample": "such as SPS-Harbor",
+      "field": "Field teams",
+      "fieldExample": "pilots, tug masters and supervisors on tablets",
+      "execute": "Execute"
+    },
+    "security": {
+      "title": "Runs inside your port.",
+      "body": "Every port gets the same system as its own installation. Ports differ by configuration, not by code.",
+      "items": {
+        "server": {
+          "title": "Your own server",
+          "body": "A dedicated installation on the port's own server, inside the port network."
+        },
+        "data": {
+          "title": "Data stays in the port",
+          "body": "Operational data never reaches the central platform, which only manages licences."
+        },
+        "learning": {
+          "title": "Learns from your port only",
+          "body": "The AI improves from your port's own outcomes. No model or data is shared between ports."
+        },
+        "scale": {
+          "title": "Scales by configuration",
+          "body": "From 1 terminal and 5 berths up to 10 terminals and 50 berths, with no code changes."
+        }
+      },
+      "reference": "Designed with Damietta Port as the reference case",
+      "facts": {
+        "terminals": "terminals",
+        "berths": "berths",
+        "calls": "vessel calls a day"
       }
     }
   },
