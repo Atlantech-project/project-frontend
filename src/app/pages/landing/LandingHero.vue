@@ -15,12 +15,12 @@ const ease = (p) => 1 - Math.pow(1 - p, 3)
 // As the page scrolls, the headline drifts back and fades while the product window
 // rises from below, straightens and grows to full size.
 const titleStyle = computed(() => {
-  const p = range(progress.value, 0.02, 0.4)
+  const p = range(progress.value, 0.02, 0.22)
   return { opacity: 1 - p, transform: `translateY(${-90 * p}px) scale(${1 - 0.12 * p})` }
 })
 
 const previewStyle = computed(() => {
-  const p = ease(range(progress.value, 0.08, 0.66))
+  const p = ease(range(progress.value, 0.14, 0.66))
   return {
     transform: `perspective(1800px) translateY(${(1 - p) * 80}svh) rotateX(${(1 - p) * 26}deg) scale(${0.84 + 0.16 * p})`,
   }

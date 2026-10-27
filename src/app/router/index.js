@@ -36,6 +36,12 @@ export const routes = [
 export const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes,
+  // Links like /#how land on their section, below the fixed landing navigation.
+  scrollBehavior(to, from, saved) {
+    if (saved) return saved
+    if (to.hash) return { el: to.hash, top: 72 }
+    return { top: 0 }
+  },
 })
 
 // The public pages are designed in the light brand look, so they keep it in system dark mode.
