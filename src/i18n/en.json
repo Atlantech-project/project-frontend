@@ -84,10 +84,11 @@
         },
         "execute": {
           "title": "Execution",
-          "body": "Teams carry out the plan and every move is tracked live.",
-          "status": "Berthed, tracking live"
+          "body": "Teams carry out the plan and every move is tracked live."
         }
-      }
+      },
+      "sailing": "Sailing the channel to B-03",
+      "berthed": "Berthed, tracking live"
     },
     "features": {
       "title": "Everything a vessel call needs.",
