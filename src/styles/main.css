@@ -2,3 +2,9 @@
 @import 'tailwindcss';
 @import '../brand/css/tokens.css';
 @import '../brand/css/tailwind-theme.css';
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}

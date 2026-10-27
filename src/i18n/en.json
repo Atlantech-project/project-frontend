@@ -4,8 +4,8 @@
     "tagline": "Intelligent Port Operations"
   },
   "notFound": {
-    "title": "Page not found",
-    "body": "The page you asked for doesn't exist.",
+    "title": "This page drifted off course",
+    "body": "We couldn't find the page you're looking for. It may have moved, or the link is wrong.",
     "back": "Back to home"
   },
   "language": {
@@ -50,23 +50,89 @@
     "settings": "Operational settings"
   },
   "landing": {
+    "eyebrow": "Intelligent Port Operations",
     "title": "The whole port on one screen",
     "tagline": "Smarter coordination. Stronger ports.",
-    "body": "ATLANTECH brings berths, tugs, pilots and terminals together so every vessel call is planned once, safely, and kept up to date live.",
-    "points": {
-      "berthing": {
-        "title": "Berthing",
-        "body": "Requests, entry windows and plans in one flow."
+    "body": "ATLANTECH brings berths, tugs, pilots and terminals together, so every vessel call is planned once, safely, and kept up to date live.",
+    "ctaHow": "See how it works",
+    "ctaFeatures": "What it does",
+    "preview": {
+      "title": "Port state",
+      "live": "Live",
+      "status": {
+        "berthing": "Berthing",
+        "pilot": "Pilot on board",
+        "waiting": "Waiting"
       },
-      "resources": {
-        "title": "Shared resources",
-        "body": "Berths, tugs and pilots without double booking."
-      },
-      "live": {
-        "title": "Live",
-        "body": "Changes show up the moment they happen."
+      "toastTitle": "Recommendation ready",
+      "toastBody": "Berth, tugs and pilot for Nile Star"
+    },
+    "features": {
+      "title": "Everything a vessel call needs",
+      "body": "One shared picture for the port authority, pilots, tugs and terminals, instead of phone calls and spreadsheets.",
+      "items": {
+        "requests": {
+          "title": "Berthing requests",
+          "body": "Submit, review and approve each request and follow it through its whole lifecycle."
+        },
+        "windows": {
+          "title": "Safe entry windows",
+          "body": "Weather, tide and channel depth turn into safe windows and clearly blocked periods."
+        },
+        "recommendations": {
+          "title": "Smart recommendations",
+          "body": "Ranked berth, tug and pilot options, each with the reason it was chosen."
+        },
+        "resources": {
+          "title": "Tugs and pilots",
+          "body": "Rosters and assignments in one place, with no double booking across departments."
+        },
+        "yard": {
+          "title": "Container yard",
+          "body": "BAPLIE files and yard placement suggestions for the container terminal."
+        },
+        "tracking": {
+          "title": "Live tracking",
+          "body": "Plans update the moment something changes, and deviations show up right away."
+        }
       }
-    }
+    },
+    "how": {
+      "title": "How it works",
+      "body": "Every call follows the same path, and people approve every plan before it runs.",
+      "checkpoint": "Human approval",
+      "steps": {
+        "request": {
+          "title": "Request",
+          "body": "The berthing request and cargo data arrive."
+        },
+        "window": {
+          "title": "Entry window",
+          "body": "Safe windows are found and staff confirm one."
+        },
+        "recommend": {
+          "title": "Recommendation",
+          "body": "Berth, tugs and pilot are proposed and staff confirm or adjust them."
+        },
+        "execute": {
+          "title": "Execution",
+          "body": "Teams carry out the plan and progress is tracked live."
+        }
+      }
+    },
+    "roles": {
+      "title": "Built for everyone in the port",
+      "body": "Each role sees only the pages and terminals it works with.",
+      "items": {
+        "authority": "Port authority",
+        "pilotage": "Pilotage",
+        "tugs": "Tug department",
+        "terminal": "Container terminal",
+        "safety": "Marine safety",
+        "admin": "Port administration"
+      }
+    },
+    "footer": "Mansoura University · Graduation Project 2026"
   },
   "states": {
     "loading": "Loading…",
@@ -77,8 +143,8 @@
     "retry": "Try again"
   },
   "error": {
-    "title": "The page couldn't open",
-    "body": "Something went wrong on our side. Try again, or go back to the start.",
+    "title": "Rough waters",
+    "body": "Something went wrong on our side and the page couldn't open. Try again, or head back to the start.",
     "back": "Back to home"
   }
 }
