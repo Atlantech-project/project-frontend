@@ -1,39 +1,48 @@
 <script setup>
 import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import AtlIcon from '@/components/AtlIcon.vue'
 import { range, useScrollProgress } from '@/composables/useScrollProgress'
-import PortPreview from './PortPreview.vue'
 import PortSkyline from './PortSkyline.vue'
 
 const { t } = useI18n()
 const section = ref(null)
 const progress = useScrollProgress(section)
+const reduced =
+  typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
 
 const ease = (p) => 1 - Math.pow(1 - p, 3)
 
-// As the page scrolls, the headline drifts back and fades while the product window
-// rises from below, straightens and grows to full size.
+// As the page scrolls, the headline drifts back and fades, the port grows into view
+// and the ship sails in until it lies alongside its berth.
 const titleStyle = computed(() => {
   const p = range(progress.value, 0.02, 0.22)
   return { opacity: 1 - p, transform: `translateY(${-90 * p}px) scale(${1 - 0.12 * p})` }
 })
 
-const previewStyle = computed(() => {
-  const p = ease(range(progress.value, 0.14, 0.66))
-  return {
-    transform: `perspective(1800px) translateY(${(1 - p) * 80}svh) rotateX(${(1 - p) * 26}deg) scale(${0.84 + 0.16 * p})`,
-  }
+// Wide screens zoom into the port; narrow ones keep the whole ship in view.
+const zoom = typeof window !== 'undefined' && window.innerWidth >= 768 ? 0.32 : 0
+const sceneStyle = computed(() => {
+  const p = ease(range(progress.value, 0.04, 0.5))
+  return { transform: `scale(${1 + zoom * p})` }
 })
 
-const toastShown = computed(() => progress.value > 0.64)
+const dock = computed(() => (reduced ? 1 : ease(range(progress.value, 0.1, 0.8))))
+
+// The vessel's status follows the ship, the same steps the dashboard shows.
+const status = computed(() => {
+  if (dock.value >= 1) return 'alongside'
+  if (dock.value > 0.66) return 'berthing'
+  if (dock.value > 0.3) return 'pilot'
+  return 'approach'
+})
+const statusShown = computed(() => reduced || progress.value > 0.2)
 </script>
 
 <!-- Hero: a tall section whose stage stays pinned while the scroll drives the reveal. -->
 <template>
   <section id="top" ref="section" class="atl-hero relative h-[240svh] text-offwhite">
     <div class="atl-hero__stage atl-sky sticky top-0 h-svh overflow-hidden">
-      <PortSkyline class="atl-hero__skyline" :progress="progress" />
+      <PortSkyline class="atl-hero__skyline" :dock="dock" :style="sceneStyle" />
 
       <div
         class="atl-hero__title absolute inset-x-0 top-[max(15svh,5.5rem)] z-10 px-4 text-center"
@@ -75,20 +84,35 @@ const toastShown = computed(() => progress.value > 0.64)
       </div>
 
       <div
-        class="atl-hero__preview absolute inset-x-0 top-[calc(50%+2rem)] z-20 mx-auto w-[min(1040px,92vw,150svh)] -translate-y-1/2"
-        :style="previewStyle"
+        class="atl-hero__status absolute inset-x-0 bottom-[34svh] z-20 sm:bottom-[54svh] flex justify-center px-4 transition duration-700"
+        :class="statusShown ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'"
+        aria-hidden="true"
       >
-        <PortPreview />
         <div
-          class="absolute -bottom-6 start-6 flex items-center gap-3 rounded-[var(--atl-radius)] bg-offwhite px-4 py-3 text-navy transition duration-700"
-          :class="toastShown ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'"
+          class="flex items-center gap-4 rounded-[var(--atl-radius-lg)] bg-offwhite px-5 py-4 text-navy shadow-xl"
         >
-          <span class="grid size-9 place-items-center rounded-full bg-gold/20 text-accent-text">
-            <AtlIcon name="spark" :size="20" />
+          <span
+            class="relative grid size-11 place-items-center rounded-full transition-colors duration-500"
+            :class="status === 'alongside' ? 'bg-teal text-offwhite' : 'bg-gold/25 text-navy'"
+          >
+            <svg
+              v-if="status === 'alongside'"
+              width="22"
+              height="22"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.4"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M5 12.5l4.5 4.5L19 7.5" />
+            </svg>
+            <span v-else class="atl-hero__ping size-3 rounded-full bg-gold" />
           </span>
-          <div>
-            <p class="text-sm font-semibold">{{ t('landing.preview.toastTitle') }}</p>
-            <p class="text-sm text-navy/70">{{ t('landing.preview.toastBody') }}</p>
+          <div class="min-w-[15rem]">
+            <p class="font-display text-lg font-semibold">{{ t('landing.hero.vessel') }}</p>
+            <p class="text-[15px] text-navy/80">{{ t(`landing.hero.status.${status}`) }}</p>
           </div>
         </div>
       </div>
@@ -97,8 +121,22 @@ const toastShown = computed(() => progress.value > 0.64)
 </template>
 
 <style scoped>
-.atl-hero__preview {
+.atl-hero__skyline {
+  transform-origin: 50% 100%;
   will-change: transform;
+}
+
+.atl-hero__ping {
+  animation: atl-ping 1.6s ease-out infinite;
+}
+
+@keyframes atl-ping {
+  0% {
+    box-shadow: 0 0 0 0 rgb(165 141 102 / 0.6);
+  }
+  100% {
+    box-shadow: 0 0 0 12px rgb(165 141 102 / 0);
+  }
 }
 
 /* Dusk over the port: flat deep navy sky, the sun drawn flat in the skyline scene. */
@@ -119,7 +157,7 @@ const toastShown = computed(() => progress.value > 0.64)
   }
 }
 
-/* Less motion: no pinned reveal, the headline and the window simply stack. */
+/* Less motion: no pinned reveal; the headline, the status and the docked ship simply stack. */
 @media (prefers-reduced-motion: reduce) {
   .atl-hero {
     height: auto;
@@ -136,14 +174,16 @@ const toastShown = computed(() => progress.value > 0.64)
     order: 3;
   }
   .atl-hero__title,
-  .atl-hero__preview {
+  .atl-hero__status,
+  .atl-hero__skyline {
     position: relative;
     inset: auto;
     opacity: 1 !important;
     transform: none !important;
     translate: none;
   }
-  .atl-rise {
+  .atl-rise,
+  .atl-hero__ping {
     animation: none;
   }
 }

@@ -3,8 +3,8 @@ import { computed } from 'vue'
 import AtlWave from '@/components/AtlWave.vue'
 
 const props = defineProps({
-  // Scroll progress of the hero (0 to 1); the layers drift at different speeds.
-  progress: { type: Number, default: 0 },
+  // How far the ship has come in, from 0 (out at sea, to the right) to 1 (alongside the berth).
+  dock: { type: Number, default: 1 },
 })
 
 const cranes = [
@@ -16,7 +16,6 @@ const palette = ['#a58d66', '#407e8c', '#c0d5d6', '#e5e1dd', '#2c6b78', '#8c7552
 // Container stacks on the quay: [x, columns, rows].
 const stacks = [
   [40, 5, 3],
-  [660, 7, 4],
   [1220, 6, 3],
 ]
 const boxes = stacks.flatMap(([x, cols, rows], s) =>
@@ -32,20 +31,21 @@ const cargo = Array.from({ length: 24 }, (_, i) => ({
   fill: palette[(i * 7 + 2) % palette.length],
 }))
 
-// The port sinks and fades as the product window rises, so the two never overlap.
-const fade = computed(() => ({
-  opacity: 1 - Math.min(1, Math.max(0, (props.progress - 0.1) / 0.3)),
-}))
-const far = computed(() => `translate(0 ${props.progress * 40})`)
-const near = computed(() => `translate(0 ${props.progress * 160})`)
-const ship = computed(() => `translate(${-props.progress * 220} ${props.progress * 60})`)
+// Alongside, the ship sits in the middle of the scene so it stays in view on narrow screens.
+const ship = computed(() => `translate(${(1 - props.dock) * 640 - 130} 0)`)
+// The wake shows only while the ship is moving.
+const wake = computed(() => (props.dock > 0.02 && props.dock < 0.98 ? 0.7 : 0))
 </script>
 
-<!-- The port at dusk: shore, cranes, container stacks and a ship coming in. -->
+<!-- The port at dusk: shore, cranes, container stacks and a ship sailing in to its berth. -->
 <template>
-  <div class="pointer-events-none absolute inset-x-0 bottom-0" :style="fade" aria-hidden="true">
-    <svg class="block h-[36svh] w-full" viewBox="0 0 1440 300" preserveAspectRatio="xMidYMax slice">
-      <g :transform="far">
+  <div class="pointer-events-none absolute inset-x-0 bottom-0" aria-hidden="true">
+    <svg
+      class="block h-[26svh] w-full sm:h-[36svh]"
+      viewBox="0 0 1440 300"
+      preserveAspectRatio="xMidYMax slice"
+    >
+      <g>
         <circle cx="1120" cy="150" r="58" fill="var(--atl-muted-gold)" opacity="0.9" />
         <circle
           cx="1120"
@@ -62,7 +62,7 @@ const ship = computed(() => `translate(${-props.progress * 220} ${props.progress
           opacity="0.45"
         />
       </g>
-      <g :transform="near">
+      <g>
         <g v-for="c in cranes" :key="c.x" :transform="`translate(${c.x} 0)`" :fill="c.fill">
           <rect x="0" y="118" width="8" height="152" />
           <rect x="64" y="118" width="8" height="152" />
@@ -99,6 +99,15 @@ const ship = computed(() => `translate(${-props.progress * 220} ${props.progress
         <rect x="1016" y="194" width="32" height="6" rx="1" fill="#083a4f" />
         <path d="M600 236 H1100 L1076 292 H630 Z" fill="#041f2b" />
         <path d="M604 246 H1096" stroke="#a58d66" stroke-width="3" />
+        <path
+          d="M1084 286 C 1150 280, 1220 292, 1300 284 M1090 294 C 1170 290, 1250 298, 1340 292"
+          stroke="#e5e1dd"
+          stroke-width="2"
+          stroke-linecap="round"
+          fill="none"
+          class="transition-opacity duration-500"
+          :opacity="wake"
+        />
       </g>
     </svg>
     <AtlWave animated base="var(--atl-light-teal)" class="absolute inset-x-0 bottom-0 h-12" />

@@ -55,24 +55,14 @@
       "line2": "One screen.",
       "body": "Berths, tugs, pilots and terminals plan each vessel call together, and everyone sees changes as they happen.",
       "ctaHow": "See how it works",
-      "ctaFeatures": "Explore features"
-    },
-    "preview": {
-      "title": "Port state",
-      "live": "Live",
-      "kpi": {
-        "vessels": "Vessels in port",
-        "berths": "Berths free",
-        "tugs": "Tugs at work"
-      },
+      "ctaFeatures": "Explore features",
+      "vessel": "Nile Star",
       "status": {
-        "berthing": "Berthing",
-        "pilot": "Pilot on board",
-        "waiting": "Waiting"
-      },
-      "toastTitle": "Recommendation ready",
-      "toastBody": "Berth, tugs and pilot for Nile Star",
-      "window": "Next safe window"
+        "approach": "Approaching the channel",
+        "pilot": "Pilot on board, tugs alongside",
+        "berthing": "Berthing at B-03",
+        "alongside": "Alongside B-03, on time"
+      }
     },
     "statement": "A port is many parties sharing the same berths, tugs and pilots. ATLANTECH recommends one coordinated plan, and people approve it before it runs.",
     "journey": {
