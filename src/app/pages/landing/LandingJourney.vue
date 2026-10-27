@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref } from 'vue'
+import { computed, onBeforeUnmount, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import AtlIcon from '@/components/AtlIcon.vue'
 import { range, useScrollProgress } from '@/composables/useScrollProgress'
@@ -56,15 +56,32 @@ function pointAt(t) {
   return { x: a.x, y: a.y, angle }
 }
 
-const sail = computed(() => {
-  const p = range(progress.value, 0.76, 0.97)
-  return pointAt(p * p * (3 - 2 * p))
+// The ship eases towards the scroll position instead of jumping with it.
+const target = () => {
+  const p = range(progress.value, 0.76, 0.99)
+  return p * p * (3 - 2 * p)
+}
+const travelled = ref(target())
+let frame = 0
+
+function glide() {
+  const gap = target() - travelled.value
+  travelled.value = Math.abs(gap) < 0.0005 ? target() : travelled.value + gap * 0.035
+  frame = travelled.value === target() ? 0 : requestAnimationFrame(glide)
+}
+
+watch(progress, () => {
+  if (!frame) frame = requestAnimationFrame(glide)
 })
+
+onBeforeUnmount(() => cancelAnimationFrame(frame))
+
+const sail = computed(() => pointAt(travelled.value))
 </script>
 
 <!-- How it works, told as one vessel call while the reader scrolls. -->
 <template>
-  <section id="how" ref="section" class="atl-journey relative h-[440svh] bg-bg">
+  <section id="how" ref="section" class="atl-journey relative h-[640svh] bg-bg">
     <div class="atl-journey__stage sticky top-0 flex h-svh items-center overflow-hidden pt-16">
       <div
         class="mx-auto grid w-full max-w-6xl items-center gap-8 px-4 md:grid-cols-[0.8fr_1.2fr] md:gap-14"
