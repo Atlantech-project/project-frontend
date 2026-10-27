@@ -50,26 +50,71 @@
     "settings": "Operational settings"
   },
   "landing": {
-    "eyebrow": "Intelligent Port Operations",
-    "title": "The whole port on one screen",
-    "tagline": "Smarter coordination. Stronger ports.",
-    "body": "ATLANTECH brings berths, tugs, pilots and terminals together, so every vessel call is planned once, safely, and kept up to date live.",
-    "ctaHow": "See how it works",
-    "ctaFeatures": "What it does",
+    "hero": {
+      "eyebrow": "Intelligent Port Operations",
+      "line1": "The whole port.",
+      "line2": "One screen.",
+      "body": "Berths, tugs, pilots and terminals, planned together and kept true, live.",
+      "ctaHow": "See how it works",
+      "ctaFeatures": "Explore features"
+    },
     "preview": {
       "title": "Port state",
       "live": "Live",
+      "kpi": {
+        "vessels": "Vessels in port",
+        "berths": "Berths free",
+        "tugs": "Tugs at work"
+      },
       "status": {
         "berthing": "Berthing",
         "pilot": "Pilot on board",
         "waiting": "Waiting"
       },
       "toastTitle": "Recommendation ready",
-      "toastBody": "Berth, tugs and pilot for Nile Star"
+      "toastBody": "Berth, tugs and pilot for Nile Star",
+      "window": "Next safe window"
+    },
+    "statement": "Ports still plan vessel calls by phone and spreadsheet. ATLANTECH puts every department on one live picture, so each call is planned once, approved by people, and kept up to date.",
+    "journey": {
+      "eyebrow": "How it works",
+      "title": "From request to berth.",
+      "checkpoint": "Human approval",
+      "map": {
+        "anchorage": "Anchorage",
+        "channel": "Channel",
+        "quay": "Quay"
+      },
+      "steps": {
+        "request": {
+          "title": "Request",
+          "body": "The berthing request and cargo data arrive in one place.",
+          "status": "Request received · Nile Star"
+        },
+        "window": {
+          "title": "Safe entry window",
+          "body": "Weather, tide and channel depth give the safe windows, and staff confirm one.",
+          "status": "Window 14:00 – 17:00 confirmed"
+        },
+        "recommend": {
+          "title": "Recommendation",
+          "body": "Berth, tugs and pilot are proposed with their reasons, and staff confirm or adjust them.",
+          "status": "Berth B-03 · 2 tugs · pilot assigned"
+        },
+        "execute": {
+          "title": "Execution",
+          "body": "Teams carry out the plan and every move is tracked live.",
+          "status": "Berthed · tracking live"
+        }
+      }
     },
     "features": {
-      "title": "Everything a vessel call needs",
-      "body": "One shared picture for the port authority, pilots, tugs and terminals, instead of phone calls and spreadsheets.",
+      "eyebrow": "Features",
+      "title": "Everything a vessel call needs.",
+      "body": "One shared picture for the port authority, pilots, tugs and terminals.",
+      "safe": "Safe",
+      "blocked": "Blocked",
+      "best": "Best match",
       "items": {
         "requests": {
           "title": "Berthing requests",
@@ -95,33 +140,20 @@
           "title": "Live tracking",
           "body": "Plans update the moment something changes, and deviations show up right away."
         }
-      }
+      },
+      "option": "{tugs} tugs · pilot"
     },
-    "how": {
-      "title": "How it works",
-      "body": "Every call follows the same path, and people approve every plan before it runs.",
-      "checkpoint": "Human approval",
-      "steps": {
-        "request": {
-          "title": "Request",
-          "body": "The berthing request and cargo data arrive."
-        },
-        "window": {
-          "title": "Entry window",
-          "body": "Safe windows are found and staff confirm one."
-        },
-        "recommend": {
-          "title": "Recommendation",
-          "body": "Berth, tugs and pilot are proposed and staff confirm or adjust them."
-        },
-        "execute": {
-          "title": "Execution",
-          "body": "Teams carry out the plan and progress is tracked live."
-        }
+    "numbers": {
+      "title": "Built around people, not just data.",
+      "items": {
+        "steps": "steps for every vessel call",
+        "modules": "modules in one place",
+        "languages": "languages, Arabic and English",
+        "approval": "of plans approved by a person"
       }
     },
     "roles": {
-      "title": "Built for everyone in the port",
+      "title": "Built for everyone in the port.",
       "body": "Each role sees only the pages and terminals it works with.",
       "items": {
         "authority": "Port authority",
@@ -131,6 +163,11 @@
         "safety": "Marine safety",
         "admin": "Port administration"
       }
+    },
+    "finale": {
+      "line1": "Smarter coordination.",
+      "line2": "Stronger ports.",
+      "top": "Back to top"
     },
     "footer": "Mansoura University · Graduation Project 2026"
   },
