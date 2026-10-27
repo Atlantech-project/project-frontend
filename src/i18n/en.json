@@ -160,13 +160,9 @@
     "footer": {
       "about": "Intelligent port operations: one live picture for berths, tugs, pilots and terminals.",
       "product": "Product",
-      "project": "Project",
-      "university": "Mansoura University",
-      "graduation": "Graduation Project 2026",
       "language": "Language",
       "rights": "© 2026 ATLANTECH. All rights reserved.",
-      "nav": "Footer",
-      "faculty": "Faculty of Computers and Information"
+      "nav": "Footer"
     },
     "nav": {
       "features": "Features",

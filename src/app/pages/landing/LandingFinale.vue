@@ -53,11 +53,8 @@ function toggleLocale() {
         </ul>
       </nav>
       <div>
-        <h3 class="font-display font-semibold">{{ t('landing.footer.project') }}</h3>
+        <h3 class="font-display font-semibold">{{ t('landing.footer.language') }}</h3>
         <ul class="mt-4 grid gap-3 text-offwhite/70">
-          <li>{{ t('landing.footer.university') }}</li>
-          <li>{{ t('landing.footer.faculty') }}</li>
-          <li>{{ t('landing.footer.graduation') }}</li>
           <li>
             <button
               type="button"
@@ -76,7 +73,6 @@ function toggleLocale() {
         class="mx-auto flex max-w-6xl flex-col gap-2 px-4 py-6 text-sm text-offwhite/60 sm:flex-row sm:justify-between"
       >
         <p>{{ t('landing.footer.rights') }}</p>
-        <p>{{ t('landing.footer.university') }}, {{ t('landing.footer.graduation') }}</p>
       </div>
     </div>
   </footer>
