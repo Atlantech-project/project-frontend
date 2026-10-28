@@ -5,6 +5,10 @@ import AtlWave from '@/components/AtlWave.vue'
 const props = defineProps({
   // How far the ship has sailed, from 0 (out of sight past the right edge) to 1 (gone past the left edge).
   sail: { type: Number, default: 1 },
+  // How far night has turned to dawn (0 to 1): the sun rises behind the cranes.
+  dawn: { type: Number, default: 1 },
+  // How many of the port's lights are on (0 to 1); they switch on one after another.
+  lights: { type: Number, default: 1 },
 })
 
 const cranes = [
@@ -31,6 +35,17 @@ const cargo = Array.from({ length: 24 }, (_, i) => ({
   fill: palette[(i * 7 + 2) % palette.length],
 }))
 
+// Floodlights on each crane's apex and beam ends, switched on from left to right.
+const lamps = cranes
+  .flatMap((c) => [
+    [c.x - 66, 112],
+    [c.x + 36, 50],
+    [c.x + 162, 112],
+  ])
+  .sort((a, b) => a[0] - b[0])
+const lampOn = (i) => props.lights > (i + 0.5) / lamps.length
+const sunY = computed(() => (1 - props.dawn) * 150)
+
 const ship = computed(() => `translate(${860 - props.sail * 2000} 0)`)
 // The wake shows only while the ship is moving.
 const wake = computed(() => (props.sail > 0.02 && props.sail < 0.98 ? 0.7 : 0))
@@ -44,17 +59,28 @@ const wake = computed(() => (props.sail > 0.02 && props.sail < 0.98 ? 0.7 : 0))
       viewBox="0 0 1440 300"
       preserveAspectRatio="xMidYMax slice"
     >
+      <defs>
+        <clipPath id="atl-horizon"><rect width="1440" height="232" /></clipPath>
+        <radialGradient id="atl-lamp-glow">
+          <stop offset="0" stop-color="#f6e2b8" stop-opacity="0.75" />
+          <stop offset="1" stop-color="#f6e2b8" stop-opacity="0" />
+        </radialGradient>
+      </defs>
       <g>
-        <circle cx="1120" cy="150" r="58" fill="var(--atl-muted-gold)" opacity="0.9" />
-        <circle
-          cx="1120"
-          cy="150"
-          r="82"
-          fill="none"
-          stroke="var(--atl-muted-gold)"
-          stroke-opacity="0.35"
-          stroke-width="10"
-        />
+        <g clip-path="url(#atl-horizon)">
+          <g :transform="`translate(0 ${sunY})`">
+            <circle cx="1120" cy="150" r="58" fill="var(--atl-muted-gold)" opacity="0.9" />
+            <circle
+              cx="1120"
+              cy="150"
+              r="82"
+              fill="none"
+              stroke="var(--atl-muted-gold)"
+              stroke-opacity="0.35"
+              stroke-width="10"
+            />
+          </g>
+        </g>
         <path
           d="M0 230 C 160 200, 280 214, 420 206 S 720 180, 900 200 S 1260 190, 1440 214 V300 H0Z"
           fill="#2c6b78"
@@ -82,6 +108,15 @@ const wake = computed(() => (props.sail > 0.02 && props.sail < 0.98 ? 0.7 : 0))
           :fill="b.fill"
         />
         <rect x="0" y="268" width="1440" height="32" fill="#06303f" />
+        <g
+          v-for="([x, y], i) in lamps"
+          :key="`lamp-${i}`"
+          class="atl-lamp"
+          :opacity="lampOn(i) ? 1 : 0"
+        >
+          <circle :cx="x" :cy="y" r="16" fill="url(#atl-lamp-glow)" />
+          <circle :cx="x" :cy="y" r="3.5" fill="#fff3d6" />
+        </g>
       </g>
       <g :transform="ship" class="atl-ship">
         <rect
@@ -95,7 +130,15 @@ const wake = computed(() => (props.sail > 0.02 && props.sail < 0.98 ? 0.7 : 0))
           :fill="b.fill"
         />
         <rect x="1010" y="186" width="44" height="50" rx="3" fill="#e5e1dd" />
-        <rect x="1016" y="194" width="32" height="6" rx="1" fill="#083a4f" />
+        <rect
+          x="1016"
+          y="194"
+          width="32"
+          height="6"
+          rx="1"
+          class="atl-lamp"
+          :fill="lights > 0.5 ? '#f6e2b8' : '#083a4f'"
+        />
         <path d="M600 236 H1100 L1076 292 H630 Z" fill="#041f2b" />
         <path d="M604 246 H1096" stroke="#a58d66" stroke-width="3" />
         <path
@@ -116,6 +159,12 @@ const wake = computed(() => (props.sail > 0.02 && props.sail < 0.98 ? 0.7 : 0))
 <style scoped>
 .atl-ship {
   animation: atl-ship-bob 5s ease-in-out infinite;
+}
+
+.atl-lamp {
+  transition:
+    opacity 0.5s,
+    fill 0.5s;
 }
 
 @keyframes atl-ship-bob {

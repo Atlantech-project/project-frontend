@@ -226,6 +226,15 @@
         "terminals": "terminals",
         "berths": "berths",
         "calls": "vessel calls a day"
+      },
+      "map": {
+        "network": "Port network",
+        "server": "Port server",
+        "internet": "Outside",
+        "berths": "Berths",
+        "tugs": "Tugs",
+        "pilots": "Pilots",
+        "yard": "Yard"
       }
     },
     "contact": {

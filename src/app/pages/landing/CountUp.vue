@@ -27,7 +27,7 @@ function count() {
 }
 
 onMounted(() => {
-  const reduced = matchMedia?.('(prefers-reduced-motion: reduce)').matches
+  const reduced = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
   if (typeof IntersectionObserver === 'undefined' || reduced) return
   shown.value = 0
   observer = new IntersectionObserver(

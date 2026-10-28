@@ -2,7 +2,9 @@
 import { useI18n } from 'vue-i18n'
 import AtlIcon from '@/components/AtlIcon.vue'
 import CountUp from './CountUp.vue'
+import { vSpotlight } from './glass'
 import { vReveal } from './reveal'
+import SecurityMap from './SecurityMap.vue'
 
 const { t } = useI18n()
 
@@ -23,14 +25,17 @@ const facts = [
 <template>
   <section id="security" class="scroll-mt-16 bg-teal-light px-4 py-24 text-navy sm:py-28">
     <div class="mx-auto max-w-6xl">
-      <div class="max-w-3xl">
-        <h2
-          v-reveal
-          class="font-display text-3xl leading-tight font-semibold tracking-tight sm:text-5xl"
-        >
-          {{ t('landing.security.title') }}
-        </h2>
-        <p v-reveal="1" class="mt-4 text-lg text-navy">{{ t('landing.security.body') }}</p>
+      <div class="grid items-center gap-10 lg:grid-cols-[1fr_1.1fr]">
+        <div class="max-w-xl">
+          <h2
+            v-reveal
+            class="font-display text-3xl leading-tight font-semibold tracking-tight sm:text-5xl"
+          >
+            {{ t('landing.security.title') }}
+          </h2>
+          <p v-reveal="1" class="mt-4 text-lg text-navy">{{ t('landing.security.body') }}</p>
+        </div>
+        <SecurityMap v-reveal="2" class="mx-auto max-w-[520px]" />
       </div>
 
       <ul class="mt-14 grid gap-x-10 gap-y-10 sm:grid-cols-2">
@@ -53,6 +58,7 @@ const facts = [
 
       <div
         v-reveal
+        v-spotlight
         class="mt-14 grid gap-6 rounded-[var(--atl-radius-lg)] bg-navy p-7 text-offwhite md:grid-cols-[1.2fr_2fr] md:items-center"
       >
         <p class="font-display text-lg font-semibold">{{ t('landing.security.reference') }}</p>

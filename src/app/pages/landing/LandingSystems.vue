@@ -1,6 +1,7 @@
 <script setup>
 import { useI18n } from 'vue-i18n'
 import AtlantechLogo from '@/brand/AtlantechLogo.vue'
+import { vSpotlight } from './glass'
 import { vReveal } from './reveal'
 
 const { t } = useI18n()
@@ -37,6 +38,7 @@ const executors = [
         <div aria-hidden="true">
           <div
             v-reveal
+            v-spotlight
             class="flex items-center gap-4 rounded-[var(--atl-radius-lg)] bg-navy p-5 text-offwhite"
           >
             <AtlantechLogo shape="symbol" tone="reversed" :height="44" />
