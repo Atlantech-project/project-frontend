@@ -159,7 +159,9 @@
       "label": "Main",
       "security": "Security",
       "top": "Home",
-      "contact": "Contact us"
+      "contact": "Contact us",
+      "themeDark": "Switch to dark mode",
+      "themeLight": "Switch to light mode"
     },
     "faq": {
       "title": "Questions ports ask us",

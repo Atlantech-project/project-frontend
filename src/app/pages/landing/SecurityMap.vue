@@ -25,7 +25,7 @@ const outside = 'M402 118 C 402 146, 384 160, 346 162'
   <div class="relative aspect-[44/30] w-full" dir="ltr" aria-hidden="true">
     <!-- The port wall -->
     <div
-      class="absolute rounded-[28px] border-2 border-navy/80 bg-white/25 shadow-[inset_0_0_0_6px_rgb(255_255_255/0.25)]"
+      class="absolute rounded-[28px] border-2 border-navy/80 bg-white/25 shadow-[inset_0_0_0_6px_rgb(255_255_255/0.25)] dark:border-teal-light/50 dark:bg-white/5 dark:shadow-[inset_0_0_0_6px_rgb(255_255_255/0.04)]"
       :style="{ left: '3.6%', right: '21.8%', top: '9%', bottom: '3%' }"
     />
     <span
@@ -36,7 +36,7 @@ const outside = 'M402 118 C 402 146, 384 160, 346 162'
       {{ t('landing.security.map.network') }}
     </span>
 
-    <svg viewBox="0 0 440 300" class="absolute inset-0 size-full">
+    <svg viewBox="0 0 440 300" class="absolute inset-0 size-full text-navy dark:text-offwhite">
       <defs>
         <filter id="atl-dot-glow" x="-1" y="-1" width="3" height="3">
           <feGaussianBlur stdDeviation="2" />
@@ -54,7 +54,7 @@ const outside = 'M402 118 C 402 146, 384 160, 346 162'
       <path
         :d="outside"
         fill="none"
-        stroke="var(--atl-deep-navy)"
+        stroke="currentColor"
         stroke-opacity="0.3"
         stroke-width="1.6"
         stroke-dasharray="3 5"
@@ -84,7 +84,7 @@ const outside = 'M402 118 C 402 146, 384 160, 346 162'
             />
           </circle>
         </g>
-        <circle r="3" fill="var(--atl-deep-navy)" fill-opacity="0.55">
+        <circle r="3" fill="currentColor" fill-opacity="0.55">
           <animateMotion :path="outside" dur="2.4s" repeatCount="indefinite" />
           <animate
             attributeName="opacity"
@@ -101,10 +101,12 @@ const outside = 'M402 118 C 402 146, 384 160, 346 162'
     <span
       v-for="m in modules"
       :key="m.key"
-      class="atl-glass atl-glass--light absolute flex -translate-x-1/2 -translate-y-1/2 items-center gap-2 rounded-full py-1 ps-1 pe-3 text-xs font-semibold whitespace-nowrap text-navy sm:py-1.5 sm:ps-1.5 sm:pe-4 sm:text-sm"
+      class="atl-glass atl-glass--light absolute flex -translate-x-1/2 -translate-y-1/2 items-center gap-2 rounded-full py-1 ps-1 pe-3 text-xs font-semibold whitespace-nowrap text-navy sm:py-1.5 dark:text-offwhite sm:ps-1.5 sm:pe-4 sm:text-sm"
       :style="at(m.x, m.y)"
     >
-      <span class="grid size-6 place-items-center rounded-full bg-navy text-offwhite sm:size-8">
+      <span
+        class="grid size-6 place-items-center rounded-full bg-navy text-offwhite sm:size-8 dark:bg-teal"
+      >
         <AtlIcon :name="m.icon" :size="15" />
       </span>
       {{ t(`landing.security.map.${m.key}`) }}
@@ -130,7 +132,7 @@ const outside = 'M402 118 C 402 146, 384 160, 346 162'
 
     <!-- Outside the wall: a request that is turned back -->
     <span
-      class="absolute flex -translate-x-1/2 -translate-y-1/2 items-center gap-1 text-xs font-semibold whitespace-nowrap text-navy/60"
+      class="absolute flex -translate-x-1/2 -translate-y-1/2 items-center gap-1 text-xs font-semibold whitespace-nowrap text-navy/60 dark:text-offwhite/60"
       :style="at(402, 104)"
     >
       <AtlIcon name="globe" :size="14" />

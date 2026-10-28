@@ -3,6 +3,7 @@ import { onBeforeUnmount, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import AtlantechLogo from '@/brand/AtlantechLogo.vue'
 import AtlIcon from '@/components/AtlIcon.vue'
+import { theme, toggleTheme } from '@/composables/useTheme'
 import { setLocale } from '@/i18n'
 
 const { t, locale } = useI18n()
@@ -83,15 +84,25 @@ onBeforeUnmount(() => {
       <div class="col-start-3 flex items-center gap-2">
         <button
           type="button"
-          class="atl-glass atl-glass-btn flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium hover:bg-offwhite/15"
+          class="atl-glass atl-glass-btn flex h-10 items-center gap-2 rounded-full px-3 text-sm font-medium hover:bg-offwhite/15 sm:px-4"
           @click="toggleLocale"
         >
           <AtlIcon name="globe" :size="16" />
-          {{ t('language.switch') }}
+          <!-- On phones the globe alone fits; the name stays for screen readers. -->
+          <span class="sr-only sm:not-sr-only">{{ t('language.switch') }}</span>
+        </button>
+        <button
+          type="button"
+          class="atl-glass atl-glass-btn grid size-10 place-items-center rounded-full hover:bg-offwhite/15"
+          :aria-label="theme === 'dark' ? t('landing.nav.themeLight') : t('landing.nav.themeDark')"
+          :title="theme === 'dark' ? t('landing.nav.themeLight') : t('landing.nav.themeDark')"
+          @click="toggleTheme"
+        >
+          <AtlIcon :name="theme === 'dark' ? 'sun' : 'moon'" :size="18" />
         </button>
         <a
           href="#contact"
-          class="atl-glass atl-glass-btn rounded-full bg-gold/85 px-5 py-2 text-sm font-semibold text-navy hover:bg-gold"
+          class="atl-glass atl-glass-btn rounded-full bg-gold/85 px-4 py-2 text-sm font-semibold whitespace-nowrap text-navy hover:bg-gold sm:px-5"
           @click="open = false"
         >
           {{ t('landing.nav.contact') }}

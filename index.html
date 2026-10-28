@@ -9,6 +9,15 @@
     <link rel="apple-touch-icon" href="/brand/icons/apple-touch-icon.png" />
     <link rel="manifest" href="/brand/icons/site.webmanifest" />
     <title>ATLANTECH</title>
+    <script>
+      // Apply the remembered light or dark look before the first paint (see useTheme.js).
+      try {
+        var t = localStorage.getItem('atl-theme')
+        if (t !== 'dark' && t !== 'light')
+          t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+        document.documentElement.dataset.theme = t
+      } catch (e) {}
+    </script>
     <style>
       /* Boot screen: the ATLANTECH symbol filling with a tide (same look as AtlTideLogo). */
       .atl-boot {

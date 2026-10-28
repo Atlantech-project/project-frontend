@@ -23,7 +23,10 @@ const facts = [
 </script>
 
 <template>
-  <section id="security" class="scroll-mt-16 bg-teal-light px-4 py-24 text-navy sm:py-28">
+  <section
+    id="security"
+    class="scroll-mt-16 bg-[var(--atl-band)] px-4 py-24 text-navy sm:py-28 dark:text-offwhite"
+  >
     <div class="mx-auto max-w-6xl">
       <div class="grid items-center gap-10 lg:grid-cols-[1fr_1.1fr]">
         <div class="max-w-xl">
@@ -33,7 +36,7 @@ const facts = [
           >
             {{ t('landing.security.title') }}
           </h2>
-          <p v-reveal="1" class="mt-4 text-lg text-navy">{{ t('landing.security.body') }}</p>
+          <p v-reveal="1" class="mt-4 text-lg">{{ t('landing.security.body') }}</p>
         </div>
         <SecurityMap v-reveal="2" class="mx-auto max-w-[520px]" />
       </div>
@@ -41,7 +44,7 @@ const facts = [
       <ul class="mt-14 grid gap-x-10 gap-y-10 sm:grid-cols-2">
         <li v-for="(p, i) in points" :key="p.key" v-reveal="i % 2" class="flex gap-4">
           <span
-            class="grid size-12 shrink-0 place-items-center rounded-full bg-navy text-teal-light"
+            class="grid size-12 shrink-0 place-items-center rounded-full bg-navy text-teal-light dark:bg-teal dark:text-offwhite"
           >
             <AtlIcon :name="p.icon" :size="22" />
           </span>
@@ -49,7 +52,7 @@ const facts = [
             <h3 class="font-display text-xl font-semibold">
               {{ t(`landing.security.items.${p.key}.title`) }}
             </h3>
-            <p class="mt-1.5 leading-relaxed text-navy">
+            <p class="mt-1.5 leading-relaxed">
               {{ t(`landing.security.items.${p.key}.body`) }}
             </p>
           </div>

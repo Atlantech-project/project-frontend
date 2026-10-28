@@ -18,12 +18,15 @@ const water = (extra) =>
 </script>
 
 <template>
-  <section ref="section" class="atl-statement relative h-[240svh] bg-teal-light text-navy">
+  <section
+    ref="section"
+    class="atl-statement relative h-[240svh] bg-[var(--atl-band)] text-navy dark:text-offwhite"
+  >
     <div class="sticky top-0 grid h-svh place-items-center px-4 pt-16">
       <div
         class="relative max-w-5xl font-display text-[clamp(1.5rem,min(3.4vw,4.4svh),2.25rem)] leading-snug font-semibold tracking-tight"
       >
-        <p class="text-navy/20">{{ t('landing.statement') }}</p>
+        <p class="text-navy/20 dark:text-offwhite/15">{{ t('landing.statement') }}</p>
         <div
           class="atl-tide atl-tide--crest absolute inset-x-0 bottom-0"
           :style="{ height: water(5) }"
@@ -69,6 +72,10 @@ const water = (extra) =>
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent;
+}
+
+:root[data-theme='dark'] .atl-tide__text {
+  background-image: linear-gradient(180deg, var(--atl-light-teal), var(--atl-off-white) 70%);
 }
 
 @keyframes atl-swell {

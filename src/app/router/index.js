@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { applyTheme } from '@/composables/useTheme'
 
 // Each feature exports its own routes; meta.pageId links a route to the Screens spec (P-xx).
 // Role guards and P-20 Access Denied come with FE-021.
@@ -6,13 +7,12 @@ export const routes = [
   {
     path: '/',
     name: 'landing',
-    meta: { ownHeader: true, theme: 'light' },
+    meta: { ownHeader: true },
     component: () => import('@/app/pages/LandingPage.vue'),
   },
   {
     path: '/error',
     name: 'error',
-    meta: { theme: 'light' },
     component: () => import('@/app/pages/ErrorPage.vue'),
   },
   // Dev builds only: preview of the shared loading, empty and error states.
@@ -28,7 +28,6 @@ export const routes = [
   {
     path: '/:pathMatch(.*)*',
     name: 'not-found',
-    meta: { theme: 'light' },
     component: () => import('@/app/pages/NotFoundPage.vue'),
   },
 ]
@@ -44,11 +43,8 @@ export const router = createRouter({
   },
 })
 
-// The public pages are designed in the light brand look, so they keep it in system dark mode.
-router.afterEach((to) => {
-  if (to.meta.theme) document.documentElement.dataset.theme = to.meta.theme
-  else delete document.documentElement.dataset.theme
-})
+// Every page shows the visitor's chosen look, light or dark.
+router.afterEach(() => applyTheme())
 
 // A page that fails to load (for example after a new deploy) shows the error page.
 router.onError((error, to) => {

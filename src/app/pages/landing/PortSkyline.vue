@@ -178,7 +178,7 @@ const ship = computed(() => `translate(${860 - props.sail * 2000} 0)`)
         <path d="M604 246 H1096" stroke="#a58d66" stroke-width="3" />
       </g>
     </svg>
-    <AtlWave animated base="var(--atl-light-teal)" class="absolute inset-x-0 bottom-0 h-12" />
+    <AtlWave animated base="var(--atl-band)" class="absolute inset-x-0 bottom-0 h-12" />
   </div>
 </template>
 
