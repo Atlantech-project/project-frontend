@@ -12,14 +12,6 @@ const { t, locale } = useI18n()
 
 const links = ['how', 'features', 'security', 'roles', 'faq', 'contact']
 
-// Two rows of containers on the little ship in the finale.
-const palette = ['#a58d66', '#c0d5d6', '#e5e1dd', '#2c6b78']
-const cargo = Array.from({ length: 14 }, (_, i) => ({
-  x: 14 + (i % 7) * 11.5,
-  y: i < 7 ? 20 : 13.5,
-  fill: palette[(i * 3 + Math.floor(i / 7)) % palette.length],
-}))
-
 function toggleLocale() {
   setLocale(locale.value === 'en' ? 'ar' : 'en')
 }
@@ -44,30 +36,6 @@ function toggleLocale() {
           {{ t('landing.finale.top') }}
         </a>
       </div>
-    </div>
-    <!-- A small ship rides the waves across the bottom of the section. -->
-    <div
-      class="pointer-events-none absolute inset-x-0 bottom-0 h-24 overflow-hidden"
-      aria-hidden="true"
-    >
-      <svg class="atl-voyage absolute bottom-6 w-32" viewBox="0 0 120 40">
-        <g class="atl-voyage__bob">
-          <rect
-            v-for="(c, i) in cargo"
-            :key="i"
-            :x="c.x"
-            :y="c.y"
-            width="11"
-            height="6"
-            rx="1"
-            :fill="c.fill"
-          />
-          <rect x="96" y="6" width="12" height="21" rx="1.5" fill="#e5e1dd" />
-          <rect x="98" y="9" width="8" height="3" rx="0.5" fill="#083a4f" />
-          <path d="M2 26 H116 L110 38 H16 Z" fill="#083a4f" />
-          <path d="M6 30 H114" stroke="#a58d66" stroke-width="1.5" />
-        </g>
-      </svg>
     </div>
     <AtlWave animated class="absolute inset-x-0 bottom-0 h-16" />
   </section>
@@ -142,40 +110,3 @@ function toggleLocale() {
     </div>
   </footer>
 </template>
-
-<style scoped>
-/* The ship sails in from the right edge and out past the left, slowly, then comes round again. */
-.atl-voyage {
-  left: 100%;
-  animation: atl-voyage 48s linear infinite;
-}
-
-.atl-voyage__bob {
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: atl-voyage-bob 4s ease-in-out infinite;
-}
-
-@keyframes atl-voyage {
-  to {
-    translate: calc(-100vw - 8rem) 0;
-  }
-}
-
-@keyframes atl-voyage-bob {
-  50% {
-    translate: 0 1.5px;
-    rotate: -1deg;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .atl-voyage {
-    left: 70%;
-    animation: none;
-  }
-  .atl-voyage__bob {
-    animation: none;
-  }
-}
-</style>
