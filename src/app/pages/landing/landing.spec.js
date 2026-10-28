@@ -21,6 +21,7 @@ describe('landing page', () => {
     expect(w.find('#roles').exists()).toBe(true)
     expect(w.find('#faq').exists()).toBe(true)
     expect(w.find('#security').exists()).toBe(true)
+    expect(w.find('#contact').exists()).toBe(true)
   })
 
   it('has no missing translations', () => {

@@ -1,4 +1,5 @@
 <script setup>
+import LandingContact from './landing/LandingContact.vue'
 import LandingFaq from './landing/LandingFaq.vue'
 import LandingFeatures from './landing/LandingFeatures.vue'
 import LandingFinale from './landing/LandingFinale.vue'
@@ -23,6 +24,7 @@ import LandingSystems from './landing/LandingSystems.vue'
     <LandingSecurity />
     <LandingRoles />
     <LandingFaq />
+    <LandingContact />
     <LandingFinale />
   </div>
 </template>

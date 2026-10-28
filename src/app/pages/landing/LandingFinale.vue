@@ -4,10 +4,12 @@ import AtlantechLogo from '@/brand/AtlantechLogo.vue'
 import AtlIcon from '@/components/AtlIcon.vue'
 import AtlWave from '@/components/AtlWave.vue'
 import { setLocale } from '@/i18n'
+import { contact, phoneHref } from './contact'
+import LandingSocials from './LandingSocials.vue'
 
 const { t, locale } = useI18n()
 
-const links = ['how', 'features', 'security', 'roles', 'faq']
+const links = ['how', 'features', 'security', 'roles', 'faq', 'contact']
 
 function toggleLocale() {
   setLocale(locale.value === 'en' ? 'ar' : 'en')
@@ -34,12 +36,15 @@ function toggleLocale() {
     </div>
   </section>
   <footer class="bg-navy text-offwhite">
-    <div class="mx-auto grid max-w-6xl gap-12 px-4 py-16 md:grid-cols-[1.6fr_1fr_1fr]">
+    <div
+      class="mx-auto grid max-w-6xl gap-12 px-4 py-16 md:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1.2fr_0.8fr]"
+    >
       <div>
         <AtlantechLogo shape="wordmark" tone="reversed" :height="34" />
         <p class="mt-5 max-w-sm leading-relaxed text-offwhite/70">
           {{ t('landing.footer.about') }}
         </p>
+        <LandingSocials class="mt-6" />
       </div>
       <nav :aria-label="t('landing.footer.nav')">
         <h3 class="font-display font-semibold">{{ t('landing.footer.product') }}</h3>
@@ -54,6 +59,29 @@ function toggleLocale() {
           </li>
         </ul>
       </nav>
+      <div>
+        <h3 class="font-display font-semibold">{{ t('landing.footer.contact') }}</h3>
+        <ul class="mt-4 grid gap-3 text-offwhite/70">
+          <li>
+            <a
+              :href="`mailto:${contact.email}`"
+              class="flex items-center gap-2 transition-colors hover:text-offwhite hover:underline"
+            >
+              <AtlIcon name="mail" :size="16" />
+              <bdi dir="ltr">{{ contact.email }}</bdi>
+            </a>
+          </li>
+          <li>
+            <a
+              :href="phoneHref"
+              class="flex items-center gap-2 transition-colors hover:text-offwhite hover:underline"
+            >
+              <AtlIcon name="phone" :size="16" />
+              <bdi dir="ltr">{{ contact.phone }}</bdi>
+            </a>
+          </li>
+        </ul>
+      </div>
       <div>
         <h3 class="font-display font-semibold">{{ t('landing.footer.language') }}</h3>
         <ul class="mt-4 grid gap-3 text-offwhite/70">

@@ -86,13 +86,13 @@ onBeforeUnmount(() => {
           <AtlIcon name="globe" :size="16" />
           {{ t('language.switch') }}
         </button>
-        <!-- Leads to P-16 web login (/login), which arrives with the UI screens. -->
-        <RouterLink
-          to="/login"
+        <a
+          href="#contact"
           class="rounded-full bg-gold px-5 py-2 text-sm font-semibold text-navy transition-colors hover:bg-offwhite"
+          @click="open = false"
         >
-          {{ t('landing.nav.signIn') }}
-        </RouterLink>
+          {{ t('landing.nav.contact') }}
+        </a>
         <button
           type="button"
           class="grid size-10 place-items-center rounded-full transition-colors hover:bg-offwhite/10 lg:hidden"
