@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onBeforeUnmount, ref, watch } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import AtlIcon from '@/components/AtlIcon.vue'
 import { range, useScrollProgress } from '@/composables/useScrollProgress'
@@ -59,6 +59,42 @@ watch(progress, () => {
 onBeforeUnmount(() => cancelAnimationFrame(frame))
 
 const sail = computed(() => pointAt(travelled.value))
+// A wake trails the ship only while it is under way.
+const underway = computed(() => travelled.value > 0.01 && travelled.value < 0.99)
+
+// Buoys mark both edges of the channel. They light up one by one once the safe window is set.
+const buoys = ref([])
+onMounted(() => {
+  const path = channel.value
+  if (!path?.getTotalLength) return
+  const length = path.getTotalLength()
+  const marks = []
+  for (let i = 0; i < 6; i++) {
+    const at = length * (0.2 + i * 0.12)
+    const a = path.getPointAtLength(at)
+    const b = path.getPointAtLength(at + 1)
+    const d = Math.hypot(b.x - a.x, b.y - a.y) || 1
+    const nx = -(b.y - a.y) / d
+    const ny = (b.x - a.x) / d
+    marks.push({ x: a.x + nx * 17, y: a.y + ny * 17, side: 'a', i })
+    marks.push({ x: a.x - nx * 17, y: a.y - ny * 17, side: 'b', i })
+  }
+  buoys.value = marks
+})
+
+// Depth contours of the outer harbour, and container stacks in the yard behind the quay.
+const contours = [
+  'M-10 34 C 70 18, 150 46, 240 28 S 360 12, 410 26',
+  'M-10 96 C 40 84, 110 112, 150 100',
+  'M250 92 C 300 76, 350 104, 410 88',
+  'M-10 196 C 50 186, 110 204, 170 194',
+  'M250 192 C 300 182, 350 200, 410 190',
+]
+const yard = Array.from({ length: 28 }, (_, i) => ({
+  x: 96 + (i % 14) * 21,
+  y: i < 14 ? 279 : 288,
+  fill: palette[(i * 5 + Math.floor(i / 3)) % palette.length],
+}))
 
 // The map's status: each step's own, then sailing, then berthed once the ship is alongside.
 const status = computed(() => {
@@ -121,18 +157,18 @@ const status = computed(() => {
 
         <div
           data-ui
-          class="relative w-full max-w-[calc((100svh-8rem)*1.38)] justify-self-center overflow-hidden rounded-[var(--atl-radius-lg)] bg-navy p-3 text-offwhite sm:p-4"
+          class="atl-harbour relative w-full max-w-[calc((100svh-8rem)*1.38)] justify-self-center overflow-hidden rounded-[var(--atl-radius-lg)] bg-navy p-1.5 text-offwhite"
         >
           <Transition name="atl-chip" mode="out-in">
             <p
               :key="status"
-              class="absolute top-5 start-5 z-10 flex items-center gap-2 rounded-full bg-offwhite px-3 py-1.5 text-xs font-semibold text-navy sm:text-sm"
+              class="atl-glass absolute top-4 start-4 z-10 flex items-center gap-2 rounded-full bg-navy/40 px-3 py-1.5 text-xs font-semibold text-offwhite sm:text-sm"
               aria-live="polite"
             >
               <AtlIcon
                 :name="status === 'berthed' ? 'check' : 'pulse'"
                 :size="16"
-                class="text-teal"
+                class="text-gold"
               />
               {{
                 status === 'berthed' || status === 'sailing'
@@ -142,109 +178,226 @@ const status = computed(() => {
             </p>
           </Transition>
 
-          <svg class="block w-full" viewBox="0 0 400 300" direction="ltr" aria-hidden="true">
+          <svg
+            class="block w-full rounded-[calc(var(--atl-radius-lg)-6px)]"
+            viewBox="0 0 400 300"
+            direction="ltr"
+            aria-hidden="true"
+          >
             <defs>
-              <linearGradient id="atl-sea" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0" stop-color="#0d4c64" />
+              <radialGradient id="atl-sea" cx="0.5" cy="0.15" r="0.95">
+                <stop offset="0" stop-color="#145a72" />
+                <stop offset="0.55" stop-color="#0c4a61" />
                 <stop offset="1" stop-color="#083a4f" />
+              </radialGradient>
+              <linearGradient id="atl-land" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#d3e2e3" />
+                <stop offset="1" stop-color="#b3cacc" />
               </linearGradient>
+              <radialGradient id="atl-glow">
+                <stop offset="0" stop-color="#f6e2b8" stop-opacity="0.9" />
+                <stop offset="1" stop-color="#f6e2b8" stop-opacity="0" />
+              </radialGradient>
+              <linearGradient id="atl-wake" x1="1" y1="0" x2="0" y2="0">
+                <stop offset="0" stop-color="#e5e1dd" stop-opacity="0.55" />
+                <stop offset="1" stop-color="#e5e1dd" stop-opacity="0" />
+              </linearGradient>
+              <filter id="atl-ship-shadow" x="-50%" y="-50%" width="200%" height="200%">
+                <feDropShadow
+                  dx="0"
+                  dy="2.5"
+                  stdDeviation="2"
+                  flood-color="#041f2b"
+                  flood-opacity="0.55"
+                />
+              </filter>
             </defs>
+
+            <!-- Sea, with soft depth contours -->
             <rect width="400" height="300" fill="url(#atl-sea)" />
+            <path
+              v-for="c in contours"
+              :key="c"
+              :d="c"
+              fill="none"
+              stroke="var(--atl-light-teal)"
+              stroke-opacity="0.08"
+              stroke-width="1"
+            />
 
             <!-- Anchorage -->
-            <circle
-              cx="70"
-              cy="70"
-              r="36"
-              fill="var(--atl-light-teal)"
-              fill-opacity="0.06"
-              stroke="var(--atl-muted-gold)"
-              stroke-width="1.5"
-              stroke-dasharray="4 5"
-            />
-            <text
-              x="70"
-              y="124"
-              text-anchor="middle"
-              font-size="12"
-              font-weight="600"
-              fill="currentColor"
-            >
-              {{ t('landing.journey.map.anchorage') }}
-            </text>
+            <g>
+              <circle cx="70" cy="70" r="40" fill="var(--atl-light-teal)" fill-opacity="0.05" />
+              <circle
+                cx="70"
+                cy="70"
+                r="40"
+                fill="none"
+                stroke="var(--atl-muted-gold)"
+                stroke-opacity="0.8"
+                stroke-width="1.2"
+                stroke-dasharray="3 4"
+                class="atl-spin"
+              />
+              <text
+                x="70"
+                y="126"
+                text-anchor="middle"
+                font-size="11"
+                font-weight="600"
+                fill="var(--atl-off-white)"
+                fill-opacity="0.85"
+              >
+                {{ t('landing.journey.map.anchorage') }}
+              </text>
+            </g>
 
             <!-- Channel: lights up once the safe window is confirmed -->
             <path
               :d="route"
               fill="none"
-              stroke-width="28"
+              stroke-width="30"
               stroke-linecap="round"
               stroke="var(--atl-light-teal)"
               class="transition-[stroke-opacity] duration-700"
-              :stroke-opacity="active >= 1 ? 0.3 : 0.08"
+              :stroke-opacity="active >= 1 ? 0.16 : 0.05"
             />
             <path
               ref="channel"
               :d="route"
               fill="none"
               stroke="var(--atl-off-white)"
-              stroke-opacity="0.7"
-              stroke-width="1.5"
-              stroke-dasharray="5 6"
+              stroke-opacity="0.55"
+              stroke-width="1.2"
+              stroke-linecap="round"
+              stroke-dasharray="4 6"
               class="atl-flow"
             />
-            <text x="226" y="104" font-size="12" font-weight="600" fill="currentColor">
+            <g v-for="b in buoys" :key="b.side + b.i">
+              <circle
+                :cx="b.x"
+                :cy="b.y"
+                r="7"
+                fill="url(#atl-glow)"
+                class="atl-buoy-glow"
+                :class="{ 'is-on': active >= 1 }"
+                :style="{ transitionDelay: `${b.i * 120}ms` }"
+              />
+              <circle
+                :cx="b.x"
+                :cy="b.y"
+                r="2.2"
+                class="transition-[fill] duration-500"
+                :fill="active >= 1 ? (b.side === 'a' ? '#a58d66' : '#e5e1dd') : '#407e8c'"
+                :style="{ transitionDelay: `${b.i * 120}ms` }"
+              />
+            </g>
+            <text
+              x="228"
+              y="104"
+              font-size="11"
+              font-weight="600"
+              fill="var(--atl-off-white)"
+              fill-opacity="0.85"
+            >
               {{ t('landing.journey.map.channel') }}
             </text>
 
-            <!-- Breakwaters -->
-            <path
-              d="M-6 154 H164 M236 154 H406"
-              stroke="var(--atl-light-teal)"
-              stroke-opacity="0.45"
-              stroke-width="10"
-              stroke-linecap="round"
-            />
+            <!-- Breakwaters, with a light at each head of the harbour mouth -->
+            <g stroke-linecap="round" fill="none">
+              <path d="M-10 160 Q 80 146 164 154" stroke="#2c6b78" stroke-width="11" />
+              <path d="M410 162 Q 320 146 236 154" stroke="#2c6b78" stroke-width="11" />
+              <path
+                d="M-10 158 Q 80 144 164 152 M410 160 Q 320 144 236 152"
+                stroke="var(--atl-light-teal)"
+                stroke-opacity="0.55"
+                stroke-width="3"
+              />
+            </g>
+            <g v-for="x in [164, 236]" :key="x">
+              <circle :cx="x" cy="154" r="10" fill="url(#atl-glow)" class="atl-beacon" />
+              <circle :cx="x" cy="154" r="3" fill="#f6e2b8" />
+            </g>
 
-            <!-- Quay and berths -->
-            <rect x="0" y="238" width="400" height="62" fill="var(--atl-light-teal)" />
+            <!-- Compass -->
+            <g transform="translate(372 198)" opacity="0.7">
+              <circle r="11" fill="none" stroke="var(--atl-light-teal)" stroke-opacity="0.35" />
+              <path d="M0 -9 L3 0 L0 9 L-3 0 Z" fill="var(--atl-light-teal)" fill-opacity="0.35" />
+              <path d="M0 -9 L3 0 L-3 0 Z" fill="var(--atl-muted-gold)" />
+              <text
+                y="-14"
+                text-anchor="middle"
+                font-size="7"
+                font-weight="700"
+                fill="var(--atl-light-teal)"
+              >
+                N
+              </text>
+            </g>
+
+            <!-- Quay, its apron and the yard behind it -->
+            <rect x="0" y="238" width="400" height="62" fill="url(#atl-land)" />
+            <rect x="0" y="238" width="400" height="4" fill="var(--atl-off-white)" />
+            <rect
+              v-for="(c, i) in yard"
+              :key="i"
+              :x="c.x"
+              :y="c.y"
+              width="18"
+              height="6"
+              rx="1"
+              :fill="c.fill"
+              fill-opacity="0.55"
+            />
             <text x="16" y="276" font-size="12" font-weight="700" fill="var(--atl-deep-navy)">
               {{ t('landing.journey.map.quay') }}
             </text>
+
             <g v-for="(b, i) in berths" :key="b">
               <rect
                 :x="berthX(i) + 4"
-                y="212"
+                y="211"
                 width="56"
-                height="22"
-                rx="3"
-                stroke-width="1.5"
-                class="transition-[fill,stroke] duration-700"
-                :fill="b === 'B-03' && active >= 2 ? 'var(--atl-muted-gold)' : 'none'"
-                :fill-opacity="b === 'B-03' && active >= 2 ? 0.35 : 0"
+                height="24"
+                rx="4"
+                stroke-width="1.2"
+                class="transition-[fill,stroke,fill-opacity,stroke-opacity] duration-700"
+                :fill="
+                  b === 'B-03' && active >= 2 ? 'var(--atl-muted-gold)' : 'var(--atl-light-teal)'
+                "
+                :fill-opacity="b === 'B-03' && active >= 2 ? 0.28 : 0.04"
                 :stroke="
                   b === 'B-03' && active >= 2 ? 'var(--atl-muted-gold)' : 'var(--atl-light-teal)'
                 "
-                :stroke-opacity="b === 'B-03' && active >= 2 ? 1 : 0.35"
-                stroke-dasharray="4 3"
+                :stroke-opacity="b === 'B-03' && active >= 2 ? 1 : 0.25"
+                stroke-dasharray="3 3"
+              />
+              <circle
+                v-for="dx in [6, 58]"
+                :key="dx"
+                :cx="berthX(i) + dx"
+                cy="240"
+                r="1.6"
+                fill="var(--atl-deep-navy)"
+                fill-opacity="0.6"
               />
               <rect
-                :x="berthX(i) + 7"
-                y="248"
-                width="50"
-                height="20"
-                rx="10"
-                class="transition-[fill] duration-700"
+                :x="berthX(i) + 9"
+                y="247"
+                width="46"
+                height="18"
+                rx="9"
+                class="transition-[fill,fill-opacity] duration-700"
                 :fill="
                   b === 'B-03' && active >= 2 ? 'var(--atl-muted-gold)' : 'var(--atl-deep-navy)'
                 "
-                :fill-opacity="b === 'B-03' && active >= 2 ? 1 : 0.12"
+                :fill-opacity="b === 'B-03' && active >= 2 ? 1 : 0.1"
               />
               <text
                 :x="berthX(i) + 32"
-                y="262"
+                y="259.5"
                 text-anchor="middle"
-                font-size="11"
+                font-size="10"
                 font-weight="700"
                 fill="var(--atl-deep-navy)"
               >
@@ -254,11 +407,21 @@ const status = computed(() => {
 
             <!-- Nile Star, with its tugs once they are assigned -->
             <g :transform="`translate(${sail.x} ${sail.y}) rotate(${sail.angle}) scale(1.3)`">
+              <path
+                d="M-26 -4 L-62 -13 M-26 4 L-62 13"
+                stroke="url(#atl-wake)"
+                stroke-width="1.6"
+                stroke-linecap="round"
+                class="transition-opacity duration-500"
+                :opacity="underway ? 1 : 0"
+              />
               <g class="transition-opacity duration-700" :opacity="active >= 2 ? 1 : 0">
                 <path d="M18 -15 h7 q3 0 3 2.5 t-3 2.5 h-7 z" fill="var(--atl-muted-gold)" />
                 <path d="M-30 10 h7 q3 0 3 2.5 t-3 2.5 h-7 z" fill="var(--atl-muted-gold)" />
               </g>
-              <path :d="hull" fill="var(--atl-off-white)" />
+              <g filter="url(#atl-ship-shadow)">
+                <path :d="hull" fill="var(--atl-off-white)" />
+              </g>
               <rect
                 v-for="c in cargo"
                 :key="c.x + '-' + c.y"
@@ -288,8 +451,33 @@ const status = computed(() => {
   grid-template-rows: 1fr;
 }
 
+.atl-harbour {
+  box-shadow:
+    inset 0 0 0 1px rgb(255 255 255 / 0.08),
+    0 40px 80px -40px rgb(4 31 43 / 0.6);
+}
+
 .atl-flow {
   animation: atl-flow 1.6s linear infinite;
+}
+
+.atl-spin {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: atl-spin 40s linear infinite;
+}
+
+.atl-buoy-glow {
+  opacity: 0;
+  transition: opacity 0.6s;
+}
+
+.atl-buoy-glow.is-on {
+  opacity: 0.8;
+}
+
+.atl-beacon {
+  animation: atl-beacon 2.8s ease-in-out infinite;
 }
 
 .atl-chip-enter-active,
@@ -311,12 +499,26 @@ const status = computed(() => {
 
 @keyframes atl-flow {
   to {
-    stroke-dashoffset: -22;
+    stroke-dashoffset: -20;
+  }
+}
+
+@keyframes atl-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes atl-beacon {
+  50% {
+    opacity: 0.3;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .atl-flow {
+  .atl-flow,
+  .atl-spin,
+  .atl-beacon {
     animation: none;
   }
   .atl-journey__body {
