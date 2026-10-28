@@ -3,6 +3,7 @@ import { useI18n } from 'vue-i18n'
 import AtlIcon from '@/components/AtlIcon.vue'
 import { contact, phoneHref } from './contact'
 import LandingSocials from './LandingSocials.vue'
+import { vSpotlight, vTilt } from './glass'
 import { vReveal } from './reveal'
 
 const { t } = useI18n()
@@ -48,8 +49,10 @@ const channels = [
           v-for="(c, i) in channels"
           :key="c.key"
           v-reveal="i"
+          v-spotlight
+          v-tilt
           :href="c.href"
-          class="atl-lift group flex items-center gap-5 rounded-[var(--atl-radius-lg)] bg-bg p-6"
+          class="atl-glass atl-glass--light group flex items-center gap-5 rounded-[var(--atl-radius-lg)] p-6"
         >
           <span
             class="grid size-14 shrink-0 place-items-center rounded-full bg-gold text-navy transition-colors duration-300 group-hover:bg-navy group-hover:text-gold"
@@ -63,7 +66,12 @@ const channels = [
             </span>
           </span>
         </a>
-        <div v-reveal="2" class="rounded-[var(--atl-radius-lg)] bg-bg p-6">
+        <div
+          v-reveal="2"
+          v-spotlight
+          v-tilt
+          class="atl-glass atl-glass--light rounded-[var(--atl-radius-lg)] p-6"
+        >
           <p class="mb-4 text-sm text-muted">{{ t('landing.contact.follow') }}</p>
           <LandingSocials tone="dark" />
         </div>

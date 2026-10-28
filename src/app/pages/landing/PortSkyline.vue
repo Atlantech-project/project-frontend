@@ -46,17 +46,9 @@ const lamps = cranes
   .sort((a, b) => a[0] - b[0])
   .filter(([x], i, all) => i === 0 || x - all[i - 1][0] > 30)
 const lampOn = (i) => props.lights > (i + 0.5) / lamps.length
-// Broken streaks of reflected light, widest nearest the shore.
-const glints = [
-  { y: 272, w: 96 },
-  { y: 277, w: 62 },
-  { y: 282, w: 36 },
-]
 const moonY = computed(() => (1 - props.moon) * 420)
 
 const ship = computed(() => `translate(${860 - props.sail * 2000} 0)`)
-// The wake shows only while the ship is moving.
-const wake = computed(() => (props.sail > 0.02 && props.sail < 0.98 ? 0.7 : 0))
 </script>
 
 <!-- The port at dusk: shore, cranes, container stacks and a ship sailing across the harbour. -->
@@ -151,40 +143,6 @@ const wake = computed(() => (props.sail > 0.02 && props.sail < 0.98 ? 0.7 : 0))
           :fill="b.fill"
         />
         <rect x="0" y="268" width="1440" height="32" fill="#06303f" />
-        <!-- Moonlight and lamplight shimmer on the water -->
-        <g class="atl-fade" :opacity="moon * 0.85">
-          <rect
-            v-for="(r, i) in glints"
-            :key="`moon-${i}`"
-            :x="1120 - r.w / 2"
-            :y="r.y"
-            :width="r.w"
-            height="2"
-            rx="1"
-            fill="#e5e1dd"
-            class="atl-glint"
-            :style="{ animationDelay: `${i * -0.7}s` }"
-          />
-        </g>
-        <g
-          v-for="([x], i) in lamps"
-          :key="`glint-${i}`"
-          class="atl-lamp"
-          :opacity="lampOn(i) ? 0.75 : 0"
-        >
-          <rect
-            v-for="(r, j) in glints.slice(0, 2)"
-            :key="j"
-            :x="x - r.w / 6"
-            :y="r.y"
-            :width="r.w / 3"
-            height="2"
-            rx="1"
-            fill="#f6e2b8"
-            class="atl-glint"
-            :style="{ animationDelay: `${(i + j) * -0.5}s` }"
-          />
-        </g>
         <g
           v-for="([x, y], i) in lamps"
           :key="`lamp-${i}`"
@@ -218,15 +176,6 @@ const wake = computed(() => (props.sail > 0.02 && props.sail < 0.98 ? 0.7 : 0))
         />
         <path d="M600 236 H1100 L1076 292 H630 Z" fill="#041f2b" />
         <path d="M604 246 H1096" stroke="#a58d66" stroke-width="3" />
-        <path
-          d="M1084 286 C 1150 280, 1220 292, 1300 284 M1090 294 C 1170 290, 1250 298, 1340 292"
-          stroke="#e5e1dd"
-          stroke-width="2"
-          stroke-linecap="round"
-          fill="none"
-          class="transition-opacity duration-500"
-          :opacity="wake"
-        />
       </g>
     </svg>
     <AtlWave animated base="var(--atl-light-teal)" class="absolute inset-x-0 bottom-0 h-12" />
@@ -255,12 +204,6 @@ const wake = computed(() => (props.sail > 0.02 && props.sail < 0.98 ? 0.7 : 0))
   animation: atl-beam 9s ease-in-out infinite;
 }
 
-.atl-glint {
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: atl-glint 2.4s ease-in-out infinite;
-}
-
 @keyframes atl-beam {
   0%,
   100% {
@@ -268,13 +211,6 @@ const wake = computed(() => (props.sail > 0.02 && props.sail < 0.98 ? 0.7 : 0))
   }
   50% {
     transform: scaleX(-1);
-  }
-}
-
-@keyframes atl-glint {
-  50% {
-    transform: scaleX(0.55);
-    opacity: 0.5;
   }
 }
 
@@ -286,8 +222,7 @@ const wake = computed(() => (props.sail > 0.02 && props.sail < 0.98 ? 0.7 : 0))
 
 @media (prefers-reduced-motion: reduce) {
   .atl-ship,
-  .atl-beam,
-  .atl-glint {
+  .atl-beam {
     animation: none;
   }
 }

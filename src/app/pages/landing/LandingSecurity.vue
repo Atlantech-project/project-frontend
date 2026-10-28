@@ -2,7 +2,7 @@
 import { useI18n } from 'vue-i18n'
 import AtlIcon from '@/components/AtlIcon.vue'
 import CountUp from './CountUp.vue'
-import { vSpotlight } from './glass'
+import { vSpotlight, vTilt } from './glass'
 import { vReveal } from './reveal'
 import SecurityMap from './SecurityMap.vue'
 
@@ -59,6 +59,7 @@ const facts = [
       <div
         v-reveal
         v-spotlight
+        v-tilt
         class="mt-14 grid gap-6 rounded-[var(--atl-radius-lg)] bg-navy p-7 text-offwhite md:grid-cols-[1.2fr_2fr] md:items-center"
       >
         <p class="font-display text-lg font-semibold">{{ t('landing.security.reference') }}</p>

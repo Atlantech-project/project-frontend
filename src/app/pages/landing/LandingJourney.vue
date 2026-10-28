@@ -3,6 +3,7 @@ import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import AtlIcon from '@/components/AtlIcon.vue'
 import { range, useScrollProgress } from '@/composables/useScrollProgress'
+import { vTilt } from './glass'
 
 const { t } = useI18n()
 const section = ref(null)
@@ -59,8 +60,6 @@ watch(progress, () => {
 onBeforeUnmount(() => cancelAnimationFrame(frame))
 
 const sail = computed(() => pointAt(travelled.value))
-// A wake trails the ship only while it is under way.
-const underway = computed(() => travelled.value > 0.01 && travelled.value < 0.99)
 // Near the quay the stern tug swings round to push from the seaward side.
 const nearQuay = computed(() => travelled.value > 0.85)
 
@@ -158,6 +157,7 @@ const status = computed(() => {
         </div>
 
         <div
+          v-tilt
           data-ui
           class="atl-harbour relative w-full max-w-[calc((100svh-8rem)*1.38)] justify-self-center overflow-hidden rounded-[var(--atl-radius-lg)] bg-navy p-1.5 text-offwhite"
         >
@@ -200,10 +200,6 @@ const status = computed(() => {
                 <stop offset="0" stop-color="#f6e2b8" stop-opacity="0.9" />
                 <stop offset="1" stop-color="#f6e2b8" stop-opacity="0" />
               </radialGradient>
-              <linearGradient id="atl-wake" x1="1" y1="0" x2="0" y2="0">
-                <stop offset="0" stop-color="#e5e1dd" stop-opacity="0.55" />
-                <stop offset="1" stop-color="#e5e1dd" stop-opacity="0" />
-              </linearGradient>
               <filter id="atl-ship-shadow" x="-50%" y="-50%" width="200%" height="200%">
                 <feDropShadow
                   dx="0"
@@ -409,14 +405,6 @@ const status = computed(() => {
 
             <!-- Nile Star, with its tugs once they are assigned -->
             <g :transform="`translate(${sail.x} ${sail.y}) rotate(${sail.angle}) scale(1.3)`">
-              <path
-                d="M-26 -4 L-62 -13 M-26 4 L-62 13"
-                stroke="url(#atl-wake)"
-                stroke-width="1.6"
-                stroke-linecap="round"
-                class="transition-opacity duration-500"
-                :opacity="underway ? 1 : 0"
-              />
               <g class="transition-opacity duration-700" :opacity="active >= 2 ? 1 : 0">
                 <path d="M18 -15 h7 q3 0 3 2.5 t-3 2.5 h-7 z" fill="var(--atl-muted-gold)" />
                 <path

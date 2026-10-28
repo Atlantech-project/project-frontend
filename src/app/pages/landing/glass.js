@@ -24,8 +24,10 @@ function lean(event) {
   const rect = el.getBoundingClientRect()
   const x = (event.clientX - rect.left) / rect.width - 0.5
   const y = (event.clientY - rect.top) / rect.height - 0.5
-  el.style.setProperty('--atl-tx', `${(-y * 7).toFixed(2)}deg`)
-  el.style.setProperty('--atl-ty', `${(x * 9).toFixed(2)}deg`)
+  // Wide cards lean less, so their far edge never swings out too far.
+  const k = Math.min(1, 420 / rect.width)
+  el.style.setProperty('--atl-tx', `${(-y * 7 * k).toFixed(2)}deg`)
+  el.style.setProperty('--atl-ty', `${(x * 9 * k).toFixed(2)}deg`)
 }
 
 function settle(event) {

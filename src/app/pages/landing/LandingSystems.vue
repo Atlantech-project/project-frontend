@@ -1,7 +1,7 @@
 <script setup>
 import { useI18n } from 'vue-i18n'
 import AtlantechLogo from '@/brand/AtlantechLogo.vue'
-import { vSpotlight } from './glass'
+import { vSpotlight, vTilt } from './glass'
 import { vReveal } from './reveal'
 
 const { t } = useI18n()
@@ -39,6 +39,7 @@ const executors = [
           <div
             v-reveal
             v-spotlight
+            v-tilt
             class="flex items-center gap-4 rounded-[var(--atl-radius-lg)] bg-navy p-5 text-offwhite"
           >
             <AtlantechLogo shape="symbol" tone="reversed" :height="44" />
@@ -61,7 +62,9 @@ const executors = [
               v-for="(e, i) in executors"
               :key="e.key"
               v-reveal="3 + i"
-              class="rounded-[var(--atl-radius)] bg-surface-2 p-4"
+              v-spotlight
+              v-tilt
+              class="atl-glass atl-glass--light rounded-[var(--atl-radius)] p-4"
             >
               <p class="font-semibold text-text">{{ t(`landing.systems.${e.key}`) }}</p>
               <p class="mt-1 text-sm text-muted">{{ t(`landing.systems.${e.example}`) }}</p>
