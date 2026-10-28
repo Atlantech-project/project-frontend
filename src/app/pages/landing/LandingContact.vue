@@ -35,7 +35,7 @@ const channels = [
         <a
           v-reveal="2"
           :href="`mailto:${contact.email}`"
-          class="mt-8 inline-flex items-center gap-2 rounded-full bg-navy px-6 py-3 font-semibold text-offwhite transition-colors hover:bg-teal"
+          class="atl-glass mt-8 inline-flex items-center gap-2 rounded-full bg-navy/90 px-6 py-3 font-semibold text-offwhite transition-colors hover:bg-teal/90"
         >
           <AtlIcon name="mail" :size="18" />
           {{ t('landing.contact.cta') }}

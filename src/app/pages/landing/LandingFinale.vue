@@ -30,7 +30,7 @@ function toggleLocale() {
       <a
         v-reveal="4"
         href="#top"
-        class="atl-lift inline-flex items-center gap-2 rounded-full bg-offwhite px-6 py-3 font-semibold text-navy hover:bg-white"
+        class="atl-glass inline-flex items-center gap-2 rounded-full bg-offwhite/85 px-6 py-3 font-semibold text-navy transition-colors hover:bg-offwhite"
       >
         <AtlIcon name="arrow-up" :size="18" />
         {{ t('landing.finale.top') }}
@@ -98,7 +98,7 @@ function toggleLocale() {
         <p>{{ t('landing.footer.rights') }}</p>
         <button
           type="button"
-          class="inline-flex items-center gap-2 self-start rounded-full px-4 py-2 ring-1 ring-offwhite/20 transition-colors hover:bg-offwhite/10 hover:text-offwhite sm:self-auto"
+          class="atl-glass inline-flex items-center gap-2 self-start rounded-full px-4 py-2 transition-colors hover:bg-offwhite/15 hover:text-offwhite sm:self-auto"
           :aria-label="t('landing.footer.language')"
           @click="toggleLocale"
         >

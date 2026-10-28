@@ -17,9 +17,9 @@ const smooth = (p) => p * p * (3 - 2 * p)
 // position instead of jumping with it, so it glides at its own slow pace.
 const target = () => (reduced ? 1 : smooth(range(progress.value, 0.02, 0.92)))
 const sail = ref(target())
-// The port's lights switch on as the ship arrives, then night turns to dawn.
+// The port's lights switch on as the ship arrives, then the moon rises over the harbour.
 const lights = computed(() => range(sail.value, 0.02, 0.32))
-const dawn = computed(() => range(sail.value, 0.3, 1))
+const moon = computed(() => range(sail.value, 0.3, 1))
 let frame = 0
 
 function glide() {
@@ -39,13 +39,13 @@ onBeforeUnmount(() => cancelAnimationFrame(frame))
 <template>
   <section id="top" ref="section" class="atl-hero relative h-[320svh] text-offwhite">
     <div class="atl-hero__stage atl-sky sticky top-0 h-svh overflow-hidden">
-      <div class="atl-hero__dawn absolute inset-0" :style="{ opacity: dawn }" aria-hidden="true" />
       <div
-        class="atl-hero__stars absolute inset-0"
-        :style="{ opacity: 1 - dawn }"
+        class="atl-hero__moonlight absolute inset-0"
+        :style="{ opacity: moon }"
         aria-hidden="true"
       />
-      <PortSkyline class="atl-hero__skyline" :sail="sail" :dawn="dawn" :lights="lights" />
+      <div class="atl-hero__stars absolute inset-0" aria-hidden="true" />
+      <PortSkyline class="atl-hero__skyline" :sail="sail" :moon="moon" :lights="lights" />
 
       <div class="atl-hero__title absolute inset-x-0 top-[max(15svh,5.5rem)] z-10 px-4 text-center">
         <h1
@@ -70,13 +70,13 @@ onBeforeUnmount(() => cancelAnimationFrame(frame))
         >
           <a
             href="#how"
-            class="rounded-full bg-offwhite px-6 py-3 font-semibold text-navy transition-colors hover:bg-white"
+            class="atl-glass rounded-full bg-offwhite/85 px-6 py-3 font-semibold text-navy transition-colors hover:bg-offwhite"
           >
             {{ t('landing.hero.ctaHow') }}
           </a>
           <a
             href="#features"
-            class="atl-glass rounded-full px-6 py-3 font-semibold transition-colors hover:bg-offwhite/10"
+            class="atl-glass rounded-full px-6 py-3 font-semibold transition-colors hover:bg-offwhite/15"
           >
             {{ t('landing.hero.ctaFeatures') }}
           </a>
@@ -92,14 +92,14 @@ onBeforeUnmount(() => cancelAnimationFrame(frame))
   background: var(--atl-deep-navy);
 }
 
-/* First light: the sky warms towards gold on the horizon while the top stays deep navy. */
-.atl-hero__dawn {
+/* Moonlight: the sky lifts to a cool teal towards the horizon; the top stays deep navy. */
+.atl-hero__moonlight {
   background: linear-gradient(
     180deg,
     var(--atl-deep-navy) 0%,
-    #0f4a60 38%,
-    #2f6f80 64%,
-    #b49770 100%
+    #0c4459 40%,
+    #1b5a6d 70%,
+    #2c6b78 100%
   );
 }
 

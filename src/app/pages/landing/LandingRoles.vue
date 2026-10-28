@@ -23,7 +23,7 @@ const nodes = roles.map((role, i) => {
   return { ...role, x: 50 + 40 * Math.cos(angle), y: 50 + 40 * Math.sin(angle) }
 })
 
-// One role at a time is linked to the centre: the one under the pointer, or each in turn.
+// One role at a time is lit: the one under the pointer, or each in turn.
 const active = ref(0)
 const hovered = ref(null)
 const ring = ref(null)
@@ -97,17 +97,6 @@ const lit = (i) => (hovered.value ?? active.value) === i
             stroke-width="0.3"
             stroke-dasharray="1 1.4"
           />
-          <line
-            v-for="(n, i) in nodes"
-            :key="n.key"
-            x1="50"
-            y1="50"
-            :x2="n.x"
-            :y2="n.y"
-            pathLength="1"
-            class="atl-ring__line"
-            :class="{ 'is-lit': lit(i) }"
-          />
         </svg>
 
         <div
@@ -146,37 +135,11 @@ const lit = (i) => (hovered.value ?? active.value) === i
 </template>
 
 <style scoped>
-/* Each spoke is drawn in gold from the hub out to its role when that role is lit. */
-.atl-ring__line {
-  stroke: var(--atl-muted-gold);
-  stroke-width: 0.5;
-  stroke-linecap: round;
-  stroke-dasharray: 1;
-  stroke-dashoffset: 1;
-  opacity: 0.25;
-  transition:
-    stroke-dashoffset 0.9s cubic-bezier(0.16, 1, 0.3, 1),
-    opacity 0.4s;
-}
-
-.atl-ring__line.is-lit {
-  stroke-dashoffset: 0;
-  opacity: 1;
-}
-
 .atl-ring__node.is-lit {
   border-color: rgb(165 141 102 / 0.8);
   box-shadow:
     inset 0 1px 0 rgb(255 255 255 / 0.4),
     0 0 0 4px rgb(165 141 102 / 0.18),
     0 24px 48px -28px rgb(4 31 43 / 0.7);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .atl-ring__line {
-    stroke-dashoffset: 0;
-    opacity: 0.5;
-    transition: none;
-  }
 }
 </style>

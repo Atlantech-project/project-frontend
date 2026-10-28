@@ -5,8 +5,8 @@ import AtlWave from '@/components/AtlWave.vue'
 const props = defineProps({
   // How far the ship has sailed, from 0 (out of sight past the right edge) to 1 (gone past the left edge).
   sail: { type: Number, default: 1 },
-  // How far night has turned to dawn (0 to 1): the sun rises behind the cranes.
-  dawn: { type: Number, default: 1 },
+  // How far the moon has risen behind the cranes (0 to 1); at 0 it is fully below the horizon.
+  moon: { type: Number, default: 1 },
   // How many of the port's lights are on (0 to 1); they switch on one after another.
   lights: { type: Number, default: 1 },
 })
@@ -36,15 +36,17 @@ const cargo = Array.from({ length: 24 }, (_, i) => ({
 }))
 
 // Floodlights on each crane's apex and beam ends, switched on from left to right.
+// Where two cranes' beams meet, they share one lamp.
 const lamps = cranes
   .flatMap((c) => [
-    [c.x - 66, 112],
-    [c.x + 36, 50],
-    [c.x + 162, 112],
+    [c.x - 62, 113],
+    [c.x + 36, 54],
+    [c.x + 158, 113],
   ])
   .sort((a, b) => a[0] - b[0])
+  .filter(([x], i, all) => i === 0 || x - all[i - 1][0] > 30)
 const lampOn = (i) => props.lights > (i + 0.5) / lamps.length
-const sunY = computed(() => (1 - props.dawn) * 150)
+const moonY = computed(() => (1 - props.moon) * 280)
 
 const ship = computed(() => `translate(${860 - props.sail * 2000} 0)`)
 // The wake shows only while the ship is moving.
@@ -55,12 +57,16 @@ const wake = computed(() => (props.sail > 0.02 && props.sail < 0.98 ? 0.7 : 0))
 <template>
   <div class="pointer-events-none absolute inset-x-0 bottom-0" aria-hidden="true">
     <svg
-      class="block h-[26svh] w-full sm:h-[36svh]"
+      class="block h-[26svh] w-full overflow-visible sm:h-[36svh]"
       viewBox="0 0 1440 300"
       preserveAspectRatio="xMidYMax slice"
     >
       <defs>
         <clipPath id="atl-horizon"><rect width="1440" height="232" /></clipPath>
+        <radialGradient id="atl-moon-halo">
+          <stop offset="0.35" stop-color="#e5e1dd" stop-opacity="0.22" />
+          <stop offset="1" stop-color="#e5e1dd" stop-opacity="0" />
+        </radialGradient>
         <radialGradient id="atl-lamp-glow">
           <stop offset="0" stop-color="#f6e2b8" stop-opacity="0.75" />
           <stop offset="1" stop-color="#f6e2b8" stop-opacity="0" />
@@ -68,17 +74,13 @@ const wake = computed(() => (props.sail > 0.02 && props.sail < 0.98 ? 0.7 : 0))
       </defs>
       <g>
         <g clip-path="url(#atl-horizon)">
-          <g :transform="`translate(0 ${sunY})`">
-            <circle cx="1120" cy="150" r="58" fill="var(--atl-muted-gold)" opacity="0.9" />
-            <circle
-              cx="1120"
-              cy="150"
-              r="82"
-              fill="none"
-              stroke="var(--atl-muted-gold)"
-              stroke-opacity="0.35"
-              stroke-width="10"
-            />
+          <g :transform="`translate(0 ${moonY})`" :opacity="moon > 0 ? 1 : 0">
+            <circle cx="1120" cy="120" r="120" fill="url(#atl-moon-halo)" />
+            <circle cx="1120" cy="120" r="48" fill="#e5e1dd" />
+            <circle cx="1102" cy="106" r="9" fill="#c0d5d6" opacity="0.7" />
+            <circle cx="1136" cy="134" r="6" fill="#c0d5d6" opacity="0.6" />
+            <circle cx="1130" cy="100" r="4" fill="#c0d5d6" opacity="0.6" />
+            <circle cx="1108" cy="140" r="3" fill="#c0d5d6" opacity="0.5" />
           </g>
         </g>
         <path

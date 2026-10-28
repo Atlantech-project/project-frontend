@@ -29,7 +29,7 @@ const questions = ['accounts', 'offline', 'languages', 'data', 'decisions']
           >
             <span class="flex-1">{{ t(`landing.faq.items.${q}.q`) }}</span>
             <span
-              class="grid size-9 shrink-0 place-items-center rounded-full bg-surface-3 text-teal transition-colors group-open:bg-teal group-open:text-offwhite"
+              class="atl-glass atl-glass--light grid size-9 shrink-0 place-items-center rounded-full text-teal transition-colors group-open:bg-teal/90 group-open:text-offwhite"
               aria-hidden="true"
             >
               <svg

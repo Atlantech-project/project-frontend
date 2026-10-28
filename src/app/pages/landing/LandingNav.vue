@@ -83,7 +83,7 @@ onBeforeUnmount(() => {
       <div class="col-start-3 flex items-center gap-2">
         <button
           type="button"
-          class="flex items-center gap-2 rounded-full border border-offwhite/30 px-4 py-2 text-sm font-medium transition-colors hover:bg-offwhite/10"
+          class="atl-glass flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-colors hover:bg-offwhite/15"
           @click="toggleLocale"
         >
           <AtlIcon name="globe" :size="16" />
@@ -91,14 +91,14 @@ onBeforeUnmount(() => {
         </button>
         <a
           href="#contact"
-          class="rounded-full bg-gold px-5 py-2 text-sm font-semibold text-navy transition-colors hover:bg-offwhite"
+          class="atl-glass rounded-full bg-gold/85 px-5 py-2 text-sm font-semibold text-navy transition-colors hover:bg-gold"
           @click="open = false"
         >
           {{ t('landing.nav.contact') }}
         </a>
         <button
           type="button"
-          class="grid size-10 place-items-center rounded-full transition-colors hover:bg-offwhite/10 lg:hidden"
+          class="atl-glass grid size-10 place-items-center rounded-full transition-colors hover:bg-offwhite/15 lg:hidden"
           :aria-expanded="open"
           aria-controls="landing-menu"
           :aria-label="open ? t('landing.nav.close') : t('landing.nav.menu')"
