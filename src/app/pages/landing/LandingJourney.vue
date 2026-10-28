@@ -12,10 +12,10 @@ const progress = useScrollProgress(section)
 const steps = ['request', 'window', 'recommend', 'execute']
 const checkpoints = ['window', 'recommend']
 const berths = ['B-01', 'B-02', 'B-03', 'B-04', 'B-05']
-const berthX = (i) => 76 + i * 66
+const berthX = (i) => 80 + i * 62
 
 // From the anchorage, through the gap between the breakwaters, then along the quay to B-03.
-const route = 'M70 70 C 150 70, 196 100, 200 150 C 204 194, 208 222, 241 222'
+const route = 'M70 70 C 150 70, 196 100, 200 150 C 204 194, 206 222, 236 222'
 // A top-down container ship, bow to the right.
 const hull = 'M-24 -6 H13 Q23 -6 26 0 Q23 6 13 6 H-24 Q-26 6 -26 4 V-4 Q-26 -6 -24 -6 Z'
 const palette = ['#a58d66', '#407e8c', '#2c6b78', '#8c7552']
@@ -213,9 +213,9 @@ const status = computed(() => {
             </text>
             <g v-for="(b, i) in berths" :key="b">
               <rect
-                :x="berthX(i) + 2"
+                :x="berthX(i) + 4"
                 y="212"
-                width="60"
+                width="56"
                 height="22"
                 rx="3"
                 stroke-width="1.5"
@@ -229,9 +229,9 @@ const status = computed(() => {
                 stroke-dasharray="4 3"
               />
               <rect
-                :x="berthX(i) + 6"
+                :x="berthX(i) + 7"
                 y="248"
-                width="52"
+                width="50"
                 height="20"
                 rx="10"
                 class="transition-[fill] duration-700"

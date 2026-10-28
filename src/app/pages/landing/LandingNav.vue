@@ -67,7 +67,7 @@ onBeforeUnmount(() => {
         <li v-for="link in links" :key="link">
           <a
             :href="`#${link}`"
-            class="block rounded-full px-4 py-2 text-[15px] font-medium transition-colors"
+            class="block rounded-full px-4 py-2 font-display text-[15px] font-medium transition-colors"
             :class="
               active === link
                 ? 'bg-offwhite/15 text-offwhite'
@@ -125,7 +125,7 @@ onBeforeUnmount(() => {
       <li v-for="link in links" :key="link">
         <a
           :href="`#${link}`"
-          class="block rounded-[var(--atl-radius-sm)] px-3 py-3 text-lg font-medium hover:bg-offwhite/10"
+          class="block rounded-[var(--atl-radius-sm)] px-3 py-3 font-display text-lg font-medium hover:bg-offwhite/10"
           @click="open = false"
         >
           {{ t(`landing.nav.${link}`) }}

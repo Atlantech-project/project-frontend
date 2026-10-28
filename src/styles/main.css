@@ -8,3 +8,13 @@
     scroll-behavior: smooth;
   }
 }
+
+/* Arabic letters join up, so tracking (tight or wide) would pull them apart,
+   and their dots and descenders need more line height than Latin headings. */
+:lang(ar) {
+  letter-spacing: normal !important;
+}
+
+:lang(ar) :is(h1, h2, h3) {
+  line-height: 1.3 !important;
+}
