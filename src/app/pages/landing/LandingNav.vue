@@ -102,7 +102,7 @@ onBeforeUnmount(() => {
         </button>
         <a
           href="#contact"
-          class="atl-glass atl-glass-btn rounded-full bg-gold/85 px-4 py-2 text-sm font-semibold whitespace-nowrap text-navy hover:bg-gold sm:px-5"
+          class="atl-glass atl-glass-btn rounded-full bg-[#8c7552] px-4 py-2 text-sm font-semibold whitespace-nowrap text-navy hover:bg-[#9a8160] sm:px-5"
           @click="open = false"
         >
           {{ t('landing.nav.contact') }}
