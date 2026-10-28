@@ -30,11 +30,11 @@ defineProps({
 }
 
 .atl-tide--light {
-  background: rgb(8 58 79 / 0.12);
+  background: color-mix(in srgb, var(--atl-deep-navy) 12%, transparent);
 }
 
 .atl-tide--dark {
-  background: rgb(229 225 221 / 0.16);
+  background: color-mix(in srgb, var(--atl-off-white) 16%, transparent);
 }
 
 .atl-tide__water {

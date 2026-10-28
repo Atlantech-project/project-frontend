@@ -2,6 +2,7 @@
 @import 'tailwindcss';
 @import '../brand/css/tokens.css';
 @import '../brand/css/tailwind-theme.css';
+@import './foundations.css';
 
 /* dark: utilities follow the chosen look (html[data-theme], set by useTheme.js), not only the OS. */
 @custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
