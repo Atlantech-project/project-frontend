@@ -24,7 +24,7 @@ const facts = [
     <div class="mx-auto max-w-6xl">
       <div class="max-w-3xl">
         <h2
-          v-reveal:line
+          v-reveal
           class="font-display text-3xl leading-tight font-semibold tracking-tight sm:text-5xl"
         >
           {{ t('landing.security.title') }}

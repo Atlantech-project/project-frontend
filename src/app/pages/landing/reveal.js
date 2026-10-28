@@ -1,6 +1,5 @@
 // v-reveal: adds `is-in` the first time an element scrolls into view; reveal.css animates it.
-//   v-reveal           rise and fade in
-//   v-reveal:line      headings rise out from behind a waterline
+//   v-reveal           rise, fade and sharpen in
 //   v-reveal="2"       stagger: waits 2 steps before starting
 let observer = null
 
@@ -17,15 +16,14 @@ function watch(el) {
         observer.unobserve(entry.target)
       }
     },
-    { rootMargin: '0px 0px -10% 0px' },
+    { rootMargin: '0px 0px -6% 0px' },
   )
   observer.observe(el)
 }
 
 export const vReveal = {
-  mounted(el, { arg, value }) {
+  mounted(el, { value }) {
     el.classList.add('atl-reveal')
-    if (arg) el.dataset.reveal = arg
     if (value != null) el.style.setProperty('--atl-i', value)
     // No observer (tests) or less motion wanted: show it straight away.
     if (typeof IntersectionObserver === 'undefined' || reducedMotion()) el.classList.add('is-in')

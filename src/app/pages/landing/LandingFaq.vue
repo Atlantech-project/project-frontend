@@ -11,7 +11,7 @@ const questions = ['accounts', 'offline', 'languages', 'data', 'decisions']
   <section id="faq" class="scroll-mt-16 bg-bg px-4 py-24 sm:py-28">
     <div class="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[1fr_1.7fr]">
       <h2
-        v-reveal:line
+        v-reveal
         class="font-display text-3xl leading-tight font-semibold tracking-tight text-text sm:text-4xl"
       >
         {{ t('landing.faq.title') }}

@@ -24,7 +24,7 @@ const channels = [
     <div class="mx-auto grid max-w-6xl items-start gap-12 lg:grid-cols-[1fr_1.2fr]">
       <div>
         <h2
-          v-reveal:line
+          v-reveal
           class="font-display text-3xl leading-tight font-semibold tracking-tight text-text sm:text-5xl"
         >
           {{ t('landing.contact.title') }}

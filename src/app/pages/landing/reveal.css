@@ -1,32 +1,20 @@
-/* Scroll reveals for the landing page (see reveal.js). One slow, calm easing everywhere. */
+/* Scroll reveals for the landing page (see reveal.js): the same soft rise as the hero title. */
 .atl-reveal {
-  --atl-ease: cubic-bezier(0.16, 1, 0.3, 1);
-  --atl-delay: calc(var(--atl-i, 0) * 110ms);
+  --atl-ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --atl-delay: calc(var(--atl-i, 0) * 90ms);
   opacity: 0;
-  translate: 0 22px;
+  translate: 0 16px;
+  filter: blur(6px);
   transition:
-    opacity 1s var(--atl-ease) var(--atl-delay),
-    translate 1.2s var(--atl-ease) var(--atl-delay);
+    opacity 0.9s var(--atl-ease) var(--atl-delay),
+    translate 0.9s var(--atl-ease) var(--atl-delay),
+    filter 0.9s var(--atl-ease) var(--atl-delay);
 }
 
 .atl-reveal.is-in {
   opacity: 1;
   translate: 0 0;
-}
-
-/* Headings rise out of the water: wiped upward from their baseline. */
-.atl-reveal[data-reveal='line'] {
-  opacity: 1;
-  translate: 0 0.45em;
-  clip-path: inset(100% 0 -0.2em 0);
-  transition:
-    clip-path 1.3s var(--atl-ease) var(--atl-delay),
-    translate 1.3s var(--atl-ease) var(--atl-delay);
-}
-
-.atl-reveal[data-reveal='line'].is-in {
-  translate: 0 0;
-  clip-path: inset(-0.2em -0.2em -0.2em -0.2em);
+  filter: none;
 }
 
 /* Bars inside a revealed block grow in one after another. */
@@ -84,11 +72,10 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .atl-reveal,
-  .atl-reveal[data-reveal='line'] {
+  .atl-reveal {
     opacity: 1;
     translate: none;
-    clip-path: none;
+    filter: none;
     transition: none;
   }
   .atl-grow-y,

@@ -20,7 +20,7 @@ const roles = [
     <div class="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[1fr_1.4fr] lg:items-start">
       <div>
         <h2
-          v-reveal:line
+          v-reveal
           class="font-display text-3xl leading-tight font-semibold tracking-tight sm:text-4xl"
         >
           {{ t('landing.roles.title') }}

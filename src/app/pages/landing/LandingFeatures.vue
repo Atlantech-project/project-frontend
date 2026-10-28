@@ -28,7 +28,7 @@ const others = [
     <div class="mx-auto max-w-6xl">
       <div class="max-w-2xl">
         <h2
-          v-reveal:line
+          v-reveal
           class="font-display text-4xl leading-tight font-semibold tracking-tight text-text sm:text-5xl"
         >
           {{ t('landing.features.title') }}

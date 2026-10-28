@@ -24,8 +24,8 @@ function toggleLocale() {
       <h2
         class="font-display text-3xl leading-[1.05] font-semibold tracking-tight sm:text-5xl lg:text-7xl"
       >
-        <span v-reveal:line class="block">{{ t('landing.finale.line1') }}</span>
-        <span v-reveal:line="2" class="block">{{ t('landing.finale.line2') }}</span>
+        <span v-reveal class="block">{{ t('landing.finale.line1') }}</span>
+        <span v-reveal="2" class="block">{{ t('landing.finale.line2') }}</span>
       </h2>
       <a
         v-reveal="4"
