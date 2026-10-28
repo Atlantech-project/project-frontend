@@ -18,12 +18,3 @@
 :lang(ar) :is(h1, h2, h3) {
   line-height: 1.3 !important;
 }
-
-/* Cairo draws lighter than Montserrat at the same weight; one step up evens them out. */
-:lang(ar) .font-medium {
-  font-weight: 600;
-}
-
-:lang(ar) :is(.font-semibold, h1, h2, h3) {
-  font-weight: 700;
-}

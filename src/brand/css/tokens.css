@@ -22,12 +22,12 @@
   font-display: swap;
 }
 
-/* Arabic: Cairo, a geometric Arabic that sits well with Montserrat and Inter.
+/* Arabic: Readex Pro, a geometric Arabic that matches Montserrat and Inter.
    Only Arabic characters load it; Latin text keeps the brand fonts. */
 @font-face {
-  font-family: "Cairo";
-  src: url("../fonts/Cairo-Arabic-Variable.woff2") format("woff2");
-  font-weight: 200 1000;
+  font-family: "Readex Pro";
+  src: url("../fonts/ReadexPro-Arabic-Variable.woff2") format("woff2");
+  font-weight: 160 700;
   font-style: normal;
   font-display: swap;
   unicode-range:
@@ -49,8 +49,8 @@
   --atl-off-white: #e5e1dd;
 
   /* Type */
-  --atl-font-display: "Montserrat", "Cairo", ui-sans-serif, system-ui, "Segoe UI", sans-serif;
-  --atl-font-body: "Inter", "Cairo", ui-sans-serif, system-ui, "Segoe UI", sans-serif;
+  --atl-font-display: "Montserrat", "Readex Pro", ui-sans-serif, system-ui, "Segoe UI", sans-serif;
+  --atl-font-body: "Inter", "Readex Pro", ui-sans-serif, system-ui, "Segoe UI", sans-serif;
   --atl-font-mono: ui-monospace, "Cascadia Code", "SFMono-Regular", Consolas, monospace;
 
   /* Shape and space */

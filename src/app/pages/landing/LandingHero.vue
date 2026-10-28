@@ -40,7 +40,7 @@ onBeforeUnmount(() => cancelAnimationFrame(frame))
 
       <div class="atl-hero__title absolute inset-x-0 top-[max(15svh,5.5rem)] z-10 px-4 text-center">
         <h1
-          class="font-display text-4xl leading-[1.04] font-semibold tracking-tight sm:text-7xl lg:text-8xl"
+          class="font-display text-4xl leading-[1.04] font-semibold tracking-tight sm:text-7xl lg:text-8xl rtl:sm:text-6xl rtl:lg:text-7xl"
         >
           <span class="atl-rise block" style="--atl-rise-delay: 120ms">
             {{ t('landing.hero.line1') }}
