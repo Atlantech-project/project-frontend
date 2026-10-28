@@ -15,8 +15,8 @@
   --color-teal: #407e8c;
   --color-offwhite: #e5e1dd;
 
-  --font-display: "Montserrat", "Readex Pro", ui-sans-serif, system-ui, sans-serif;
-  --font-sans: "Inter", "Readex Pro", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Montserrat", "Cairo", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Inter", "Cairo", ui-sans-serif, system-ui, sans-serif;
 
   --radius-brand: 12px;
 }
