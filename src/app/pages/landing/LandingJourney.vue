@@ -61,6 +61,8 @@ onBeforeUnmount(() => cancelAnimationFrame(frame))
 const sail = computed(() => pointAt(travelled.value))
 // A wake trails the ship only while it is under way.
 const underway = computed(() => travelled.value > 0.01 && travelled.value < 0.99)
+// Near the quay the stern tug swings round to push from the seaward side.
+const nearQuay = computed(() => travelled.value > 0.85)
 
 // Buoys mark both edges of the channel. They light up one by one once the safe window is set.
 const buoys = ref([])
@@ -162,7 +164,7 @@ const status = computed(() => {
           <Transition name="atl-chip" mode="out-in">
             <p
               :key="status"
-              class="atl-glass absolute top-4 start-4 z-10 flex items-center gap-2 rounded-full bg-navy/40 px-3 py-1.5 text-xs font-semibold text-offwhite sm:text-sm"
+              class="atl-glass absolute top-4 left-4 z-10 flex items-center gap-2 rounded-full bg-navy/40 px-3 py-1.5 text-xs font-semibold text-offwhite sm:text-sm"
               aria-live="polite"
             >
               <AtlIcon
@@ -320,7 +322,7 @@ const status = computed(() => {
             </g>
 
             <!-- Compass -->
-            <g transform="translate(372 198)" opacity="0.7">
+            <g transform="translate(374 32)" opacity="0.7">
               <circle r="11" fill="none" stroke="var(--atl-light-teal)" stroke-opacity="0.35" />
               <path d="M0 -9 L3 0 L0 9 L-3 0 Z" fill="var(--atl-light-teal)" fill-opacity="0.35" />
               <path d="M0 -9 L3 0 L-3 0 Z" fill="var(--atl-muted-gold)" />
@@ -417,7 +419,12 @@ const status = computed(() => {
               />
               <g class="transition-opacity duration-700" :opacity="active >= 2 ? 1 : 0">
                 <path d="M18 -15 h7 q3 0 3 2.5 t-3 2.5 h-7 z" fill="var(--atl-muted-gold)" />
-                <path d="M-30 10 h7 q3 0 3 2.5 t-3 2.5 h-7 z" fill="var(--atl-muted-gold)" />
+                <path
+                  d="M-30 10 h7 q3 0 3 2.5 t-3 2.5 h-7 z"
+                  fill="var(--atl-muted-gold)"
+                  class="atl-tug"
+                  :class="{ 'is-seaward': nearQuay }"
+                />
               </g>
               <g filter="url(#atl-ship-shadow)">
                 <path :d="hull" fill="var(--atl-off-white)" />
@@ -474,6 +481,14 @@ const status = computed(() => {
 
 .atl-buoy-glow.is-on {
   opacity: 0.8;
+}
+
+.atl-tug {
+  transition: transform 0.8s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.atl-tug.is-seaward {
+  transform: translateY(-25px);
 }
 
 .atl-beacon {
