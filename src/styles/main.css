@@ -3,3 +3,39 @@
 @import '../brand/css/tokens.css';
 @import '../brand/css/tailwind-theme.css';
 @import './foundations.css';
+
+/* dark: utilities follow the chosen look (html[data-theme], set by useTheme.js), not only the OS. */
+@custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
+
+/* The light-teal band behind the statement and the security section; deep teal in dark mode. */
+:root {
+  --atl-band: var(--atl-light-teal);
+}
+
+:root[data-theme='dark'] {
+  --atl-band: #0b3446;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* Arabic letters join up, so tracking (tight or wide) would pull them apart,
+   and their dots and descenders need more line height than Latin headings. */
+:lang(ar) {
+  letter-spacing: normal !important;
+}
+
+:lang(ar) :is(h1, h2, h3) {
+  line-height: 1.3 !important;
+}
+
+/* Switching light and dark mode: the new look spreads in a circle (see useTheme.js),
+   so the browser's default cross-fade steps aside. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
