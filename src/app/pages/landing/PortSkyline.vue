@@ -46,7 +46,7 @@ const lamps = cranes
   .sort((a, b) => a[0] - b[0])
   .filter(([x], i, all) => i === 0 || x - all[i - 1][0] > 30)
 const lampOn = (i) => props.lights > (i + 0.5) / lamps.length
-const moonY = computed(() => (1 - props.moon) * 280)
+const moonY = computed(() => (1 - props.moon) * 420)
 
 const ship = computed(() => `translate(${860 - props.sail * 2000} 0)`)
 // The wake shows only while the ship is moving.
@@ -62,7 +62,7 @@ const wake = computed(() => (props.sail > 0.02 && props.sail < 0.98 ? 0.7 : 0))
       preserveAspectRatio="xMidYMax slice"
     >
       <defs>
-        <clipPath id="atl-horizon"><rect width="1440" height="232" /></clipPath>
+        <clipPath id="atl-horizon"><rect y="-400" width="1440" height="632" /></clipPath>
         <radialGradient id="atl-moon-halo">
           <stop offset="0.35" stop-color="#e5e1dd" stop-opacity="0.22" />
           <stop offset="1" stop-color="#e5e1dd" stop-opacity="0" />
@@ -75,12 +75,12 @@ const wake = computed(() => (props.sail > 0.02 && props.sail < 0.98 ? 0.7 : 0))
       <g>
         <g clip-path="url(#atl-horizon)">
           <g :transform="`translate(0 ${moonY})`" :opacity="moon > 0 ? 1 : 0">
-            <circle cx="1120" cy="120" r="120" fill="url(#atl-moon-halo)" />
-            <circle cx="1120" cy="120" r="48" fill="#e5e1dd" />
-            <circle cx="1102" cy="106" r="9" fill="#c0d5d6" opacity="0.7" />
-            <circle cx="1136" cy="134" r="6" fill="#c0d5d6" opacity="0.6" />
-            <circle cx="1130" cy="100" r="4" fill="#c0d5d6" opacity="0.6" />
-            <circle cx="1108" cy="140" r="3" fill="#c0d5d6" opacity="0.5" />
+            <circle cx="1120" cy="-60" r="120" fill="url(#atl-moon-halo)" />
+            <circle cx="1120" cy="-60" r="48" fill="#e5e1dd" />
+            <circle cx="1102" cy="-74" r="9" fill="#c0d5d6" opacity="0.7" />
+            <circle cx="1136" cy="-46" r="6" fill="#c0d5d6" opacity="0.6" />
+            <circle cx="1130" cy="-80" r="4" fill="#c0d5d6" opacity="0.6" />
+            <circle cx="1108" cy="-40" r="3" fill="#c0d5d6" opacity="0.5" />
           </g>
         </g>
         <path
