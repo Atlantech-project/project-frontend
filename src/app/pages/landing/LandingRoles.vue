@@ -34,9 +34,7 @@ const roles = [
           v-reveal="i"
           class="group flex items-center gap-4 rounded-[var(--atl-radius)] bg-offwhite/5 px-5 py-4 text-lg transition-colors hover:bg-offwhite/10"
         >
-          <span
-            class="grid size-10 shrink-0 place-items-center rounded-full bg-gold text-navy transition-transform duration-500 group-hover:rotate-[-8deg]"
-          >
+          <span class="grid size-10 shrink-0 place-items-center rounded-full bg-gold text-navy">
             <AtlIcon :name="role.icon" :size="20" />
           </span>
           {{ t(`landing.roles.items.${role.key}`) }}
