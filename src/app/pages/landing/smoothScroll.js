@@ -21,6 +21,8 @@ export function useSmoothScroll() {
   }
 
   onMounted(() => {
+    // Lenis needs ResizeObserver; without it (old browsers, tests) the page scrolls natively.
+    if (typeof ResizeObserver === 'undefined') return
     if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
     lenis = new Lenis({ lerp: 0.085, autoRaf: true })
     document.addEventListener('click', onClick)
