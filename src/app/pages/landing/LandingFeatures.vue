@@ -1,5 +1,6 @@
 <script setup>
 import { useI18n } from 'vue-i18n'
+import CountUp from './CountUp.vue'
 import { vReveal } from './reveal'
 
 const { t } = useI18n()
@@ -89,7 +90,11 @@ const others = [
                 >
                   {{ t('landing.features.best') }}
                 </span>
-                <span class="ms-auto font-display font-semibold tabular-nums">{{ o.score }}</span>
+                <CountUp
+                  :value="o.score"
+                  :delay="400 + i * 160"
+                  class="ms-auto font-display font-semibold"
+                />
               </div>
               <div class="mt-2 h-1.5 overflow-hidden rounded-full bg-surface">
                 <span

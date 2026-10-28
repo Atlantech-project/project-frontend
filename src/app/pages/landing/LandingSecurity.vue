@@ -1,6 +1,7 @@
 <script setup>
 import { useI18n } from 'vue-i18n'
 import AtlIcon from '@/components/AtlIcon.vue'
+import CountUp from './CountUp.vue'
 import { vReveal } from './reveal'
 
 const { t } = useI18n()
@@ -13,9 +14,9 @@ const points = [
 ]
 // Reference port figures (Master Context, section 4).
 const facts = [
-  { key: 'terminals', value: '8' },
-  { key: 'berths', value: '36' },
-  { key: 'calls', value: '~26' },
+  { key: 'terminals', value: 8 },
+  { key: 'berths', value: 36 },
+  { key: 'calls', value: 26, prefix: '~' },
 ]
 </script>
 
@@ -64,7 +65,9 @@ const facts = [
           >
             <dt class="sr-only">{{ t(`landing.security.facts.${f.key}`) }}</dt>
             <dd class="font-display text-3xl font-semibold text-gold">
-              <bdi dir="ltr">{{ f.value }}</bdi>
+              <bdi dir="ltr"
+                ><CountUp :value="f.value" :prefix="f.prefix" :delay="300 + i * 120"
+              /></bdi>
             </dd>
             <dd class="mt-1 text-sm text-offwhite/75" aria-hidden="true">
               {{ t(`landing.security.facts.${f.key}`) }}
