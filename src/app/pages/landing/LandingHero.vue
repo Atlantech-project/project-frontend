@@ -45,6 +45,8 @@ onBeforeUnmount(() => cancelAnimationFrame(frame))
         aria-hidden="true"
       />
       <div class="atl-hero__stars absolute inset-0" aria-hidden="true" />
+      <div class="atl-hero__stars atl-hero__stars--b absolute inset-0" aria-hidden="true" />
+      <span class="atl-hero__shoot" aria-hidden="true" />
       <PortSkyline class="atl-hero__skyline" :sail="sail" :moon="moon" :lights="lights" />
 
       <div class="atl-hero__title absolute inset-x-0 top-[max(15svh,5.5rem)] z-10 px-4 text-center">
@@ -115,6 +117,57 @@ onBeforeUnmount(() => cancelAnimationFrame(frame))
     radial-gradient(1px 1px at 5% 52%, rgb(229 225 221 / 0.5), transparent 60%),
     radial-gradient(1.5px 1.5px at 66% 55%, rgb(229 225 221 / 0.5), transparent 60%),
     radial-gradient(1px 1px at 35% 60%, rgb(229 225 221 / 0.4), transparent 60%);
+  animation: atl-twinkle 5s ease-in-out infinite;
+}
+
+/* A second set of stars twinkles out of step with the first. */
+.atl-hero__stars--b {
+  background-image:
+    radial-gradient(1px 1px at 8% 30%, rgb(229 225 221 / 0.7), transparent 60%),
+    radial-gradient(1.5px 1.5px at 19% 8%, rgb(229 225 221 / 0.6), transparent 60%),
+    radial-gradient(1px 1px at 33% 24%, rgb(229 225 221 / 0.7), transparent 60%),
+    radial-gradient(1px 1px at 49% 46%, rgb(229 225 221 / 0.5), transparent 60%),
+    radial-gradient(1.5px 1.5px at 62% 6%, rgb(229 225 221 / 0.7), transparent 60%),
+    radial-gradient(1px 1px at 79% 26%, rgb(229 225 221 / 0.6), transparent 60%),
+    radial-gradient(1.5px 1.5px at 90% 48%, rgb(229 225 221 / 0.5), transparent 60%),
+    radial-gradient(1px 1px at 52% 18%, rgb(229 225 221 / 0.6), transparent 60%);
+  animation-duration: 7s;
+  animation-delay: -3s;
+}
+
+/* Now and then a shooting star crosses the upper sky. */
+.atl-hero__shoot {
+  position: absolute;
+  top: 12%;
+  left: 78%;
+  width: 140px;
+  height: 1.5px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgb(229 225 221 / 0.9), transparent);
+  opacity: 0;
+  rotate: -18deg;
+  animation: atl-shoot 11s ease-out 3s infinite;
+}
+
+@keyframes atl-twinkle {
+  50% {
+    opacity: 0.35;
+  }
+}
+
+@keyframes atl-shoot {
+  0%,
+  90% {
+    opacity: 0;
+    translate: 0 0;
+  }
+  92% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    translate: -320px 104px;
+  }
 }
 
 .atl-rise {
@@ -154,8 +207,12 @@ onBeforeUnmount(() => cancelAnimationFrame(frame))
     transform: none !important;
     translate: none;
   }
-  .atl-rise {
+  .atl-rise,
+  .atl-hero__stars {
     animation: none;
+  }
+  .atl-hero__shoot {
+    display: none;
   }
 }
 </style>

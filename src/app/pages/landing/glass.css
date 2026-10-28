@@ -130,6 +130,23 @@
     }
   }
 
+  /* A card that leans towards the pointer (see glass.js). */
+  .atl-tilt {
+    transform: perspective(1000px) rotateX(var(--atl-tx, 0deg)) rotateY(var(--atl-ty, 0deg));
+    transition: transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
+    will-change: transform;
+  }
+
+  .atl-tilt:hover {
+    transition-duration: 0.15s;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .atl-tilt {
+      transform: none;
+    }
+  }
+
   /* A soft light that follows the pointer across a card (see glass.js). */
   .atl-spot {
     position: relative;
@@ -156,9 +173,33 @@
     opacity: 1;
   }
 
+  /* On milky glass the light is a brighter white so it still reads. */
+  .atl-glass--light.atl-spot::after {
+    background: radial-gradient(
+      300px circle at var(--atl-mx, 50%) var(--atl-my, 50%),
+      rgb(255 255 255 / var(--atl-spot-white, 0.55)),
+      transparent 65%
+    );
+  }
+
+  [data-theme='dark'] .atl-glass--light.atl-spot::after {
+    --atl-spot-white: 0.14;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme='light']) .atl-glass--light.atl-spot::after {
+      --atl-spot-white: 0.14;
+    }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .atl-spot::after {
       display: none;
     }
   }
+}
+
+/* Smooth scrolling (see smoothScroll.js) eases the page itself, so the CSS smoothing steps aside. */
+html.lenis {
+  scroll-behavior: auto;
 }

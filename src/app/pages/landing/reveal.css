@@ -8,7 +8,8 @@
   transition:
     opacity 0.9s var(--atl-ease) var(--atl-delay),
     translate 0.9s var(--atl-ease) var(--atl-delay),
-    filter 0.9s var(--atl-ease) var(--atl-delay);
+    filter 0.9s var(--atl-ease) var(--atl-delay),
+    transform 0.5s var(--atl-ease);
 }
 
 .atl-reveal.is-in {

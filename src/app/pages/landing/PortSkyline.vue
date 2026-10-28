@@ -46,6 +46,12 @@ const lamps = cranes
   .sort((a, b) => a[0] - b[0])
   .filter(([x], i, all) => i === 0 || x - all[i - 1][0] > 30)
 const lampOn = (i) => props.lights > (i + 0.5) / lamps.length
+// Broken streaks of reflected light, widest nearest the shore.
+const glints = [
+  { y: 272, w: 96 },
+  { y: 277, w: 62 },
+  { y: 282, w: 36 },
+]
 const moonY = computed(() => (1 - props.moon) * 420)
 
 const ship = computed(() => `translate(${860 - props.sail * 2000} 0)`)
@@ -67,6 +73,11 @@ const wake = computed(() => (props.sail > 0.02 && props.sail < 0.98 ? 0.7 : 0))
           <stop offset="0.35" stop-color="#e5e1dd" stop-opacity="0.22" />
           <stop offset="1" stop-color="#e5e1dd" stop-opacity="0" />
         </radialGradient>
+        <linearGradient id="atl-beam" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stop-color="#f6e2b8" stop-opacity="0.42" />
+          <stop offset="1" stop-color="#f6e2b8" stop-opacity="0" />
+        </linearGradient>
+        <clipPath id="atl-tower"><path d="M785 268 L791 150 H809 L815 268 Z" /></clipPath>
         <radialGradient id="atl-lamp-glow">
           <stop offset="0" stop-color="#f6e2b8" stop-opacity="0.75" />
           <stop offset="1" stop-color="#f6e2b8" stop-opacity="0" />
@@ -87,6 +98,36 @@ const wake = computed(() => (props.sail > 0.02 && props.sail < 0.98 ? 0.7 : 0))
           d="M0 230 C 160 200, 280 214, 420 206 S 720 180, 900 200 S 1260 190, 1440 214 V300 H0Z"
           fill="#2c6b78"
           opacity="0.45"
+        />
+      </g>
+      <!-- The lighthouse: its beam sweeps the harbour once night has fallen. -->
+      <g class="atl-fade" :opacity="moon">
+        <path d="M800 138 L1420 70 L1420 206 Z" fill="url(#atl-beam)" class="atl-beam" />
+      </g>
+      <g>
+        <path d="M785 268 L791 150 H809 L815 268 Z" fill="#c0d5d6" />
+        <g clip-path="url(#atl-tower)" fill="#407e8c">
+          <rect x="780" y="176" width="40" height="14" />
+          <rect x="780" y="218" width="40" height="14" />
+        </g>
+        <rect x="786" y="146" width="28" height="5" rx="1" fill="#c0d5d6" />
+        <rect
+          x="792"
+          y="130"
+          width="16"
+          height="16"
+          rx="2"
+          class="atl-lamp"
+          :fill="moon > 0.05 ? '#f6e2b8' : '#0c4459'"
+        />
+        <path d="M789 131 L800 118 L811 131 Z" fill="#a58d66" />
+        <circle
+          cx="800"
+          cy="138"
+          r="22"
+          fill="url(#atl-lamp-glow)"
+          class="atl-fade"
+          :opacity="moon"
         />
       </g>
       <g>
@@ -110,6 +151,40 @@ const wake = computed(() => (props.sail > 0.02 && props.sail < 0.98 ? 0.7 : 0))
           :fill="b.fill"
         />
         <rect x="0" y="268" width="1440" height="32" fill="#06303f" />
+        <!-- Moonlight and lamplight shimmer on the water -->
+        <g class="atl-fade" :opacity="moon * 0.85">
+          <rect
+            v-for="(r, i) in glints"
+            :key="`moon-${i}`"
+            :x="1120 - r.w / 2"
+            :y="r.y"
+            :width="r.w"
+            height="2"
+            rx="1"
+            fill="#e5e1dd"
+            class="atl-glint"
+            :style="{ animationDelay: `${i * -0.7}s` }"
+          />
+        </g>
+        <g
+          v-for="([x], i) in lamps"
+          :key="`glint-${i}`"
+          class="atl-lamp"
+          :opacity="lampOn(i) ? 0.75 : 0"
+        >
+          <rect
+            v-for="(r, j) in glints.slice(0, 2)"
+            :key="j"
+            :x="x - r.w / 6"
+            :y="r.y"
+            :width="r.w / 3"
+            height="2"
+            rx="1"
+            fill="#f6e2b8"
+            class="atl-glint"
+            :style="{ animationDelay: `${(i + j) * -0.5}s` }"
+          />
+        </g>
         <g
           v-for="([x, y], i) in lamps"
           :key="`lamp-${i}`"
@@ -169,6 +244,40 @@ const wake = computed(() => (props.sail > 0.02 && props.sail < 0.98 ? 0.7 : 0))
     fill 0.5s;
 }
 
+.atl-fade {
+  transition: opacity 0.4s;
+}
+
+/* The beam turns with the lamp: it narrows to a flash when it faces us, then sweeps back. */
+.atl-beam {
+  transform-box: view-box;
+  transform-origin: 800px 138px;
+  animation: atl-beam 9s ease-in-out infinite;
+}
+
+.atl-glint {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: atl-glint 2.4s ease-in-out infinite;
+}
+
+@keyframes atl-beam {
+  0%,
+  100% {
+    transform: scaleX(1);
+  }
+  50% {
+    transform: scaleX(-1);
+  }
+}
+
+@keyframes atl-glint {
+  50% {
+    transform: scaleX(0.55);
+    opacity: 0.5;
+  }
+}
+
 @keyframes atl-ship-bob {
   50% {
     translate: 0 3px;
@@ -176,7 +285,9 @@ const wake = computed(() => (props.sail > 0.02 && props.sail < 0.98 ? 0.7 : 0))
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .atl-ship {
+  .atl-ship,
+  .atl-beam,
+  .atl-glint {
     animation: none;
   }
 }

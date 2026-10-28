@@ -10,8 +10,11 @@ import LandingRoles from './landing/LandingRoles.vue'
 import LandingSecurity from './landing/LandingSecurity.vue'
 import LandingStatement from './landing/LandingStatement.vue'
 import LandingSystems from './landing/LandingSystems.vue'
+import { useSmoothScroll } from './landing/smoothScroll'
 import './landing/glass.css'
 import './landing/reveal.css'
+
+useSmoothScroll()
 </script>
 
 <!-- Public landing page; its content follows the project's Master Context. -->

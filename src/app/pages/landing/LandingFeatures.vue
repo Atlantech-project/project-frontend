@@ -5,7 +5,7 @@ import AtlIcon from '@/components/AtlIcon.vue'
 import AtlWave from '@/components/AtlWave.vue'
 import { useScrollProgress } from '@/composables/useScrollProgress'
 import CountUp from './CountUp.vue'
-import { vSpotlight } from './glass'
+import { vSpotlight, vTilt } from './glass'
 import { vReveal } from './reveal'
 
 const { t, locale } = useI18n()
@@ -112,6 +112,7 @@ const shift = computed(() => {
         >
           <article
             v-spotlight
+            v-tilt
             v-reveal
             data-ui
             class="atl-feat__card atl-feat__card--wide rounded-[var(--atl-radius-lg)] bg-navy p-8 text-offwhite"
@@ -142,6 +143,8 @@ const shift = computed(() => {
           </article>
 
           <article
+            v-spotlight
+            v-tilt
             v-reveal="1"
             data-ui
             class="atl-feat__card atl-feat__card--wide atl-glass atl-glass--light rounded-[var(--atl-radius-lg)] bg-gold/15 p-8 text-text"
@@ -187,6 +190,8 @@ const shift = computed(() => {
           <article
             v-for="(f, i) in others"
             :key="f.key"
+            v-spotlight
+            v-tilt
             v-reveal="2 + i"
             class="atl-feat__card atl-glass atl-glass--light flex flex-col rounded-[var(--atl-radius-lg)] p-8"
           >
