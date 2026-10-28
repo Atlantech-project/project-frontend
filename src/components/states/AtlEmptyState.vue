@@ -1,5 +1,6 @@
 <script setup>
 import { useI18n } from 'vue-i18n'
+import mark from '@/brand/logos/atlantech-symbol-mono-white.png'
 
 defineProps({
   title: { type: String, default: '' },
@@ -13,29 +14,8 @@ const { t } = useI18n()
 <template>
   <div class="grid justify-items-center gap-3 px-4 py-12 text-center">
     <slot name="icon">
-      <!-- An empty berth on calm water -->
-      <svg width="132" height="80" viewBox="0 0 132 80" fill="none" aria-hidden="true">
-        <rect x="4" y="58" width="124" height="18" rx="3" fill="var(--atl-light-teal)" />
-        <rect
-          x="38"
-          y="30"
-          width="56"
-          height="22"
-          rx="4"
-          stroke="var(--atl-mid-teal)"
-          stroke-width="2"
-          stroke-dasharray="5 5"
-        />
-        <circle cx="30" cy="54" r="3" fill="var(--atl-muted-gold)" />
-        <circle cx="102" cy="54" r="3" fill="var(--atl-muted-gold)" />
-        <path
-          d="M4 18 q8 -5 16 0 t16 0 M96 12 q8 -5 16 0 t16 0"
-          stroke="var(--atl-mid-teal)"
-          stroke-width="2"
-          stroke-linecap="round"
-          opacity="0.5"
-        />
-      </svg>
+      <!-- The ATLANTECH symbol as a quiet, single-colour silhouette -->
+      <span class="atl-empty__mark" :style="{ '--atl-mark': `url(${mark})` }" aria-hidden="true" />
     </slot>
     <h2 class="font-display text-lg font-semibold text-text">
       {{ title || t('states.emptyTitle') }}
@@ -46,3 +26,15 @@ const { t } = useI18n()
     </div>
   </div>
 </template>
+
+<style scoped>
+/* The logo's shape used as a mask, filled with the muted text colour so it follows the theme. */
+.atl-empty__mark {
+  display: block;
+  width: 120px;
+  aspect-ratio: 640 / 489;
+  background: var(--atl-text-muted);
+  opacity: 0.35;
+  mask: var(--atl-mark) center / contain no-repeat;
+}
+</style>
