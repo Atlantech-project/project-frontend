@@ -1,9 +1,11 @@
 <script setup>
+import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import AtlantechLogo from '@/brand/AtlantechLogo.vue'
 import { setLocale } from '@/i18n'
 
 const { t, locale } = useI18n()
+const route = useRoute()
 
 function toggleLocale() {
   setLocale(locale.value === 'en' ? 'ar' : 'en')
@@ -12,7 +14,10 @@ function toggleLocale() {
 
 <template>
   <div class="min-h-screen bg-bg text-text">
-    <header class="flex items-center gap-3 bg-navy px-4 py-2 text-offwhite">
+    <header
+      v-if="!route.meta.ownHeader"
+      class="flex items-center gap-3 bg-navy px-4 py-2 text-offwhite"
+    >
       <AtlantechLogo shape="wordmark" tone="reversed" :height="28" />
       <button
         type="button"
