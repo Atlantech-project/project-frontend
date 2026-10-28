@@ -3,6 +3,7 @@ import { useI18n } from 'vue-i18n'
 import AtlIcon from '@/components/AtlIcon.vue'
 import { contact, phoneHref } from './contact'
 import LandingSocials from './LandingSocials.vue'
+import { vReveal } from './reveal'
 
 const { t } = useI18n()
 
@@ -23,14 +24,16 @@ const channels = [
     <div class="mx-auto grid max-w-6xl items-start gap-12 lg:grid-cols-[1fr_1.2fr]">
       <div>
         <h2
+          v-reveal:line
           class="font-display text-3xl leading-tight font-semibold tracking-tight text-text sm:text-5xl"
         >
           {{ t('landing.contact.title') }}
         </h2>
-        <p class="mt-5 max-w-md text-lg leading-relaxed text-text">
+        <p v-reveal="1" class="mt-5 max-w-md text-lg leading-relaxed text-text">
           {{ t('landing.contact.body') }}
         </p>
         <a
+          v-reveal="2"
           :href="`mailto:${contact.email}`"
           class="mt-8 inline-flex items-center gap-2 rounded-full bg-navy px-6 py-3 font-semibold text-offwhite transition-colors hover:bg-teal"
         >
@@ -41,12 +44,15 @@ const channels = [
 
       <div class="grid gap-4">
         <a
-          v-for="c in channels"
+          v-for="(c, i) in channels"
           :key="c.key"
+          v-reveal="i"
           :href="c.href"
-          class="flex items-center gap-5 rounded-[var(--atl-radius-lg)] bg-bg p-6 transition-colors hover:bg-surface-2"
+          class="atl-lift group flex items-center gap-5 rounded-[var(--atl-radius-lg)] bg-bg p-6"
         >
-          <span class="grid size-14 shrink-0 place-items-center rounded-full bg-gold text-navy">
+          <span
+            class="grid size-14 shrink-0 place-items-center rounded-full bg-gold text-navy transition-colors duration-300 group-hover:bg-navy group-hover:text-gold"
+          >
             <AtlIcon :name="c.icon" :size="24" />
           </span>
           <span>
@@ -56,7 +62,7 @@ const channels = [
             </span>
           </span>
         </a>
-        <div class="rounded-[var(--atl-radius-lg)] bg-bg p-6">
+        <div v-reveal="2" class="rounded-[var(--atl-radius-lg)] bg-bg p-6">
           <p class="mb-4 text-sm text-muted">{{ t('landing.contact.follow') }}</p>
           <LandingSocials tone="dark" />
         </div>

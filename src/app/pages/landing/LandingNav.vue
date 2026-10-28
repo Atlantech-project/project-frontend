@@ -49,8 +49,11 @@ onBeforeUnmount(() => {
 
 <template>
   <header
-    class="fixed inset-x-0 top-0 z-50 text-offwhite transition-[background-color,box-shadow] duration-300"
-    :class="scrolled || open ? 'bg-navy' : 'bg-transparent'"
+    class="atl-nav fixed inset-x-0 top-0 z-50 text-offwhite transition-[background-color,box-shadow] duration-500"
+    :class="{
+      'bg-navy': open,
+      'bg-navy/80 shadow-[0_12px_32px_-24px_rgb(0_0_0/0.7)] backdrop-blur-lg': scrolled && !open,
+    }"
   >
     <nav
       class="mx-auto grid h-[72px] max-w-6xl grid-cols-[auto_1fr_auto] items-center gap-4 px-4"
@@ -131,3 +134,23 @@ onBeforeUnmount(() => {
     </ul>
   </header>
 </template>
+
+<style scoped>
+/* The bar settles in from above as the page opens. */
+.atl-nav {
+  animation: atl-nav-in 1s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes atl-nav-in {
+  from {
+    opacity: 0;
+    translate: 0 -100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .atl-nav {
+    animation: none;
+  }
+}
+</style>

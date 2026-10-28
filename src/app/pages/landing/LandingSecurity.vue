@@ -1,6 +1,7 @@
 <script setup>
 import { useI18n } from 'vue-i18n'
 import AtlIcon from '@/components/AtlIcon.vue'
+import { vReveal } from './reveal'
 
 const { t } = useI18n()
 
@@ -22,14 +23,17 @@ const facts = [
   <section id="security" class="scroll-mt-16 bg-teal-light px-4 py-24 text-navy sm:py-28">
     <div class="mx-auto max-w-6xl">
       <div class="max-w-3xl">
-        <h2 class="font-display text-3xl leading-tight font-semibold tracking-tight sm:text-5xl">
+        <h2
+          v-reveal:line
+          class="font-display text-3xl leading-tight font-semibold tracking-tight sm:text-5xl"
+        >
           {{ t('landing.security.title') }}
         </h2>
-        <p class="mt-4 text-lg text-navy">{{ t('landing.security.body') }}</p>
+        <p v-reveal="1" class="mt-4 text-lg text-navy">{{ t('landing.security.body') }}</p>
       </div>
 
       <ul class="mt-14 grid gap-x-10 gap-y-10 sm:grid-cols-2">
-        <li v-for="p in points" :key="p.key" class="flex gap-4">
+        <li v-for="(p, i) in points" :key="p.key" v-reveal="i % 2" class="flex gap-4">
           <span
             class="grid size-12 shrink-0 place-items-center rounded-full bg-navy text-teal-light"
           >
@@ -47,13 +51,15 @@ const facts = [
       </ul>
 
       <div
+        v-reveal
         class="mt-14 grid gap-6 rounded-[var(--atl-radius-lg)] bg-navy p-7 text-offwhite md:grid-cols-[1.2fr_2fr] md:items-center"
       >
         <p class="font-display text-lg font-semibold">{{ t('landing.security.reference') }}</p>
         <dl class="grid grid-cols-3 gap-3">
           <div
-            v-for="f in facts"
+            v-for="(f, i) in facts"
             :key="f.key"
+            v-reveal="2 + i"
             class="rounded-[var(--atl-radius)] bg-offwhite/10 px-4 py-3"
           >
             <dt class="sr-only">{{ t(`landing.security.facts.${f.key}`) }}</dt>

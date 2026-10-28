@@ -6,6 +6,7 @@ import AtlWave from '@/components/AtlWave.vue'
 import { setLocale } from '@/i18n'
 import { contact, phoneHref } from './contact'
 import LandingSocials from './LandingSocials.vue'
+import { vReveal } from './reveal'
 
 const { t, locale } = useI18n()
 
@@ -17,92 +18,93 @@ function toggleLocale() {
 </script>
 
 <template>
-  <section class="relative bg-teal px-4 pt-36 pb-28 text-center text-offwhite">
+  <section class="relative bg-teal px-4 pt-36 pb-40 text-center text-offwhite">
     <AtlWave animated base="var(--atl-bg)" class="absolute inset-x-0 top-0 h-14 rotate-180" />
-    <div class="mx-auto grid max-w-4xl justify-items-center gap-8">
-      <AtlantechLogo shape="symbol" tone="reversed" :height="88" />
+    <div class="mx-auto grid max-w-4xl justify-items-center gap-10">
       <h2
         class="font-display text-3xl leading-[1.05] font-semibold tracking-tight sm:text-5xl lg:text-7xl"
       >
-        <span class="block">{{ t('landing.finale.line1') }}</span>
-        <span class="block">{{ t('landing.finale.line2') }}</span>
+        <span v-reveal:line class="block">{{ t('landing.finale.line1') }}</span>
+        <span v-reveal:line="2" class="block">{{ t('landing.finale.line2') }}</span>
       </h2>
       <a
+        v-reveal="4"
         href="#top"
-        class="rounded-full bg-offwhite px-6 py-3 font-semibold text-navy transition-colors hover:bg-white"
+        class="atl-lift inline-flex items-center gap-2 rounded-full bg-offwhite px-6 py-3 font-semibold text-navy hover:bg-white"
       >
+        <AtlIcon name="arrow-up" :size="18" />
         {{ t('landing.finale.top') }}
       </a>
     </div>
+    <AtlWave animated class="absolute inset-x-0 bottom-0 h-16" />
   </section>
+
+  <!-- The full lockup sits large here so its tagline stays readable. -->
   <footer class="bg-navy text-offwhite">
-    <div
-      class="mx-auto grid max-w-6xl gap-12 px-4 py-16 md:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1.2fr_0.8fr]"
-    >
-      <div>
-        <AtlantechLogo shape="wordmark" tone="reversed" :height="34" />
-        <p class="mt-5 max-w-sm leading-relaxed text-offwhite/70">
+    <div class="mx-auto grid max-w-6xl gap-14 px-4 pt-16 pb-14 lg:grid-cols-[1.25fr_1fr] lg:pt-20">
+      <div v-reveal>
+        <AtlantechLogo shape="lockup" tone="reversed" :height="168" class="-ms-2" />
+        <p class="mt-6 max-w-sm leading-relaxed text-offwhite/70">
           {{ t('landing.footer.about') }}
         </p>
-        <LandingSocials class="mt-6" />
+        <LandingSocials class="mt-7" />
       </div>
-      <nav :aria-label="t('landing.footer.nav')">
-        <h3 class="font-display font-semibold">{{ t('landing.footer.product') }}</h3>
-        <ul class="mt-4 grid gap-3">
-          <li v-for="link in links" :key="link">
-            <a
-              :href="`#${link}`"
-              class="text-offwhite/70 transition-colors hover:text-offwhite hover:underline"
-            >
-              {{ t(`landing.nav.${link}`) }}
-            </a>
-          </li>
-        </ul>
-      </nav>
-      <div>
-        <h3 class="font-display font-semibold">{{ t('landing.footer.contact') }}</h3>
-        <ul class="mt-4 grid gap-3 text-offwhite/70">
-          <li>
-            <a
-              :href="`mailto:${contact.email}`"
-              class="flex items-center gap-2 transition-colors hover:text-offwhite hover:underline"
-            >
-              <AtlIcon name="mail" :size="16" />
-              <bdi dir="ltr">{{ contact.email }}</bdi>
-            </a>
-          </li>
-          <li>
-            <a
-              :href="phoneHref"
-              class="flex items-center gap-2 transition-colors hover:text-offwhite hover:underline"
-            >
-              <AtlIcon name="phone" :size="16" />
-              <bdi dir="ltr">{{ contact.phone }}</bdi>
-            </a>
-          </li>
-        </ul>
-      </div>
-      <div>
-        <h3 class="font-display font-semibold">{{ t('landing.footer.language') }}</h3>
-        <ul class="mt-4 grid gap-3 text-offwhite/70">
-          <li>
-            <button
-              type="button"
-              class="flex items-center gap-2 transition-colors hover:text-offwhite hover:underline"
-              @click="toggleLocale"
-            >
-              <AtlIcon name="globe" :size="16" />
-              {{ t('language.switch') }}
-            </button>
-          </li>
-        </ul>
+
+      <div class="grid content-start gap-12 sm:grid-cols-2 lg:pt-6">
+        <nav v-reveal="1" :aria-label="t('landing.footer.nav')">
+          <h3 class="font-display text-sm font-semibold text-gold">
+            {{ t('landing.footer.product') }}
+          </h3>
+          <ul class="mt-5 grid gap-3.5">
+            <li v-for="link in links" :key="link">
+              <a
+                :href="`#${link}`"
+                class="atl-underline pb-0.5 text-offwhite/75 hover:text-offwhite"
+              >
+                {{ t(`landing.nav.${link}`) }}
+              </a>
+            </li>
+          </ul>
+        </nav>
+        <div v-reveal="2">
+          <h3 class="font-display text-sm font-semibold text-gold">
+            {{ t('landing.footer.contact') }}
+          </h3>
+          <ul class="mt-5 grid gap-3.5 text-offwhite/75">
+            <li>
+              <a
+                :href="`mailto:${contact.email}`"
+                class="group inline-flex items-center gap-3 hover:text-offwhite"
+              >
+                <AtlIcon name="mail" :size="16" class="text-gold" />
+                <bdi dir="ltr" class="atl-underline pb-0.5">{{ contact.email }}</bdi>
+              </a>
+            </li>
+            <li>
+              <a :href="phoneHref" class="group inline-flex items-center gap-3 hover:text-offwhite">
+                <AtlIcon name="phone" :size="16" class="text-gold" />
+                <bdi dir="ltr" class="atl-underline pb-0.5">{{ contact.phone }}</bdi>
+              </a>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
-    <div class="bg-black/15">
+
+    <div class="mx-auto max-w-6xl px-4">
       <div
-        class="mx-auto flex max-w-6xl flex-col gap-2 px-4 py-6 text-sm text-offwhite/60 sm:flex-row sm:justify-between"
+        class="flex flex-col gap-4 border-t border-offwhite/10 py-7 text-sm text-offwhite/60 sm:flex-row sm:items-center sm:justify-between"
       >
         <p>{{ t('landing.footer.rights') }}</p>
+        <button
+          type="button"
+          class="inline-flex items-center gap-2 self-start rounded-full px-4 py-2 ring-1 ring-offwhite/20 transition-colors hover:bg-offwhite/10 hover:text-offwhite sm:self-auto"
+          :aria-label="t('landing.footer.language')"
+          @click="toggleLocale"
+        >
+          <AtlIcon name="globe" :size="16" />
+          {{ t('language.switch') }}
+        </button>
       </div>
     </div>
   </footer>

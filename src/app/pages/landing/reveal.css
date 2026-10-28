@@ -1,0 +1,104 @@
+/* Scroll reveals for the landing page (see reveal.js). One slow, calm easing everywhere. */
+.atl-reveal {
+  --atl-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --atl-delay: calc(var(--atl-i, 0) * 110ms);
+  opacity: 0;
+  translate: 0 22px;
+  transition:
+    opacity 1s var(--atl-ease) var(--atl-delay),
+    translate 1.2s var(--atl-ease) var(--atl-delay);
+}
+
+.atl-reveal.is-in {
+  opacity: 1;
+  translate: 0 0;
+}
+
+/* Headings rise out of the water: wiped upward from their baseline. */
+.atl-reveal[data-reveal='line'] {
+  opacity: 1;
+  translate: 0 0.45em;
+  clip-path: inset(100% 0 -0.2em 0);
+  transition:
+    clip-path 1.3s var(--atl-ease) var(--atl-delay),
+    translate 1.3s var(--atl-ease) var(--atl-delay);
+}
+
+.atl-reveal[data-reveal='line'].is-in {
+  translate: 0 0;
+  clip-path: inset(-0.2em -0.2em -0.2em -0.2em);
+}
+
+/* Bars inside a revealed block grow in one after another. */
+.atl-grow-y {
+  transform: scaleY(0);
+  transform-origin: bottom;
+  transition: transform 1s var(--atl-ease, ease) calc(300ms + var(--atl-b, 0) * 40ms);
+}
+
+.atl-grow-x {
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 1.4s var(--atl-ease, ease) calc(400ms + var(--atl-b, 0) * 160ms);
+}
+
+[dir='rtl'] .atl-grow-x {
+  transform-origin: right;
+}
+
+.is-in .atl-grow-y,
+.is-in .atl-grow-x {
+  transform: none;
+}
+
+/* A soft lift on cards a visitor can click. */
+.atl-lift {
+  transition:
+    translate 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.4s,
+    background-color 0.3s;
+}
+
+.atl-lift:hover {
+  translate: 0 -3px;
+  box-shadow: 0 18px 40px -24px rgb(8 58 79 / 0.45);
+}
+
+/* Links whose underline draws in from the start edge. */
+.atl-underline {
+  background: linear-gradient(currentColor, currentColor) no-repeat;
+  background-position: left bottom;
+  background-size: 0 1px;
+  transition:
+    background-size 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    color 0.3s;
+}
+
+[dir='rtl'] .atl-underline {
+  background-position: right bottom;
+}
+
+.atl-underline:hover,
+.atl-underline:focus-visible {
+  background-size: 100% 1px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .atl-reveal,
+  .atl-reveal[data-reveal='line'] {
+    opacity: 1;
+    translate: none;
+    clip-path: none;
+    transition: none;
+  }
+  .atl-grow-y,
+  .atl-grow-x {
+    transform: none;
+    transition: none;
+  }
+  .atl-lift,
+  .atl-lift:hover {
+    translate: none;
+    transition: none;
+  }
+}

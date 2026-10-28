@@ -1,5 +1,6 @@
 <script setup>
 import { useI18n } from 'vue-i18n'
+import { vReveal } from './reveal'
 
 const { t } = useI18n()
 
@@ -10,6 +11,7 @@ const questions = ['accounts', 'offline', 'languages', 'data', 'decisions']
   <section id="faq" class="scroll-mt-16 bg-bg px-4 py-24 sm:py-28">
     <div class="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[1fr_1.7fr]">
       <h2
+        v-reveal:line
         class="font-display text-3xl leading-tight font-semibold tracking-tight text-text sm:text-4xl"
       >
         {{ t('landing.faq.title') }}
@@ -18,6 +20,7 @@ const questions = ['accounts', 'offline', 'languages', 'data', 'decisions']
         <details
           v-for="(q, i) in questions"
           :key="q"
+          v-reveal="i"
           class="atl-faq group rounded-[var(--atl-radius-lg)] bg-surface px-6"
           :open="i === 0"
         >
@@ -72,8 +75,26 @@ const questions = ['accounts', 'offline', 'languages', 'data', 'decisions']
   transform: scaleY(0);
 }
 
+/* Answers slide open where the browser can animate to auto height. */
+.atl-faq {
+  interpolate-size: allow-keywords;
+}
+
+.atl-faq::details-content {
+  block-size: 0;
+  overflow: clip;
+  transition:
+    block-size 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+    content-visibility 0.5s allow-discrete;
+}
+
+.atl-faq[open]::details-content {
+  block-size: auto;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .atl-faq__bar {
+  .atl-faq__bar,
+  .atl-faq::details-content {
     transition: none;
   }
 }

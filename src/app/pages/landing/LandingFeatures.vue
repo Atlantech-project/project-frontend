@@ -1,5 +1,6 @@
 <script setup>
 import { useI18n } from 'vue-i18n'
+import { vReveal } from './reveal'
 
 const { t } = useI18n()
 
@@ -27,15 +28,16 @@ const others = [
     <div class="mx-auto max-w-6xl">
       <div class="max-w-2xl">
         <h2
+          v-reveal:line
           class="font-display text-4xl leading-tight font-semibold tracking-tight text-text sm:text-5xl"
         >
           {{ t('landing.features.title') }}
         </h2>
-        <p class="mt-4 text-lg text-text">{{ t('landing.features.body') }}</p>
+        <p v-reveal="1" class="mt-4 text-lg text-text">{{ t('landing.features.body') }}</p>
       </div>
 
       <div class="mt-14 grid gap-6 lg:grid-cols-2">
-        <article data-ui class="rounded-[var(--atl-radius-lg)] bg-navy p-8 text-offwhite">
+        <article v-reveal data-ui class="rounded-[var(--atl-radius-lg)] bg-navy p-8 text-offwhite">
           <h3 class="font-display text-2xl font-semibold">
             {{ t('landing.features.items.windows.title') }}
           </h3>
@@ -46,9 +48,9 @@ const others = [
             <span
               v-for="(bar, i) in tide"
               :key="i"
-              class="flex-1 rounded-t-sm"
+              class="atl-grow-y flex-1 rounded-t-sm"
               :class="bar.blocked ? 'bg-danger' : 'bg-teal-light'"
-              :style="{ height: `${bar.height}%` }"
+              :style="{ height: `${bar.height}%`, '--atl-b': i }"
             />
           </div>
           <div class="mt-3 flex gap-5 text-sm text-offwhite/75">
@@ -61,7 +63,11 @@ const others = [
           </div>
         </article>
 
-        <article data-ui class="rounded-[var(--atl-radius-lg)] bg-gold/15 p-8 text-text">
+        <article
+          v-reveal="1"
+          data-ui
+          class="rounded-[var(--atl-radius-lg)] bg-gold/15 p-8 text-text"
+        >
           <h3 class="font-display text-2xl font-semibold">
             {{ t('landing.features.items.recommendations.title') }}
           </h3>
@@ -87,9 +93,9 @@ const others = [
               </div>
               <div class="mt-2 h-1.5 overflow-hidden rounded-full bg-surface">
                 <span
-                  class="block h-full rounded-full"
+                  class="atl-grow-x block h-full rounded-full"
                   :class="i === 0 ? 'bg-teal' : 'bg-gold'"
-                  :style="{ width: `${o.score}%` }"
+                  :style="{ width: `${o.score}%`, '--atl-b': i }"
                 />
               </div>
             </li>
@@ -98,7 +104,7 @@ const others = [
       </div>
 
       <ul class="mt-16 grid gap-x-10 gap-y-12 sm:grid-cols-2">
-        <li v-for="f in others" :key="f.key" class="max-w-sm">
+        <li v-for="(f, i) in others" :key="f.key" v-reveal="i % 2" class="max-w-sm">
           <span class="block size-3 rounded-sm" :class="f.swatch" aria-hidden="true" />
           <h3 class="mt-4 font-display text-xl font-semibold text-text">
             {{ t(`landing.features.items.${f.key}.title`) }}

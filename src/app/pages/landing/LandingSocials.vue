@@ -16,10 +16,10 @@ defineProps({
         target="_blank"
         rel="noopener noreferrer"
         :aria-label="s.label"
-        class="grid size-11 place-items-center rounded-full transition-colors"
+        class="grid size-11 place-items-center rounded-full transition duration-300 hover:-translate-y-0.5"
         :class="
           tone === 'light'
-            ? 'bg-offwhite/10 text-offwhite hover:bg-gold hover:text-navy'
+            ? 'text-offwhite/80 ring-1 ring-offwhite/20 hover:bg-gold hover:text-navy hover:ring-gold'
             : 'bg-navy text-offwhite hover:bg-teal'
         "
       >
