@@ -16,7 +16,7 @@ defineProps({
         target="_blank"
         rel="noopener noreferrer"
         :aria-label="s.label"
-        class="atl-glass grid size-11 place-items-center rounded-full transition duration-300 hover:-translate-y-0.5"
+        class="atl-glass atl-glass-btn grid size-11 place-items-center rounded-full"
         :class="
           tone === 'light'
             ? 'text-offwhite/85 hover:bg-gold/85 hover:text-navy'

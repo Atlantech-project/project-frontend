@@ -115,7 +115,7 @@ const lit = (i) => (hovered.value ?? active.value) === i
             <button
               v-spotlight
               type="button"
-              class="atl-glass atl-ring__node flex items-center gap-3 rounded-full py-2 ps-2 pe-4 text-[15px] font-medium whitespace-nowrap transition-[box-shadow,border-color] duration-500"
+              class="atl-glass atl-glass-btn atl-ring__node flex items-center gap-3 rounded-full py-2 ps-2 pe-4 text-[15px] font-medium whitespace-nowrap"
               :class="{ 'is-lit': lit(i) }"
               @pointerenter="hovered = i"
               @pointerleave="hovered = null"

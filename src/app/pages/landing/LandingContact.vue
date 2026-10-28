@@ -32,14 +32,15 @@ const channels = [
         <p v-reveal="1" class="mt-5 max-w-md text-lg leading-relaxed text-text">
           {{ t('landing.contact.body') }}
         </p>
-        <a
-          v-reveal="2"
-          :href="`mailto:${contact.email}`"
-          class="atl-glass mt-8 inline-flex items-center gap-2 rounded-full bg-navy/90 px-6 py-3 font-semibold text-offwhite transition-colors hover:bg-teal/90"
-        >
-          <AtlIcon name="mail" :size="18" />
-          {{ t('landing.contact.cta') }}
-        </a>
+        <div v-reveal="2" class="mt-8">
+          <a
+            :href="`mailto:${contact.email}`"
+            class="atl-glass atl-glass-btn inline-flex items-center gap-2 rounded-full bg-navy/90 px-6 py-3 font-semibold text-offwhite hover:bg-teal/90"
+          >
+            <AtlIcon name="mail" :size="18" class="atl-nudge-x" />
+            {{ t('landing.contact.cta') }}
+          </a>
+        </div>
       </div>
 
       <div class="grid gap-4">

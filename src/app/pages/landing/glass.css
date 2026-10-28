@@ -56,6 +56,80 @@
     }
   }
 
+  /* Glass buttons: on hover the pane lifts, its rim brightens and a band of light sweeps across. */
+  .atl-glass-btn {
+    transition:
+      transform 0.45s cubic-bezier(0.2, 0.7, 0.2, 1),
+      box-shadow 0.45s,
+      border-color 0.3s,
+      background-color 0.3s,
+      color 0.3s;
+  }
+
+  .atl-glass-btn::before {
+    background:
+      linear-gradient(105deg, transparent 38%, rgb(255 255 255 / 0.45) 50%, transparent 62%) 150%
+        0 / 250% 100% no-repeat,
+      radial-gradient(120% 80% at 20% -10%, rgb(255 255 255 / 0.28), transparent 55%);
+  }
+
+  .atl-glass-btn:hover {
+    transform: translateY(-3px);
+    border-color: rgb(255 255 255 / 0.45);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.55),
+      0 0 0 4px rgb(255 255 255 / 0.06),
+      0 22px 40px -18px rgb(4 31 43 / 0.75);
+  }
+
+  .atl-glass-btn:hover::before {
+    background-position:
+      -50% 0,
+      0 0;
+    transition: background-position 0.9s cubic-bezier(0.3, 0.6, 0.3, 1);
+  }
+
+  .atl-glass-btn:active {
+    transform: translateY(0) scale(0.97);
+    transition-duration: 0.12s;
+  }
+
+  /* The icon inside points the way: up for "back to top", forward for a message. */
+  .atl-nudge-up,
+  .atl-nudge-x {
+    transition: translate 0.4s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+
+  .atl-glass-btn:hover .atl-nudge-up {
+    translate: 0 -3px;
+  }
+
+  .atl-glass-btn:hover .atl-nudge-x {
+    translate: 3px 0;
+  }
+
+  [dir='rtl'] .atl-glass-btn:hover .atl-nudge-x {
+    translate: -3px 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .atl-glass-btn:hover,
+    .atl-glass-btn:active {
+      transform: none;
+    }
+
+    .atl-glass-btn:hover::before {
+      transition: none;
+      background-position:
+        150% 0,
+        0 0;
+    }
+
+    .atl-glass-btn:hover :is(.atl-nudge-up, .atl-nudge-x) {
+      translate: none;
+    }
+  }
+
   /* A soft light that follows the pointer across a card (see glass.js). */
   .atl-spot {
     position: relative;

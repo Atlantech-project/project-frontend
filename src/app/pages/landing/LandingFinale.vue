@@ -27,14 +27,15 @@ function toggleLocale() {
         <span v-reveal class="block">{{ t('landing.finale.line1') }}</span>
         <span v-reveal="2" class="block">{{ t('landing.finale.line2') }}</span>
       </h2>
-      <a
-        v-reveal="4"
-        href="#top"
-        class="atl-glass inline-flex items-center gap-2 rounded-full bg-offwhite/85 px-6 py-3 font-semibold text-navy transition-colors hover:bg-offwhite"
-      >
-        <AtlIcon name="arrow-up" :size="18" />
-        {{ t('landing.finale.top') }}
-      </a>
+      <div v-reveal="4">
+        <a
+          href="#top"
+          class="atl-glass atl-glass-btn inline-flex items-center gap-2 rounded-full bg-navy/30 px-6 py-3 font-semibold text-offwhite hover:bg-navy/45"
+        >
+          <AtlIcon name="arrow-up" :size="18" class="atl-nudge-up" />
+          {{ t('landing.finale.top') }}
+        </a>
+      </div>
     </div>
     <AtlWave animated class="absolute inset-x-0 bottom-0 h-16" />
   </section>
@@ -98,7 +99,7 @@ function toggleLocale() {
         <p>{{ t('landing.footer.rights') }}</p>
         <button
           type="button"
-          class="atl-glass inline-flex items-center gap-2 self-start rounded-full px-4 py-2 transition-colors hover:bg-offwhite/15 hover:text-offwhite sm:self-auto"
+          class="atl-glass atl-glass-btn inline-flex items-center gap-2 self-start rounded-full px-4 py-2 hover:bg-offwhite/15 hover:text-offwhite sm:self-auto"
           :aria-label="t('landing.footer.language')"
           @click="toggleLocale"
         >

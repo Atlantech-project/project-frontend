@@ -70,13 +70,13 @@ onBeforeUnmount(() => cancelAnimationFrame(frame))
         >
           <a
             href="#how"
-            class="atl-glass rounded-full bg-offwhite/85 px-6 py-3 font-semibold text-navy transition-colors hover:bg-offwhite"
+            class="atl-glass atl-glass-btn rounded-full bg-offwhite/85 px-6 py-3 font-semibold text-navy hover:bg-offwhite"
           >
             {{ t('landing.hero.ctaHow') }}
           </a>
           <a
             href="#features"
-            class="atl-glass rounded-full px-6 py-3 font-semibold transition-colors hover:bg-offwhite/15"
+            class="atl-glass atl-glass-btn rounded-full px-6 py-3 font-semibold hover:bg-offwhite/15"
           >
             {{ t('landing.hero.ctaFeatures') }}
           </a>
