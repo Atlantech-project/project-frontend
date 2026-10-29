@@ -1,0 +1,217 @@
+/*
+ * ATLANTECH design foundations for the port web app (FE-015).
+ * Source: Figma "ATLANTECH" › Design System · Foundations. Light theme only, like the design.
+ *
+ * Pages use these tokens only: no raw hex colours, px font sizes or shadows in components.
+ * Semantic tokens (page, fg-*, edge-*, brand-*, status-*) are what components use;
+ * the primitive scales (navy-50 … danger-800) exist so the semantic ones can alias them.
+ *
+ * Team decisions that differ from the Figma file:
+ *   - Corner radius stays on the brand kit: 8 / 12 / 16 px (Figma has 4 / 8 / 12).
+ *   - Arabic text uses Readex Pro (Figma falls back to the system font).
+ *
+ * The landing page keeps its own light/dark tokens in brand/css/tokens.css.
+ */
+
+@font-face {
+  font-family: 'Roboto Mono';
+  src: url('./fonts/RobotoMono-Latin-Variable.woff2') format('woff2');
+  font-weight: 100 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* static: every variable is emitted, so charts and inline styles can read them with var(). */
+@theme static {
+  /* Primitive scales */
+  --color-navy-50: #e8edef;
+  --color-navy-100: #dce3e6;
+  --color-navy-200: #c2ced3;
+  --color-navy-300: #a7b9c0;
+  --color-navy-400: #8ca3ad;
+  --color-navy-500: #6f8c98;
+  --color-navy-600: #517483;
+  --color-navy-700: #305a6c;
+  --color-navy-800: #083a4f;
+  --color-navy-900: #062d3e;
+  --color-navy-950: #052736;
+
+  --color-teal-50: #e8eff1;
+  --color-teal-100: #d8e4e7;
+  --color-teal-200: #c0d5d6;
+  --color-teal-300: #94b7bf;
+  --color-teal-400: #6f9ea8;
+  --color-teal-500: #407e8c;
+  --color-teal-600: #37707d;
+  --color-teal-700: #306470;
+  --color-teal-800: #295964;
+  --color-teal-900: #224e58;
+  --color-teal-950: #1f4852;
+
+  --color-gold-50: #f4f1ec;
+  --color-gold-100: #ece8e0;
+  --color-gold-200: #ddd4c5;
+  --color-gold-300: #cdbfa9;
+  --color-gold-400: #bba98b;
+  --color-gold-500: #a58d66;
+  --color-gold-600: #907a58;
+  --color-gold-700: #7e6a4b;
+  --color-gold-800: #6d5b40;
+  --color-gold-900: #5c4d34;
+  --color-gold-950: #54452f;
+
+  --color-neutral-50: #f6f4f2;
+  --color-neutral-100: #eeebe8;
+  --color-neutral-200: #e5e1dd;
+  --color-neutral-300: #cfcac5;
+  --color-neutral-400: #a9a8a6;
+  --color-neutral-500: #84898b;
+  --color-neutral-600: #5f676b;
+  --color-neutral-700: #434c51;
+  --color-neutral-800: #2b363c;
+  --color-neutral-900: #17252d;
+  --color-neutral-950: #0c171d;
+
+  --color-success-50: #e8f1ed;
+  --color-success-100: #dae8e2;
+  --color-success-200: #bcd5cb;
+  --color-success-500: #5b987d;
+  --color-success-600: #2f7d5b;
+  --color-success-700: #276b4e;
+  --color-success-800: #215c42;
+
+  --color-warning-50: #f8f1e3;
+  --color-warning-100: #f4e7d0;
+  --color-warning-200: #ebd2a8;
+  --color-warning-500: #c9891a;
+  --color-warning-600: #b07716;
+  --color-warning-700: #9a6813;
+  --color-warning-800: #855a11;
+
+  --color-danger-50: #f7eae8;
+  --color-danger-100: #f1dcd9;
+  --color-danger-200: #e6c0bb;
+  --color-danger-500: #c26357;
+  --color-danger-600: #b23a2b;
+  --color-danger-700: #983124;
+  --color-danger-800: #82291e;
+
+  /* Backgrounds (Figma color/bg/*): bg-page, bg-card, bg-subtle, bg-fill, bg-inverse, bg-brand-tint, bg-overlay/33 */
+  --color-page: #f7f5f2;
+  --color-card: #ffffff;
+  --color-subtle: #f2efeb;
+  --color-fill: var(--color-neutral-200);
+  --color-inverse: var(--color-navy-800);
+  --color-brand-tint: var(--color-teal-100);
+  --color-overlay: var(--color-navy-950);
+
+  /* Text (color/text/*): text-fg, text-fg-secondary, text-fg-muted ... */
+  --color-fg: #0f2a36;
+  --color-fg-secondary: #4b5f68;
+  --color-fg-muted: var(--color-neutral-600);
+  --color-fg-disabled: var(--color-neutral-400);
+  --color-fg-inverse: var(--color-neutral-200);
+  --color-fg-link: var(--color-teal-700);
+  --color-fg-accent: #7a6440;
+
+  /* Borders and focus (color/border/*): border-edge, border-edge-strong ... */
+  --color-edge: #d3dedf;
+  --color-edge-strong: #8fa3aa;
+  --color-edge-focus: var(--color-teal-500);
+  --color-edge-inverse: var(--color-navy-700);
+
+  /* Brand actions (color/brand/*) */
+  --color-brand: var(--color-navy-800);
+  --color-brand-hover: var(--color-navy-700);
+  --color-brand-pressed: var(--color-navy-900);
+  --color-brand-secondary: var(--color-teal-500);
+  --color-brand-secondary-hover: var(--color-teal-600);
+  --color-brand-accent: var(--color-gold-500);
+  --color-brand-accent-tint: var(--color-gold-100);
+
+  /* Status (color/status/*): always pair the colour with a label */
+  --color-status-info-fg: var(--color-teal-800);
+  --color-status-info-bg: var(--color-teal-100);
+  --color-status-info-border: var(--color-teal-300);
+  --color-status-success-fg: var(--color-success-700);
+  --color-status-success-bg: var(--color-success-50);
+  --color-status-success-border: var(--color-success-200);
+  --color-status-warning-fg: var(--color-warning-800);
+  --color-status-warning-bg: var(--color-warning-50);
+  --color-status-warning-border: var(--color-warning-200);
+  --color-status-danger-fg: var(--color-danger-700);
+  --color-status-danger-bg: var(--color-danger-50);
+  --color-status-danger-border: var(--color-danger-200);
+  --color-status-neutral-fg: var(--color-neutral-700);
+  --color-status-neutral-bg: var(--color-neutral-100);
+  --color-status-neutral-border: var(--color-neutral-300);
+
+  /* Type: Montserrat for headings and numbers, Inter for text, Roboto Mono for IDs (BR-A-0109) */
+  --font-mono: 'Roboto Mono', ui-monospace, 'Cascadia Code', Consolas, monospace;
+
+  /* Radius (brand kit): rounded-control, rounded-card, rounded-panel, rounded-full */
+  --radius-control: 8px; /* buttons, inputs, badges */
+  --radius-card: 12px; /* cards, dialogs */
+  --radius-panel: 16px; /* large panels */
+
+  /* Elevation: shadow-card, shadow-dropdown, shadow-dialog, shadow-focus */
+  --shadow-card: 0 1px 2px 0 rgb(8 58 79 / 0.08);
+  --shadow-dropdown: 0 4px 12px 0 rgb(8 58 79 / 0.12);
+  --shadow-dialog: 0 12px 32px 0 rgb(8 58 79 / 0.2);
+  --shadow-focus: 0 0 0 3px rgb(64 126 140 / 0.45);
+
+  /* Sizes: h-control-sm (compact tables), h-control (web default), h-control-lg (primary action), w-sidebar */
+  --spacing-control-sm: 32px;
+  --spacing-control: 40px;
+  --spacing-control-lg: 48px;
+  --spacing-sidebar: 232px;
+}
+
+/* Type styles (Figma text styles). Spacing uses the default 4 px scale: p-1 = 4 px, p-2 = 8 px ... */
+@utility type-h1 {
+  font: 600 28px / 36px var(--atl-font-display);
+}
+@utility type-h2 {
+  font: 600 22px / 30px var(--atl-font-display);
+}
+@utility type-h3 {
+  font: 600 18px / 26px var(--atl-font-display);
+}
+@utility type-h4 {
+  font: 600 16px / 24px var(--atl-font-display);
+}
+@utility type-number-display {
+  font: 700 32px / 40px var(--atl-font-display);
+}
+@utility type-number-m {
+  font: 600 22px / 28px var(--atl-font-display);
+}
+@utility type-body-l {
+  font: 400 16px / 24px var(--atl-font-body);
+}
+@utility type-body-m {
+  font: 400 14px / 20px var(--atl-font-body);
+}
+@utility type-body-s {
+  font: 400 13px / 18px var(--atl-font-body);
+}
+@utility type-label-l {
+  font: 500 16px / 22px var(--atl-font-body);
+}
+@utility type-label-m {
+  font: 500 14px / 20px var(--atl-font-body);
+}
+@utility type-label-s {
+  font: 500 12px / 16px var(--atl-font-body);
+}
+@utility type-caption {
+  font: 400 12px / 16px var(--atl-font-body);
+}
+@utility type-overline {
+  font: 600 11px / 16px var(--atl-font-body);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+@utility type-mono {
+  font: 400 13px / 20px var(--font-mono);
+}

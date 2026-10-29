@@ -1,7 +1,5 @@
 # src layout
 
-See `docs/adr/ADR-001-frontend-stack.md` for the full rules.
-
 | Folder | Holds |
 |---|---|
 | `app/` | Router, guards, layouts and app-level pages (not found, access denied) |

@@ -1,4 +1,5 @@
-// Port roles, as stored in user_role_assignment.role (Users & Actors).
+// Port roles, as stored in user_role_assignment.role (Users & Actors). The database enum is
+// the source of truth for these codes (e.g. PORT_STAFF, not PORT_AUTHORITY_STAFF from the CT-03 example).
 // R-numbers are the role IDs used in the Screens spec.
 export const ROLES = Object.freeze({
   PORT_GM: 'PORT_GM', // R2 Port Admin
