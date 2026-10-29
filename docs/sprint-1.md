@@ -9,7 +9,7 @@
 | Task | What was delivered | PR |
 |---|---|---|
 | FE-001 | Stack decided: Vue 3 + Vite, **JavaScript** (no TypeScript), pnpm, Node 22, Tailwind v4, PrimeVue 4 (unstyled), TanStack Query, Pinia, vue-i18n, Vitest | #1, #2 |
-| FE-006 | Scope fixed: English + Arabic (RTL); times shown in port local time from `port_profile.timezone` (DEC-45); latest 2 versions of Chrome, Edge and Firefox, desktop ≥1280px, tablet ≥768px (DEC-46) | #6, #7 |
+| FE-006 | Scope fixed: English + Arabic (RTL); times shown in port local time from `port_profile.timezone` (DEC-45); latest 2 versions of Chrome, Edge and Firefox, desktop ≥1280px, tablet ≥768px (DEC-46); accessibility WCAG 2.1 AA (NFR-UX-3) | #6, #7 |
 | FE-010 | Project scaffold: folder layout (`app`, `features`, `components`, `composables`, `stores`, `api`, `i18n`, `brand`, `styles`), router, i18n, brand kit | #3 |
 | FE-011 | Runtime `config.json` (API URL, events URL, locale, feature flags), so one build runs on dev and demo | #4 |
 | FE-012 | GitHub Actions CI on every push and PR to `develop`, `release` and `main`: lint, format, tests, build | #5 |
@@ -25,6 +25,7 @@ Other PRs: #10 brought the README into `develop`. #11 + #12 and #15 + #16 were t
 - **UI kit:** PrimeVue pinned to v4, because v5 needs a licence key.
 - **Sign-in:** by username, not email (DEC-35).
 - **Roles:** database names are the source of truth.
+- **Accessibility:** WCAG 2.1 AA, the level the requirements name (NFR-UX-3). The FE-015 contrast test checks it: 4.5:1 for text, 3:1 for UI parts such as focus rings.
 - **Fonts:** Montserrat for headings and numbers, Inter for text, **Readex Pro** for Arabic, Roboto Mono for IDs such as BR-A-0109.
 - **Corner radius:** brand kit 8 / 12 / 16 px. Figma uses 4 / 8 / 12, and we kept the brand kit.
 - **Landing page:** treated as the official product website, with no university or graduation-project mentions and no sign-in button.
