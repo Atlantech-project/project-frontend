@@ -1,0 +1,10 @@
+# Text files are stored and checked out with LF on every machine, whatever
+# core.autocrlf says locally. Prettier writes LF (.editorconfig: end_of_line = lf),
+# so `pnpm format:check` gives the same answer here and in CI.
+* text=auto eol=lf
+
+# Binary files are never converted.
+*.png binary
+*.ico binary
+*.woff binary
+*.woff2 binary
