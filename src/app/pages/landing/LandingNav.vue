@@ -61,7 +61,11 @@ onBeforeUnmount(() => {
       :aria-label="t('landing.nav.label')"
     >
       <a href="#top" class="flex items-center" @click="open = false">
-        <AtlantechLogo shape="wordmark" tone="reversed" :height="30" />
+        <!-- Name only: the wordmark image is cropped above its tagline, which is too small to read
+             at nav size (the footer shows the full lockup). -->
+        <span class="flex h-[19px] items-start overflow-hidden">
+          <AtlantechLogo shape="wordmark" tone="reversed" :height="42" class="-mt-[6px]" />
+        </span>
       </a>
 
       <ul class="hidden items-center justify-center gap-1 lg:flex">
