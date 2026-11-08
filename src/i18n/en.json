@@ -260,5 +260,9 @@
     "title": "This page didn't load",
     "body": "Something went wrong while opening ATLANTECH. Try again, or go back to the home page.",
     "back": "Back to home"
+  },
+  "form": {
+    "showPassword": "Show password",
+    "hidePassword": "Hide password"
   }
 }
