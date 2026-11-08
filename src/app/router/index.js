@@ -11,6 +11,12 @@ export const routes = [
     component: () => import('@/app/pages/LandingPage.vue'),
   },
   {
+    path: '/login',
+    name: 'login',
+    meta: { ownHeader: true, pageId: 'P-16', public: true },
+    component: () => import('@/features/auth/PortLoginPage.vue'),
+  },
+  {
     path: '/error',
     name: 'error',
     component: () => import('@/app/pages/ErrorPage.vue'),
