@@ -298,5 +298,57 @@
     "password": "Use at least 8 characters with letters and numbers.",
     "regex": "This value isn't in the right format.",
     "date": "This isn't a valid date and time."
+  },
+  "login": {
+    "title": "Port Login",
+    "subtitle": "Sign in to your port-local operational system.",
+    "currentPort": "Current port",
+    "thisPort": "the port",
+    "username": "Username",
+    "usernamePlaceholder": "Enter your username",
+    "password": "Password",
+    "passwordPlaceholder": "Enter your password",
+    "signIn": "Sign In",
+    "signingIn": "Signing in…",
+    "required": {
+      "username": "Enter your username.",
+      "password": "Enter your password."
+    },
+    "deployment": "Dedicated {port} deployment. Access to operational information follows your authorized scope.",
+    "deploymentGeneric": "Dedicated port deployment. Access to operational information follows your authorized scope.",
+    "messages": {
+      "staffOnly": {
+        "title": "Authorized port staff only",
+        "body": "Use your port-local account to sign in."
+      },
+      "invalidCredentials": {
+        "title": "Username or password is incorrect.",
+        "body": "Check your port-local credentials and try again."
+      },
+      "accountDisabled": {
+        "title": "Your port account is disabled.",
+        "body": "Contact your port system administrator to restore access."
+      },
+      "sessionExpired": {
+        "title": "Your session has expired.",
+        "body": "Sign in again to continue to {port} operations."
+      },
+      "tooManyAttempts": {
+        "title": "Too many sign-in attempts.",
+        "body": "Wait a minute, then try again."
+      },
+      "network": {
+        "title": "Can't reach the port server.",
+        "body": "Check your connection and try again."
+      },
+      "unavailable": {
+        "title": "The port system isn't ready yet.",
+        "body": "Try again later or contact your port system administrator."
+      },
+      "generic": {
+        "title": "Sign-in didn't work.",
+        "body": "Something went wrong on our side. Try again."
+      }
+    }
   }
 }
