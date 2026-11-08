@@ -5,6 +5,7 @@ import { createAuthGuard } from './guard'
 
 // Each feature exports its own routes; meta.pageId links a route to the Screens spec (P-xx).
 // Pages need a signed-in web user unless meta.public; meta.roles narrows them further (FE-021).
+// meta.layout 'app' opens the page inside the app shell (FE-020) with meta.titleKey as its title.
 export const routes = [
   {
     path: '/',
@@ -21,7 +22,7 @@ export const routes = [
   {
     path: '/home',
     name: 'home',
-    meta: { ownHeader: true, pageId: 'P-17' },
+    meta: { layout: 'app', pageId: 'P-17', titleKey: 'nav.home' },
     component: () => import('@/features/home/HomePage.vue'),
   },
   {

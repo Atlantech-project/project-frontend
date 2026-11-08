@@ -2,6 +2,7 @@
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import AtlantechLogo from '@/brand/AtlantechLogo.vue'
+import AppShell from '@/app/shell/AppShell.vue'
 import { setLocale } from '@/i18n'
 
 const { t, locale } = useI18n()
@@ -13,7 +14,10 @@ function toggleLocale() {
 </script>
 
 <template>
-  <div class="min-h-screen bg-page text-fg">
+  <AppShell v-if="route.meta.layout === 'app'">
+    <RouterView />
+  </AppShell>
+  <div v-else class="min-h-screen bg-page text-fg">
     <header
       v-if="!route.meta.ownHeader"
       class="flex items-center gap-3 bg-inverse px-4 py-2 text-fg-inverse"

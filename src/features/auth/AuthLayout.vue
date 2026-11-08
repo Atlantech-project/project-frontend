@@ -1,9 +1,7 @@
 <script setup>
-import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useQuery } from '@tanstack/vue-query'
 import AtlantechLogo from '@/brand/AtlantechLogo.vue'
-import { fetchSystemInfo } from '@/api/system'
+import { usePortName } from '@/app/useSystemInfo'
 import background from '@/assets/images/port-login-bg.webp'
 
 defineProps({
@@ -13,14 +11,7 @@ defineProps({
 
 const { t } = useI18n()
 
-// The port this server belongs to; the pages still work if it can't be loaded.
-const { data: systemInfo } = useQuery({
-  queryKey: ['system', 'info'],
-  queryFn: fetchSystemInfo,
-  staleTime: Infinity,
-  retry: false,
-})
-const portName = computed(() => systemInfo.value?.port_name ?? '')
+const portName = usePortName()
 </script>
 
 <!-- Frame shared by the P-16 sign-in states (Figma "P-16 / Port Login / *"): port photo, white card
