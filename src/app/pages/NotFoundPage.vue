@@ -9,11 +9,11 @@ const { t } = useI18n()
 <!-- "Off course": a compass replaces the 0 in 404. -->
 <template>
   <section
-    class="relative grid min-h-[calc(100vh-48px)] place-items-center overflow-hidden bg-bg px-4 pb-24"
+    class="relative grid min-h-[calc(100vh-48px)] place-items-center overflow-hidden bg-page px-4 pb-24"
   >
     <div class="grid max-w-xl justify-items-center gap-5 text-center">
       <div
-        class="flex items-center gap-2 font-display text-8xl font-semibold text-navy sm:text-9xl"
+        class="flex items-center gap-2 font-display text-8xl font-semibold text-brand sm:text-9xl"
         aria-hidden="true"
       >
         <span>4</span>
@@ -23,7 +23,7 @@ const { t } = useI18n()
             cy="50"
             r="44"
             fill="none"
-            stroke="var(--atl-mid-teal)"
+            stroke="var(--color-teal-500)"
             stroke-width="6"
           />
           <circle
@@ -31,24 +31,24 @@ const { t } = useI18n()
             cy="50"
             r="34"
             fill="none"
-            stroke="var(--atl-light-teal)"
+            stroke="var(--color-teal-200)"
             stroke-width="2"
           />
           <g class="atl-compass__needle">
-            <path d="M50 18 L58 50 L50 50 Z" fill="var(--atl-muted-gold)" />
-            <path d="M50 18 L42 50 L50 50 Z" fill="var(--atl-muted-gold)" opacity="0.75" />
-            <path d="M50 82 L58 50 L50 50 Z" fill="var(--atl-deep-navy)" opacity="0.75" />
-            <path d="M50 82 L42 50 L50 50 Z" fill="var(--atl-deep-navy)" />
+            <path d="M50 18 L58 50 L50 50 Z" fill="var(--color-gold-500)" />
+            <path d="M50 18 L42 50 L50 50 Z" fill="var(--color-gold-500)" opacity="0.75" />
+            <path d="M50 82 L58 50 L50 50 Z" fill="var(--color-navy-800)" opacity="0.75" />
+            <path d="M50 82 L42 50 L50 50 Z" fill="var(--color-navy-800)" />
           </g>
-          <circle cx="50" cy="50" r="5" fill="var(--atl-deep-navy)" />
+          <circle cx="50" cy="50" r="5" fill="var(--color-navy-800)" />
         </svg>
         <span>4</span>
       </div>
-      <h1 class="font-display text-3xl font-semibold text-text">{{ t('notFound.title') }}</h1>
-      <p class="text-muted">{{ t('notFound.body') }}</p>
+      <h1 class="type-h1 text-fg">{{ t('notFound.title') }}</h1>
+      <p class="text-fg-secondary">{{ t('notFound.body') }}</p>
       <RouterLink
         to="/"
-        class="inline-flex items-center gap-2 rounded-[var(--atl-radius-sm)] bg-primary px-5 py-3 font-semibold text-on-primary transition hover:brightness-110"
+        class="inline-flex items-center gap-2 rounded-control bg-brand px-5 py-3 font-semibold text-fg-inverse transition-colors hover:bg-brand-hover focus-visible:shadow-focus focus-visible:outline-none"
       >
         <AtlIcon name="home" :size="18" />
         {{ t('notFound.back') }}

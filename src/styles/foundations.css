@@ -201,6 +201,10 @@
 @utility type-label-m {
   font: 500 14px / 20px var(--atl-font-body);
 }
+/* Strong/M: bold body text, used by form labels, buttons and message titles */
+@utility type-strong-m {
+  font: 600 14px / 20px var(--atl-font-body);
+}
 @utility type-label-s {
   font: 500 12px / 16px var(--atl-font-body);
 }
