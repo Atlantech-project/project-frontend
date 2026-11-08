@@ -8,10 +8,17 @@ import AtlInput from '@/components/ui/AtlInput.vue'
 import AtlPasswordInput from '@/components/ui/AtlPasswordInput.vue'
 import AtlAlert from '@/components/ui/AtlAlert.vue'
 import AtlConflictDialog from '@/components/AtlConflictDialog.vue'
+import AtlStatusBadge from '@/components/ui/AtlStatusBadge.vue'
+import { STATUS_TONES } from '@/app/statuses'
 
 const username = ref('n.hassan')
 const password = ref('temporary-pass1')
 const conflictOpen = ref(false)
+const tones = ['success', 'info', 'warning', 'danger', 'neutral']
+const byTone = (tone) =>
+  Object.entries(STATUS_TONES)
+    .filter(([, t]) => t === tone)
+    .map(([value]) => value)
 </script>
 
 <!-- Dev-only page (/dev/states) to check the shared screen states and form components on brand,
@@ -66,6 +73,12 @@ const conflictOpen = ref(false)
         <AtlAlert tone="danger" title="This account is disabled.">
           Contact your port administrator.
         </AtlAlert>
+      </div>
+      <div class="grid content-start gap-3 md:col-span-2">
+        <h2 class="type-h3 text-fg">Status badges</h2>
+        <div v-for="tone in tones" :key="tone" class="flex flex-wrap gap-2">
+          <AtlStatusBadge v-for="value in byTone(tone)" :key="value" :value="value" />
+        </div>
       </div>
       <div class="grid content-start gap-3 md:col-span-2">
         <h2 class="type-h3 text-fg">Record changed (409)</h2>
