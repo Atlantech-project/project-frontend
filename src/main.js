@@ -1,22 +1,18 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
-import { VueQueryPlugin, QueryClient } from '@tanstack/vue-query'
+import { VueQueryPlugin } from '@tanstack/vue-query'
 import PrimeVue from 'primevue/config'
 
 import App from './App.vue'
 import { loadConfig } from './app/config'
+import { createQueryClient } from './app/queryClient'
 import { router } from './app/router'
 import { redirectOnSignOut } from './app/router/guard'
 import { i18n, setLocale } from './i18n'
 import { installSessionHandling } from './stores/session'
 import './styles/main.css'
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    // SSE events tell us when data changes (CT-05), so no background refetch on focus.
-    queries: { refetchOnWindowFocus: false, retry: 1 },
-  },
-})
+const queryClient = createQueryClient()
 
 const config = await loadConfig()
 setLocale(config.defaultLocale)
