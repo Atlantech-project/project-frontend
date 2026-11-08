@@ -17,6 +17,12 @@ export const routes = [
     component: () => import('@/features/auth/PortLoginPage.vue'),
   },
   {
+    path: '/change-password',
+    name: 'change-password',
+    meta: { ownHeader: true, pageId: 'P-16' },
+    component: () => import('@/features/auth/ChangePasswordPage.vue'),
+  },
+  {
     path: '/error',
     name: 'error',
     component: () => import('@/app/pages/ErrorPage.vue'),

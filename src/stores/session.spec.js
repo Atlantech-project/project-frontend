@@ -73,6 +73,23 @@ describe('session store', () => {
     expect(s.mustChangePassword).toBe(false)
   })
 
+  it('keeps the temporary password in memory only for a first sign-in', async () => {
+    auth.login.mockResolvedValueOnce(staff).mockResolvedValueOnce(newUser)
+    auth.changePassword.mockResolvedValue(staff)
+    const s = useSessionStore()
+    await s.login({ username: 'a', password: 'normal' })
+    expect(s.hasTemporaryPassword()).toBe(false)
+    await s.login({ username: 'a', password: 'Temp12345' })
+    expect(s.hasTemporaryPassword()).toBe(true)
+    await s.changePassword({ newPassword: 'abc12345', confirmation: 'abc12345' })
+    expect(auth.changePassword).toHaveBeenCalledWith({
+      currentPassword: 'Temp12345',
+      newPassword: 'abc12345',
+      confirmation: 'abc12345',
+    })
+    expect(s.hasTemporaryPassword()).toBe(false)
+  })
+
   it('a failed login keeps nobody signed in', async () => {
     auth.login.mockRejectedValue(new ApiError({ status: 401, code: 'UNAUTHENTICATED' }))
     const s = useSessionStore()
