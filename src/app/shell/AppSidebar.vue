@@ -55,7 +55,11 @@ function toggleLocale() {
     class="fixed inset-y-0 start-0 flex w-sidebar flex-col gap-4 overflow-y-auto bg-inverse px-4 py-7 text-fg-inverse"
   >
     <div class="flex flex-col gap-2 px-3">
-      <AtlantechLogo shape="wordmark" tone="reversed" :height="22" class="self-start" />
+      <!-- Name only, cropped above the tagline like the landing nav (the tagline is unreadable
+           at this size). -->
+      <span class="flex h-[19px] items-start self-start overflow-hidden">
+        <AtlantechLogo shape="wordmark" tone="reversed" :height="42" class="-ms-[11px] -mt-[6px]" />
+      </span>
       <p class="type-caption">{{ t('shell.deployment') }}</p>
       <p v-if="portName" class="type-strong-m text-card">{{ portName }}</p>
     </div>
