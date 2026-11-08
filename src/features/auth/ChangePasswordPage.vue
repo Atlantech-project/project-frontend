@@ -9,7 +9,7 @@ import { fieldMessages } from '@/api/errors'
 import { useSessionStore } from '@/stores/session'
 import AuthLayout from './AuthLayout.vue'
 import { MIN_PASSWORD_LENGTH, isStrongEnough } from './passwordRules'
-import { safeRedirect } from './redirect'
+import { afterSignIn } from './redirect'
 
 const i18n = useI18n()
 const { t } = i18n
@@ -36,7 +36,8 @@ const isProblem = computed(() => message.value !== 'firstLogin')
 onMounted(async () => {
   await session.restore().catch(() => {})
   if (!session.isSignedIn) await router.replace({ name: 'login', query: route.query })
-  else if (!session.mustChangePassword) await router.replace(safeRedirect(route.query.redirect))
+  else if (!session.mustChangePassword)
+    await router.replace(afterSignIn(session, route.query.redirect))
 })
 
 function validate() {
@@ -76,7 +77,7 @@ async function submit() {
       newPassword: form.password,
       confirmation: form.confirmation,
     })
-    await router.replace(safeRedirect(route.query.redirect))
+    await router.replace(afterSignIn(session, route.query.redirect))
   } catch (error) {
     if (error.isValidation) showFieldErrors(error)
     else if (error.status === 401 || error.status === 419)

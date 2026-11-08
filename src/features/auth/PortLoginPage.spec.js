@@ -37,6 +37,7 @@ async function mountPage(path = '/login') {
     routes: [
       { path: '/login', component: PortLoginPage },
       { path: '/change-password', name: 'change-password', component: { template: '<p>cp</p>' } },
+      { path: '/access-denied', name: 'access-denied', component: { template: '<p>p20</p>' } },
       { path: '/:any(.*)*', component: { template: '<p>next</p>' } },
     ],
   })
@@ -103,6 +104,16 @@ describe('P-16 Port Login', () => {
     await w.find('form').trigger('submit')
     await flushPromises()
     expect(router.currentRoute.value.fullPath).toBe('/change-password?redirect=/vessels')
+  })
+
+  it('sends a field role to P-20 after signing in', async () => {
+    auth.login.mockResolvedValue({ ...staff, role: 'MARINE_PILOT' })
+    const { w, router } = await mountPage()
+    await w.find('input[name=username]').setValue('pilot.01')
+    await w.find('input[name=password]').setValue('secret123')
+    await w.find('form').trigger('submit')
+    await flushPromises()
+    expect(router.currentRoute.value.fullPath).toBe('/access-denied?reason=mobileOnly')
   })
 
   it('ignores a redirect to another site', async () => {
