@@ -1,5 +1,7 @@
 <script setup>
 import { useI18n } from 'vue-i18n'
+import { setLocale } from '@/i18n'
+import AtlIcon from '@/components/AtlIcon.vue'
 import AtlantechLogo from '@/brand/AtlantechLogo.vue'
 import { usePortName } from '@/app/useSystemInfo'
 import background from '@/assets/images/port-login-bg.webp'
@@ -9,7 +11,11 @@ defineProps({
   subtitle: { type: String, default: '' },
 })
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
+
+function toggleLocale() {
+  setLocale(locale.value === 'en' ? 'ar' : 'en')
+}
 
 const portName = usePortName()
 </script>
@@ -25,6 +31,16 @@ const portName = usePortName()
       aria-hidden="true"
       class="pointer-events-none absolute inset-0 size-full object-cover opacity-60"
     />
+
+    <!-- Language switch: shows the other language's name, like the sidebar and the landing nav. -->
+    <button
+      type="button"
+      class="absolute end-4 top-4 flex h-10 items-center gap-2 rounded-full border border-offwhite/25 bg-inverse/60 px-4 type-strong-m text-offwhite backdrop-blur transition-colors hover:bg-inverse/80 focus-visible:shadow-focus focus-visible:outline-none sm:end-6 sm:top-6"
+      @click="toggleLocale"
+    >
+      <AtlIcon name="globe" :size="18" />
+      {{ t('language.switch') }}
+    </button>
 
     <section
       class="relative flex w-full max-w-[480px] flex-col gap-5 rounded-card border border-edge bg-card p-8 shadow-[0_16px_48px_0_rgb(0_0_0/0.28)]"
