@@ -1,13 +1,15 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { applyTheme } from '@/composables/useTheme'
+import { useSessionStore } from '@/stores/session'
+import { createAuthGuard } from './guard'
 
 // Each feature exports its own routes; meta.pageId links a route to the Screens spec (P-xx).
-// Role guards and P-20 Access Denied come with FE-021.
+// Pages need a signed-in web user unless meta.public; meta.roles narrows them further (FE-021).
 export const routes = [
   {
     path: '/',
     name: 'landing',
-    meta: { ownHeader: true },
+    meta: { ownHeader: true, public: true },
     component: () => import('@/app/pages/LandingPage.vue'),
   },
   {
@@ -23,8 +25,15 @@ export const routes = [
     component: () => import('@/features/auth/ChangePasswordPage.vue'),
   },
   {
+    path: '/access-denied',
+    name: 'access-denied',
+    meta: { ownHeader: true, pageId: 'P-20' },
+    component: () => import('@/features/auth/AccessDeniedPage.vue'),
+  },
+  {
     path: '/error',
     name: 'error',
+    meta: { public: true },
     component: () => import('@/app/pages/ErrorPage.vue'),
   },
   // Dev builds only: preview of the shared loading, empty and error states.
@@ -33,6 +42,7 @@ export const routes = [
         {
           path: '/dev/states',
           name: 'dev-states',
+          meta: { public: true },
           component: () => import('@/app/pages/StatesPreviewPage.vue'),
         },
       ]
@@ -40,6 +50,7 @@ export const routes = [
   {
     path: '/:pathMatch(.*)*',
     name: 'not-found',
+    meta: { public: true },
     component: () => import('@/app/pages/NotFoundPage.vue'),
   },
 ]
@@ -54,6 +65,8 @@ export const router = createRouter({
     return { top: 0 }
   },
 })
+
+router.beforeEach(createAuthGuard(() => useSessionStore()))
 
 // Every page shows the visitor's chosen look, light or dark.
 router.afterEach(() => applyTheme())

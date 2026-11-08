@@ -391,5 +391,24 @@
         "body": "Something went wrong on our side. Try again."
       }
     }
+  },
+  "accessDenied": {
+    "title": "Access Denied",
+    "body": "You do not have permission to access the requested resource.",
+    "reasonLabel": "Reason",
+    "reasons": {
+      "permissions": "Insufficient user permissions.",
+      "mobileOnly": "Your role works in the mobile app only."
+    },
+    "help": {
+      "permissions": "Contact your system administrator if you need access.",
+      "mobileOnly": "Open the ATLANTECH app on your tablet. Contact your system administrator if you need web access."
+    },
+    "next": {
+      "permissions": "Return to your role-scoped dashboard.",
+      "mobileOnly": "Sign out and continue in the mobile app."
+    },
+    "backHome": "Back to Home",
+    "signOut": "Sign Out"
   }
 }

@@ -6,6 +6,7 @@ import PrimeVue from 'primevue/config'
 import App from './App.vue'
 import { loadConfig } from './app/config'
 import { router } from './app/router'
+import { redirectOnSignOut } from './app/router/guard'
 import { i18n, setLocale } from './i18n'
 import { installSessionHandling } from './stores/session'
 import './styles/main.css'
@@ -22,7 +23,12 @@ setLocale(config.defaultLocale)
 
 const pinia = createPinia()
 // Signing out drops the previous user's cached data.
-installSessionHandling(pinia, { onSignedOut: () => queryClient.clear() })
+installSessionHandling(pinia, {
+  onSignedOut: () => {
+    queryClient.clear()
+    redirectOnSignOut(router)()
+  },
+})
 
 createApp(App)
   .use(pinia)
