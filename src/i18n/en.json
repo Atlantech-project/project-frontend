@@ -261,6 +261,10 @@
     "body": "Something went wrong while opening ATLANTECH. Try again, or go back to the home page.",
     "back": "Back to home"
   },
+  "form": {
+    "showPassword": "Show password",
+    "hidePassword": "Hide password"
+  },
   "errors": {
     "network_error": "Can't reach the server. Check your connection and try again.",
     "validation_failed": "Some fields need attention.",
