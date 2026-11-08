@@ -87,7 +87,7 @@ describe('first sign-in password change', () => {
       newPassword: 'NewPass2026',
       confirmation: 'NewPass2026',
     })
-    expect(router.currentRoute.value.fullPath).toBe('/')
+    expect(router.currentRoute.value.fullPath).toBe('/home')
   })
 
   it('stops a weak password and a mismatch before calling the API', async () => {

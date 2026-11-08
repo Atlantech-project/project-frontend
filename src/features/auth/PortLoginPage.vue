@@ -9,7 +9,7 @@ import AtlPasswordInput from '@/components/ui/AtlPasswordInput.vue'
 import { useSessionStore } from '@/stores/session'
 import AuthLayout from './AuthLayout.vue'
 import { isProblem, loginMessage } from './loginMessages'
-import { safeRedirect } from './redirect'
+import { afterSignIn } from './redirect'
 
 const { t } = useI18n()
 const route = useRoute()
@@ -41,7 +41,7 @@ async function submit() {
     if (session.mustChangePassword) {
       await router.replace({ name: 'change-password', query: route.query })
     } else {
-      await router.replace(safeRedirect(route.query.redirect))
+      await router.replace(afterSignIn(session, route.query.redirect))
     }
   } catch (e) {
     error.value = e

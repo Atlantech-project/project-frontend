@@ -205,6 +205,10 @@
 @utility type-strong-m {
   font: 600 14px / 20px var(--atl-font-body);
 }
+/* Strong/XS: small bold labels, e.g. the "Reason" title on P-20 */
+@utility type-strong-xs {
+  font: 600 12px / 16px var(--atl-font-body);
+}
 @utility type-label-s {
   font: 500 12px / 16px var(--atl-font-body);
 }
