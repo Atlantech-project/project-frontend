@@ -13,6 +13,10 @@ export const useSessionStore = defineStore('session', () => {
   // Why the last session ended on its own (SESSION_EXPIRED, UNAUTHENTICATED), for the login page.
   const endedReason = ref(null)
   let pending = null
+  // The temporary password typed at a first sign-in, kept in memory only (never stored) so the
+  // forced password change (FE-026) can send it as current_password without asking again.
+  // Lost on reload; the page then asks for it.
+  let temporaryPassword = null
 
   const isSignedIn = computed(() => user.value !== null)
   const role = computed(() => user.value?.role ?? null)
@@ -23,6 +27,7 @@ export const useSessionStore = defineStore('session', () => {
     user.value = profile
     status.value = 'ready'
     if (profile) endedReason.value = null
+    else temporaryPassword = null
   }
 
   // Ask the server who is signed in. Called once on start (e.g. after a page reload); later calls
@@ -48,12 +53,26 @@ export const useSessionStore = defineStore('session', () => {
 
   async function login(credentials) {
     setUser(await auth.login(credentials))
+    temporaryPassword = mustChangePassword.value ? credentials.password : null
     return user.value
   }
 
-  async function changePassword(passwords) {
-    setUser(await auth.changePassword(passwords))
+  const hasTemporaryPassword = () => temporaryPassword !== null
+
+  // currentPassword defaults to the temporary password from this sign-in.
+  async function changePassword({
+    currentPassword = temporaryPassword,
+    newPassword,
+    confirmation,
+  }) {
+    setUser(await auth.changePassword({ currentPassword, newPassword, confirmation }))
+    temporaryPassword = null
     return user.value
+  }
+
+  // The kept temporary password was rejected (changed elsewhere): ask the user for it instead.
+  function forgetTemporaryPassword() {
+    temporaryPassword = null
   }
 
   // Signs out on the server, then forgets the user even if the server call failed.
@@ -82,6 +101,8 @@ export const useSessionStore = defineStore('session', () => {
     canUseWeb,
     restore,
     login,
+    hasTemporaryPassword,
+    forgetTemporaryPassword,
     changePassword,
     logout,
     sessionLost,

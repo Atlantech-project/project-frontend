@@ -350,5 +350,46 @@
         "body": "Something went wrong on our side. Try again."
       }
     }
+  },
+  "changePassword": {
+    "title": "Set a new password",
+    "subtitle": "This is your first sign-in. Replace the temporary password to continue.",
+    "current": "Temporary password",
+    "currentPlaceholder": "The password you signed in with",
+    "new": "New password",
+    "newPlaceholder": "At least {min} characters, letters and numbers",
+    "confirm": "Confirm new password",
+    "confirmPlaceholder": "Repeat the new password",
+    "save": "Save and continue",
+    "saving": "Saving…",
+    "required": {
+      "current": "Enter the temporary password you signed in with."
+    },
+    "messages": {
+      "firstLogin": {
+        "title": "Temporary password expires after first use",
+        "body": "You cannot open any operational page before choosing a new password."
+      },
+      "mismatch": {
+        "title": "Passwords do not match.",
+        "body": "Enter the same new password in both fields (at least {min} characters, with letters and numbers)."
+      },
+      "tooManyAttempts": {
+        "title": "Too many attempts.",
+        "body": "Wait a minute, then try again."
+      },
+      "network": {
+        "title": "Can't reach the port server.",
+        "body": "Check your connection and try again."
+      },
+      "unavailable": {
+        "title": "The port system isn't ready yet.",
+        "body": "Try again later or contact your port system administrator."
+      },
+      "generic": {
+        "title": "The password wasn't changed.",
+        "body": "Something went wrong on our side. Try again."
+      }
+    }
   }
 }

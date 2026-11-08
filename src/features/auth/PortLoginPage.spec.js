@@ -36,6 +36,7 @@ async function mountPage(path = '/login') {
     history: createMemoryHistory(),
     routes: [
       { path: '/login', component: PortLoginPage },
+      { path: '/change-password', name: 'change-password', component: { template: '<p>cp</p>' } },
       { path: '/:any(.*)*', component: { template: '<p>next</p>' } },
     ],
   })
@@ -92,6 +93,16 @@ describe('P-16 Port Login', () => {
     await flushPromises()
     expect(auth.login).toHaveBeenCalledWith({ username: 'port.staff', password: 'secret123' })
     expect(router.currentRoute.value.fullPath).toBe('/vessels')
+  })
+
+  it('goes to the password change after a first sign-in, keeping the redirect', async () => {
+    auth.login.mockResolvedValue({ ...staff, must_change_password: true })
+    const { w, router } = await mountPage('/login?redirect=/vessels')
+    await w.find('input[name=username]').setValue('port.staff')
+    await w.find('input[name=password]').setValue('Temp12345')
+    await w.find('form').trigger('submit')
+    await flushPromises()
+    expect(router.currentRoute.value.fullPath).toBe('/change-password?redirect=/vessels')
   })
 
   it('ignores a redirect to another site', async () => {
