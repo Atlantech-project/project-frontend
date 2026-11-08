@@ -410,5 +410,25 @@
     },
     "backHome": "العودة إلى الرئيسية",
     "signOut": "تسجيل الخروج"
+  },
+  "home": {
+    "welcome": "أهلاً، {name}",
+    "body": "تم تسجيل دخولك. لوحة التحكم الخاصة بك قريباً.",
+    "roleLabel": "دورك",
+    "signOut": "تسجيل الخروج",
+    "roles": {
+      "PORT_GM": "المدير العام للميناء",
+      "PORT_STAFF": "موظف هيئة الميناء",
+      "MARINE_SAFETY_OFFICER": "ضابط السلامة البحرية",
+      "PILOTAGE_MANAGER": "مدير الإرشاد",
+      "PILOTAGE_OFFICER": "ضابط الإرشاد",
+      "MARINE_PILOT": "مرشد بحري",
+      "TUG_MANAGER": "مدير القاطرات",
+      "TUG_OFFICER": "ضابط القاطرات",
+      "TUG_MASTER": "ربان القاطرة",
+      "TERMINAL_ADMIN": "مدير المحطة",
+      "TERMINAL_OFFICER": "مخطط عمليات المحطة",
+      "TERMINAL_SUPERVISOR": "مشرف المحطة"
+    }
   }
 }

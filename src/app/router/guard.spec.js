@@ -41,7 +41,7 @@ describe('auth guard', () => {
   it('moves a signed-in user away from the sign-in page', async () => {
     expect(
       await guardFor(fakeSession({ user: staff }))(route('login', { meta: { public: true } })),
-    ).toBe('/')
+    ).toBe('/home')
     const first = fakeSession({ user: { ...staff, must_change_password: true } })
     expect(await guardFor(first)(route('login', { meta: { public: true } }))).toEqual({
       name: 'change-password',
@@ -55,7 +55,7 @@ describe('auth guard', () => {
       query: { redirect: '/vessels' },
     })
     expect(await guardFor(s)(route('change-password'))).toBe(true)
-    expect(await guardFor(fakeSession({ user: staff }))(route('change-password'))).toBe('/')
+    expect(await guardFor(fakeSession({ user: staff }))(route('change-password'))).toBe('/home')
   })
 
   it('shows P-20 "mobile only" to field roles and users with no role', async () => {

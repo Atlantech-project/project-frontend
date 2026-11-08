@@ -21,7 +21,7 @@ export const NAVIGATION = Object.freeze([
     id: 'general',
     labelKey: 'nav.section.general',
     items: [
-      { pageId: 'P-17', path: '/', labelKey: 'nav.home', roles: WEB_ROLES },
+      { pageId: 'P-17', path: '/home', labelKey: 'nav.home', roles: WEB_ROLES },
       {
         pageId: 'P-18',
         path: '/port-state',

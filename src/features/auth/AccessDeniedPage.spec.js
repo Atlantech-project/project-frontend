@@ -23,7 +23,7 @@ async function mountAt(path) {
     routes: [
       { path: '/access-denied', component: AccessDeniedPage },
       { path: '/login', name: 'login', component: { template: '<p>login</p>' } },
-      { path: '/', component: { template: '<p>home</p>' } },
+      { path: '/home', component: { template: '<p>home</p>' } },
     ],
   })
   await router.push(path)
@@ -39,7 +39,7 @@ describe('P-20 Access Denied', () => {
     expect(w.text()).toContain(en.accessDenied.reasons.permissions)
     await w.find('button').trigger('click')
     await flushPromises()
-    expect(router.currentRoute.value.path).toBe('/')
+    expect(router.currentRoute.value.path).toBe('/home')
   })
 
   it('tells a field role to use the mobile app and signs out', async () => {

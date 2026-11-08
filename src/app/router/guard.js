@@ -3,6 +3,7 @@
 //   meta.roles    web roles allowed; leave out for "any signed-in web user"
 // Order: signed in -> new password chosen (FE-026) -> web role (DEC-48) -> page role.
 import { isWebRole } from '@/app/roles'
+import { HOME } from '@/features/auth/redirect'
 
 export const ACCESS_DENIED_REASONS = Object.freeze(['permissions', 'mobileOnly'])
 
@@ -21,7 +22,7 @@ export function createAuthGuard(getSession) {
       if (to.name === 'login') {
         await session.restore().catch(() => {})
         if (session.isSignedIn)
-          return session.mustChangePassword ? { name: 'change-password' } : '/'
+          return session.mustChangePassword ? { name: 'change-password' } : HOME
       }
       return true
     }
@@ -38,7 +39,7 @@ export function createAuthGuard(getSession) {
         ? true
         : { name: 'change-password', query: { redirect: to.fullPath } }
     }
-    if (to.name === 'change-password') return '/'
+    if (to.name === 'change-password') return HOME
 
     if (to.name === 'access-denied') return true
     if (!isWebRole(session.role)) return denied('mobileOnly', to)

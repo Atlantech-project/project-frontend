@@ -19,6 +19,12 @@ export const routes = [
     component: () => import('@/features/auth/PortLoginPage.vue'),
   },
   {
+    path: '/home',
+    name: 'home',
+    meta: { ownHeader: true, pageId: 'P-17' },
+    component: () => import('@/features/home/HomePage.vue'),
+  },
+  {
     path: '/change-password',
     name: 'change-password',
     meta: { ownHeader: true, pageId: 'P-16' },

@@ -123,7 +123,7 @@ describe('P-16 Port Login', () => {
     await w.find('input[name=password]').setValue('secret123')
     await w.find('form').trigger('submit')
     await flushPromises()
-    expect(router.currentRoute.value.fullPath).toBe('/')
+    expect(router.currentRoute.value.fullPath).toBe('/home')
   })
 
   it('shows the wrong-password message and clears the password', async () => {

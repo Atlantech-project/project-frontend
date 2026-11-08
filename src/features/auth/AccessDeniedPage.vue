@@ -6,6 +6,7 @@ import AtlIcon from '@/components/AtlIcon.vue'
 import AtlButton from '@/components/ui/AtlButton.vue'
 import { useSessionStore } from '@/stores/session'
 import { ACCESS_DENIED_REASONS } from '@/app/router/guard'
+import { HOME } from './redirect'
 
 const { t } = useI18n()
 const route = useRoute()
@@ -59,7 +60,7 @@ async function signOut() {
           <AtlIcon name="back" :size="16" class="rtl:-scale-x-100" />
           {{ t('accessDenied.signOut') }}
         </AtlButton>
-        <AtlButton v-else @click="router.replace('/')">
+        <AtlButton v-else @click="router.replace(HOME)">
           <AtlIcon name="back" :size="16" class="rtl:-scale-x-100" />
           {{ t('accessDenied.backHome') }}
         </AtlButton>

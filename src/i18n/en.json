@@ -410,5 +410,25 @@
     },
     "backHome": "Back to Home",
     "signOut": "Sign Out"
+  },
+  "home": {
+    "welcome": "Welcome, {name}",
+    "body": "You are signed in. Your home dashboard is on its way.",
+    "roleLabel": "Your role",
+    "signOut": "Sign Out",
+    "roles": {
+      "PORT_GM": "Port General Manager",
+      "PORT_STAFF": "Port Authority Staff",
+      "MARINE_SAFETY_OFFICER": "Marine Safety Officer",
+      "PILOTAGE_MANAGER": "Pilotage Manager",
+      "PILOTAGE_OFFICER": "Pilotage Officer",
+      "MARINE_PILOT": "Marine Pilot",
+      "TUG_MANAGER": "Tug Manager",
+      "TUG_OFFICER": "Tug Officer",
+      "TUG_MASTER": "Tug Master",
+      "TERMINAL_ADMIN": "Terminal Administrator",
+      "TERMINAL_OFFICER": "Terminal Operations Planner",
+      "TERMINAL_SUPERVISOR": "Terminal Supervisor"
+    }
   }
 }
