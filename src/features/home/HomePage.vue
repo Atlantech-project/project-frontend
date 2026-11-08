@@ -1,55 +1,29 @@
 <script setup>
-import { computed, ref } from 'vue'
-import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import AtlantechLogo from '@/brand/AtlantechLogo.vue'
-import AtlButton from '@/components/ui/AtlButton.vue'
+import { useRoleName } from '@/app/useRoleName'
 import { useSessionStore } from '@/stores/session'
 
-const { t, te } = useI18n()
-const router = useRouter()
+const { t } = useI18n()
 const session = useSessionStore()
 
-const roleName = computed(() => {
-  const key = `home.roles.${session.role}`
-  return te(key) ? t(key) : (session.role ?? '')
-})
-const signingOut = ref(false)
-
-async function signOut() {
-  signingOut.value = true
-  try {
-    await session.logout()
-  } catch {
-    // Signed out locally anyway.
-  } finally {
-    signingOut.value = false
-    await router.replace({ name: 'login' })
-  }
-}
+const roleName = useRoleName()
 </script>
 
-<!-- Temporary home after sign-in, until the role home pages (P-17) and the app shell exist. -->
+<!-- Temporary home after sign-in, inside the app shell, until the P-17 Home Dashboard (FE-040). -->
 <template>
-  <main class="grid min-h-screen place-items-center bg-page px-4 py-10">
-    <section
-      class="flex w-full max-w-[480px] flex-col gap-5 rounded-card border border-edge bg-card p-8"
-      aria-labelledby="home-title"
-    >
-      <AtlantechLogo :height="64" :card-on-dark="false" />
-      <div class="flex flex-col gap-2 text-fg">
-        <h1 id="home-title" class="type-h1">
-          {{ t('home.welcome', { name: session.user?.name ?? '' }) }}
-        </h1>
-        <p class="type-body-m text-fg-muted">{{ t('home.body') }}</p>
-      </div>
-      <div class="flex flex-col gap-0.5 bg-subtle px-3 py-2.5">
-        <span class="type-caption text-fg-muted">{{ t('home.roleLabel') }}</span>
-        <span class="type-strong-m text-fg">{{ roleName }}</span>
-      </div>
-      <AtlButton variant="secondary" :loading="signingOut" @click="signOut">
-        {{ t('home.signOut') }}
-      </AtlButton>
-    </section>
-  </main>
+  <section
+    class="flex max-w-[640px] flex-col gap-4 rounded-card border border-edge bg-card p-6"
+    aria-labelledby="home-welcome"
+  >
+    <div class="flex flex-col gap-2">
+      <h2 id="home-welcome" class="type-h3 text-fg">
+        {{ t('home.welcome', { name: session.user?.name ?? '' }) }}
+      </h2>
+      <p class="type-body-m text-fg-muted">{{ t('home.body') }}</p>
+    </div>
+    <div class="flex flex-col gap-0.5 bg-subtle px-3 py-2.5">
+      <span class="type-caption text-fg-muted">{{ t('home.roleLabel') }}</span>
+      <span class="type-strong-m text-fg">{{ roleName }}</span>
+    </div>
+  </section>
 </template>
