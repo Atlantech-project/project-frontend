@@ -260,5 +260,39 @@
     "title": "This page didn't load",
     "body": "Something went wrong while opening ATLANTECH. Try again, or go back to the home page.",
     "back": "Back to home"
+  },
+  "errors": {
+    "network_error": "Can't reach the server. Check your connection and try again.",
+    "validation_failed": "Some fields need attention.",
+    "version_conflict": "Someone else changed this record. Reload to see the latest version.",
+    "unauthenticated": "Your session has ended. Sign in again.",
+    "session_expired": "Your session expired. Sign in again to continue.",
+    "forbidden": "You don't have access to this.",
+    "not_found": "We couldn't find what you're looking for.",
+    "method_not_allowed": "This action isn't allowed.",
+    "account_disabled": "This account is disabled. Contact your port administrator.",
+    "password_change_required": "Set a new password before you continue.",
+    "device_revoked": "This device no longer has access.",
+    "app_update_required": "A newer version is required. Update the app.",
+    "license_read_only": "The port licence is read-only. You can view data but not change it.",
+    "plan_limit_exceeded": "The port's plan limit has been reached.",
+    "too_many_attempts": "Too many attempts. Wait a minute and try again.",
+    "idempotency_key_reused": "This request was already sent.",
+    "service_unavailable": "The service isn't ready yet. Try again later.",
+    "server_error": "Something went wrong on our side. Try again.",
+    "bad_request": "The request couldn't be processed."
+  },
+  "validation": {
+    "invalid": "This value isn't valid.",
+    "required": "This field is required.",
+    "string": "This value isn't valid.",
+    "max": "This value is too long.",
+    "min": "This value is too short.",
+    "confirmed": "The passwords do not match.",
+    "different": "Choose a password different from the current one.",
+    "current_password": "The current password is incorrect.",
+    "password": "Use at least 8 characters with letters and numbers.",
+    "regex": "This value isn't in the right format.",
+    "date": "This isn't a valid date and time."
   }
 }
