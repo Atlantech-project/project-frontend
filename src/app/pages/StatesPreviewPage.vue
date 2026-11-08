@@ -7,9 +7,11 @@ import AtlButton from '@/components/ui/AtlButton.vue'
 import AtlInput from '@/components/ui/AtlInput.vue'
 import AtlPasswordInput from '@/components/ui/AtlPasswordInput.vue'
 import AtlAlert from '@/components/ui/AtlAlert.vue'
+import AtlConflictDialog from '@/components/AtlConflictDialog.vue'
 
 const username = ref('n.hassan')
 const password = ref('temporary-pass1')
+const conflictOpen = ref(false)
 </script>
 
 <!-- Dev-only page (/dev/states) to check the shared screen states and form components on brand,
@@ -64,6 +66,22 @@ const password = ref('temporary-pass1')
         <AtlAlert tone="danger" title="This account is disabled.">
           Contact your port administrator.
         </AtlAlert>
+      </div>
+      <div class="grid content-start gap-3 md:col-span-2">
+        <h2 class="type-h3 text-fg">Record changed (409)</h2>
+        <AtlButton
+          label="Open dialog"
+          variant="secondary"
+          class="self-start"
+          @click="conflictOpen = true"
+        />
+        <AtlConflictDialog
+          v-model:visible="conflictOpen"
+          subject="user"
+          @reload="conflictOpen = false"
+        >
+          Omar Hassan · omar.hassan<br />CT Operations Supervisor · Terminal A
+        </AtlConflictDialog>
       </div>
     </section>
   </div>

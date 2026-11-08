@@ -435,5 +435,12 @@
     "TERMINAL_ADMIN": "Terminal Administrator",
     "TERMINAL_OFFICER": "Terminal Operations Planner",
     "TERMINAL_SUPERVISOR": "Terminal Supervisor"
+  },
+  "conflict": {
+    "title": "This record was changed by someone else",
+    "titleFor": "This {subject} was changed by someone else",
+    "body": "The record changed since you opened it. Nothing was saved. Reload to see the latest data, then repeat your change.",
+    "cancel": "Cancel",
+    "reload": "Reload"
   }
 }
