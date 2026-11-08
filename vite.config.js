@@ -24,6 +24,7 @@ export default defineConfig(({ mode }) => {
     test: {
       environment: 'jsdom',
       include: ['src/**/*.spec.js'],
+      setupFiles: ['src/mocks/vitest.setup.js'],
     },
   }
 })
