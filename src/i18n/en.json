@@ -412,9 +412,48 @@
     "signOut": "Sign Out"
   },
   "home": {
-    "welcome": "Welcome, {name}",
-    "body": "You are signed in. Your home dashboard is on its way.",
-    "roleLabel": "Your role"
+    "scope": {
+      "port": "Your scope · The whole port",
+      "terminal": "Your scope · Your terminals only",
+      "user": "{name} · {role}"
+    },
+    "live": {
+      "title": "Live updates",
+      "notConnected": "Not connected yet"
+    },
+    "summary": {
+      "label": "Port summary",
+      "noData": "No data yet",
+      "berths": {
+        "title": "Port berth overview",
+        "note": "Berths and their status"
+      },
+      "tugs": {
+        "title": "Shared marine resources",
+        "note": "Tug availability"
+      },
+      "pilots": {
+        "title": "Marine pilot availability",
+        "note": "Pilots on duty"
+      },
+      "plans": {
+        "title": "Operational plans",
+        "note": "Plans under way"
+      }
+    },
+    "notifications": {
+      "title": "Latest Notifications",
+      "empty": "No notifications yet."
+    },
+    "updates": {
+      "title": "Recent Live Updates",
+      "empty": "No live updates yet."
+    },
+    "actions": {
+      "title": "Quick Actions",
+      "view": "View {page}",
+      "empty": "Shortcuts to your pages will appear here."
+    }
   },
   "shell": {
     "deployment": "Port-local operations",
