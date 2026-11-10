@@ -439,6 +439,22 @@
       "plans": {
         "title": "Operational plans",
         "note": "Plans under way"
+      },
+      "terminalBerths": {
+        "title": "Terminal berth state",
+        "note": "Your terminal's current state"
+      },
+      "vessels": {
+        "title": "Vessel operations",
+        "note": "Vessels within your terminal's scope"
+      },
+      "terminalPilots": {
+        "title": "Marine pilot availability",
+        "note": "Relevant shared pilot pool"
+      },
+      "terminalPlans": {
+        "title": "Operational plans",
+        "note": "Authorized terminal records"
       }
     },
     "notifications": {

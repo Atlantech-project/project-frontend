@@ -40,11 +40,15 @@ describe('P-17 Home Dashboard', () => {
     const w = await mountHome({ name: 'T Admin', role: 'TERMINAL_ADMIN', terminal_ids: [2] })
     expect(w.text()).toContain(en.home.scope.terminal)
     expect(w.text()).not.toContain(en.home.scope.port)
+    for (const card of SUMMARY_CARDS.terminal) {
+      expect(w.text()).toContain(en.home.summary[card.id].title)
+    }
+    expect(w.text()).not.toContain(en.home.summary.berths.title)
   })
 
   it('shows every summary card with no data yet, and empty feeds', async () => {
     const w = await mountHome({ name: 'Port Staff', role: 'PORT_STAFF' })
-    for (const card of SUMMARY_CARDS) {
+    for (const card of SUMMARY_CARDS.port) {
       expect(w.text()).toContain(en.home.summary[card.id].title)
     }
     expect(w.text()).toContain(en.home.summary.noData)

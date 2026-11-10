@@ -17,6 +17,8 @@ const roleName = useRoleName()
 // Users tied to terminals see their terminals only; everyone else sees the whole port.
 const terminalScoped = computed(() => (session.user?.terminal_ids?.length ?? 0) > 0)
 
+const summaryCards = computed(() => SUMMARY_CARDS[terminalScoped.value ? 'terminal' : 'port'])
+
 const shortcuts = computed(() =>
   shortcutsFor(navigationFor(session.role), (path) => router.resolve(path).name !== 'not-found'),
 )
@@ -44,7 +46,7 @@ const shortcuts = computed(() =>
 
     <ul class="grid grid-cols-2 gap-4 xl:grid-cols-4" :aria-label="t('home.summary.label')">
       <li
-        v-for="card in SUMMARY_CARDS"
+        v-for="card in summaryCards"
         :key="card.id"
         class="flex min-h-[126px] flex-col gap-2 rounded-control border border-edge bg-subtle p-4"
       >
