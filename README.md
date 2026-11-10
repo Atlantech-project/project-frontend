@@ -58,7 +58,9 @@ Type is set in **Montserrat**, with **Inter** for dense data. Shapes are clean a
 
 | Area | Technology |
 |---|---|
-| Framework | Vue.js |
+| Framework | Vue 3 + Vite, JavaScript |
+| UI | PrimeVue 4 (unstyled) + Tailwind CSS 4 with the brand tokens |
+| Data | TanStack Query, Pinia, Axios |
 | Talking to the server | REST over HTTPS, Server-Sent Events |
 | Backend | [ATLANTECH Port API](https://github.com/Atlantech-project/project-backend) |
 
@@ -67,9 +69,11 @@ Type is set in **Montserrat**, with **Inter** for dense data. Shapes are clean a
 ```bash
 git clone https://github.com/Atlantech-project/project-frontend.git
 cd project-frontend
+pnpm install
+pnpm dev
 ```
 
-Setup steps will be added here once the project is scaffolded.
+The full setup, the folder map and how to add a page are in the [developer guide](docs/developer-guide.md). Frontend decisions are logged in [docs/decisions.md](docs/decisions.md).
 
 ## Neighbours
 
