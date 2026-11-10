@@ -205,6 +205,10 @@
 @utility type-strong-m {
   font: 600 14px / 20px var(--atl-font-body);
 }
+/* Strong/S: table headings and key cells, e.g. the P-29 audit table */
+@utility type-strong-s {
+  font: 600 13px / 18px var(--atl-font-body);
+}
 /* Strong/XS: small bold labels, e.g. the "Reason" title on P-20 */
 @utility type-strong-xs {
   font: 600 12px / 16px var(--atl-font-body);

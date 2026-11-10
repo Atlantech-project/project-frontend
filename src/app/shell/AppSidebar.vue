@@ -18,7 +18,13 @@ const router = useRouter()
 const session = useSessionStore()
 
 // Menu icons until the approved icon set (FE-018).
-const ICONS = { 'P-17': 'home', 'P-18': 'anchor', 'P-19': 'bell', 'P-21': 'pulse' }
+const ICONS = {
+  'P-17': 'home',
+  'P-18': 'anchor',
+  'P-19': 'bell',
+  'P-21': 'pulse',
+  'P-29': 'history',
+}
 
 // The role's menu as one list (Figma has no section headings). Pages appear once their route
 // exists, so the menu never leads to Not Found.

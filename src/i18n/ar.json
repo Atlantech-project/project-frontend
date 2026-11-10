@@ -510,5 +510,88 @@
     "YARD_REC_GENERATED": "تم إنشاء خطة الساحة",
     "YARD_REC_REJECTED": "خطة الساحة مرفوضة",
     "YARD_REC_REQUESTED": "خطة الساحة مطلوبة"
+  },
+  "audit": {
+    "title": "سجل التدقيق والتغييرات",
+    "intro": "راجع من غيّر ماذا ومتى في بيانات الميناء وعملياته.",
+    "system": "النظام",
+    "filters": {
+      "search": "بحث عن مستخدم",
+      "searchPlaceholder": "الاسم أو اسم المستخدم",
+      "entity": "نوع السجل",
+      "allEntities": "كل السجلات",
+      "action": "الإجراء",
+      "allActions": "كل الإجراءات",
+      "range": "الفترة"
+    },
+    "ranges": {
+      "1": "آخر 24 ساعة",
+      "7": "آخر 7 أيام",
+      "30": "آخر 30 يوماً",
+      "0": "كل الأوقات"
+    },
+    "columns": {
+      "time": "الوقت (UTC)",
+      "actor": "المستخدم",
+      "entity": "السجل",
+      "action": "الإجراء",
+      "summary": "الملخص",
+      "actions": "إجراءات"
+    },
+    "table": {
+      "title": "سجل التغييرات",
+      "shown": "{from}–{to} من {total} تغيير",
+      "view": "عرض التفاصيل",
+      "page": "صفحة {page} من {pages}",
+      "previous": "السابق",
+      "next": "التالي"
+    },
+    "actions": {
+      "CREATE": "إنشاء",
+      "UPDATE": "تعديل",
+      "DELETE": "حذف",
+      "STATUS_CHANGE": "تغيير حالة",
+      "SAFETY_EXCEPTION": "استثناء سلامة",
+      "REJECTED_ATTEMPT": "محاولة مرفوضة"
+    },
+    "entities": {
+      "users": "مستخدم",
+      "user_devices": "جهاز",
+      "port_profiles": "ملف الميناء",
+      "port_settings": "إعداد الميناء",
+      "port_shifts": "وردية",
+      "terminals": "محطة",
+      "berths": "رصيف",
+      "navigation_channels": "قناة ملاحية",
+      "safety_constraints": "قيد سلامة",
+      "pilot_profiles": "مرشد",
+      "tugboats": "قاطرة",
+      "tug_master_profiles": "ربان قاطرة",
+      "berthing_requests": "طلب رسو",
+      "operational_plans": "خطة تشغيلية"
+    },
+    "summary": {
+      "rejected": "طلب مرفوض",
+      "fields": "{count} حقل | {count} حقول",
+      "more": "{change} (+{count} أخرى)"
+    },
+    "empty": {
+      "title": "لا توجد تغييرات مسجلة بعد",
+      "body": "ستظهر هنا التغييرات على بيانات الميناء وعملياته.",
+      "filteredTitle": "لا توجد تغييرات تطابق هذه الفلاتر",
+      "filteredBody": "جرّب فترة أوسع أو فلاتر أقل.",
+      "clear": "مسح الفلاتر"
+    },
+    "error": "تعذر تحميل سجل التغييرات",
+    "details": {
+      "back": "رجوع إلى سجل التغييرات",
+      "summary": "ملخص التغيير",
+      "changes": "تغييرات الحقول",
+      "count": "تغيّر {count} حقل | تغيّرت {count} حقول",
+      "field": "الحقل",
+      "before": "قبل",
+      "after": "بعد",
+      "none": "لا توجد تغييرات حقول في هذا السجل."
+    }
   }
 }

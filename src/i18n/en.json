@@ -510,5 +510,88 @@
     "YARD_REC_GENERATED": "Yard plan generated",
     "YARD_REC_REJECTED": "Yard plan rejected",
     "YARD_REC_REQUESTED": "Yard plan requested"
+  },
+  "audit": {
+    "title": "Audit & Change History",
+    "intro": "Review who changed what, and when, across port data and operations.",
+    "system": "System",
+    "filters": {
+      "search": "Search actor",
+      "searchPlaceholder": "Name or username",
+      "entity": "Entity type",
+      "allEntities": "All entities",
+      "action": "Action",
+      "allActions": "All actions",
+      "range": "Date range"
+    },
+    "ranges": {
+      "1": "Last 24 hours",
+      "7": "Last 7 days",
+      "30": "Last 30 days",
+      "0": "All time"
+    },
+    "columns": {
+      "time": "Time (UTC)",
+      "actor": "Actor",
+      "entity": "Entity",
+      "action": "Action",
+      "summary": "Summary",
+      "actions": "Actions"
+    },
+    "table": {
+      "title": "Change history",
+      "shown": "{from}–{to} of {total} changes",
+      "view": "View details",
+      "page": "Page {page} of {pages}",
+      "previous": "Previous",
+      "next": "Next"
+    },
+    "actions": {
+      "CREATE": "Created",
+      "UPDATE": "Updated",
+      "DELETE": "Removed",
+      "STATUS_CHANGE": "Status changed",
+      "SAFETY_EXCEPTION": "Safety exception",
+      "REJECTED_ATTEMPT": "Rejected attempt"
+    },
+    "entities": {
+      "users": "User",
+      "user_devices": "Device",
+      "port_profiles": "Port profile",
+      "port_settings": "Port setting",
+      "port_shifts": "Port shift",
+      "terminals": "Terminal",
+      "berths": "Berth",
+      "navigation_channels": "Navigation channel",
+      "safety_constraints": "Safety constraint",
+      "pilot_profiles": "Pilot",
+      "tugboats": "Tugboat",
+      "tug_master_profiles": "Tug master",
+      "berthing_requests": "Berthing request",
+      "operational_plans": "Operational plan"
+    },
+    "summary": {
+      "rejected": "Request refused",
+      "fields": "{count} field | {count} fields",
+      "more": "{change} (+{count} more)"
+    },
+    "empty": {
+      "title": "No changes recorded yet",
+      "body": "Changes to port data and operations will appear here.",
+      "filteredTitle": "No changes match these filters",
+      "filteredBody": "Try a wider date range or fewer filters.",
+      "clear": "Clear filters"
+    },
+    "error": "Could not load the change history",
+    "details": {
+      "back": "Back to Change History",
+      "summary": "Change summary",
+      "changes": "Field changes",
+      "count": "{count} field changed | {count} fields changed",
+      "field": "Field",
+      "before": "Before",
+      "after": "After",
+      "none": "This entry has no field changes."
+    }
   }
 }

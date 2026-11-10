@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { ROLES } from '@/app/roles'
 import { applyTheme } from '@/composables/useTheme'
 import { useSessionStore } from '@/stores/session'
 import { createAuthGuard } from './guard'
@@ -24,6 +25,12 @@ export const routes = [
     name: 'home',
     meta: { layout: 'app', pageId: 'P-17', titleKey: 'nav.home' },
     component: () => import('@/features/home/HomePage.vue'),
+  },
+  {
+    path: '/admin/audit',
+    name: 'audit',
+    meta: { layout: 'app', pageId: 'P-29', titleKey: 'audit.title', roles: [ROLES.PORT_GM] },
+    component: () => import('@/features/audit/AuditPage.vue'),
   },
   {
     path: '/change-password',
