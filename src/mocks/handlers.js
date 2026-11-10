@@ -25,7 +25,15 @@ const MESSAGE_KEYS = {
 
 export function problem(status, code, extra = {}) {
   return HttpResponse.json(
-    { type: 'about:blank', title: code, status, code, message_key: MESSAGE_KEYS[code], ...extra },
+    {
+      type: `https://atlantech.io/errors/${code.toLowerCase().replaceAll('_', '-')}`,
+      title: code,
+      status,
+      code,
+      message_key: MESSAGE_KEYS[code] ?? `errors.${code.toLowerCase()}`,
+      detail: code,
+      ...extra,
+    },
     { status, headers: { 'Content-Type': 'application/problem+json' } },
   )
 }
@@ -91,6 +99,13 @@ export const handlers = [
     if (query.get('entity_type'))
       rows = rows.filter((r) => r.entity_type === query.get('entity_type'))
     if (query.get('action')) rows = rows.filter((r) => r.action === query.get('action'))
+    if (query.get('from')) rows = rows.filter((r) => r.occurred_at >= query.get('from'))
+    if (query.get('q')) {
+      const text = query.get('q').toLowerCase()
+      rows = rows.filter((r) =>
+        [r.actor?.name, r.actor?.username].some((v) => v?.toLowerCase().includes(text)),
+      )
+    }
     return HttpResponse.json({
       data: rows.slice((page - 1) * perPage, page * perPage),
       meta: { page, per_page: perPage, total: rows.length },

@@ -30,6 +30,7 @@ const ICONS = {
   grid: ['M4 4h6v6H4z', 'M14 4h6v6h-6z', 'M4 14h6v6H4z', 'M14 14h6v6h-6z'],
   pulse: ['M3 12h4l3-7 4 14 3-7h4'],
   check: ['M20 6L9 17l-5-5'],
+  chevron: ['M6 9l6 6 6-6'],
   shield: ['M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z', 'M9 12l2 2 4-4'],
   arrow: ['M12 5v14', 'M6 13l6 6 6-6'],
   back: ['M19 12H5', 'M11 6l-6 6 6 6'],

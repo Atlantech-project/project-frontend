@@ -10,10 +10,12 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "node scripts/api-types.mjs --check && vite build",
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
+    "api:types": "node scripts/api-types.mjs",
+    "api:check": "node scripts/api-types.mjs --check",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
@@ -45,7 +47,8 @@
     "prettier": "^3.9.10",
     "tailwindcss": "^4.3.3",
     "vite": "^8.3.5",
-    "vitest": "^5.0.5"
+    "vitest": "^5.0.5",
+    "yaml": "^2.9.1"
   },
   "pnpm": {
     "onlyBuiltDependencies": [

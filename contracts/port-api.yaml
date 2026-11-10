@@ -1,0 +1,1054 @@
+# ATLANTECH port API · OpenAPI 3.0 (CT-02)
+#
+# Source of truth: project-backend ATLANTECH/openapi/port-api.yaml, owned by the Backend Team (DEC-13).
+# Every PR that adds or changes an endpoint updates this file in the same PR; tests/Feature/Api/OpenApiDriftTest.php
+# fails when routes and paths, or error codes and ErrorCode, differ. Published to PortHub
+# contracts/openapi/port-api.yaml with `composer contracts:openapi` (paired PortHub PR).
+# Conventions: CT-01 (api-conventions.md, error-codes.md). Minor bump per endpoint PR; a breaking change is a major bump and /api/v2.
+openapi: 3.0.3
+info:
+  title: ATLANTECH Port API
+  version: '1.8.0'
+  description: |
+    The port API used by the web app (Vue) and the mobile app (Flutter).
+
+    - Every path starts with `/api/v1`. A breaking change means `/api/v2` next to v1.
+    - Times are ISO 8601 in UTC with microseconds on output (`2026-11-02T10:15:04.123456Z`); input must carry
+      `Z` or an offset (`+02:00`), a value without one is refused with 422.
+    - Every error is `application/problem+json` (RFC 9457) with a stable `code` and a `message_key`.
+    - Lists take `?page=&per_page=` and return `{ "data": [...], "meta": { "page", "per_page", "total" } }`.
+    - Editable records return `version` (the `updated_at` value) as an opaque token; every update sends it back, and a stale one is refused with 409.
+  contact:
+    name: ATLANTECH Backend Team
+servers:
+  - url: /
+    description: The port server; paths carry the full /api/v1 prefix.
+tags:
+  - name: Auth
+    description: >-
+      Web sign-in with the Sanctum SPA session (CT-03; first call `GET /sanctum/csrf-cookie`), and mobile sign-in with a
+      device token (CT-04). Signed-in routes take either the session cookie or `Authorization: Bearer`.
+  - name: Audit
+    description: Audit log browsing for the Port Admin (FR-MD-16).
+  - name: System
+    description: Public port information for the mobile app (CT-04).
+paths:
+  /api/v1/auth/login:
+    post:
+      tags: [Auth]
+      operationId: authLogin
+      summary: Web sign-in
+      description: >-
+        Signs a user in with `username` and password (DEC-35) and starts a new session (new session id).
+        Call `GET /sanctum/csrf-cookie` first and send its value as `X-XSRF-TOKEN`. The username is trimmed and
+        lowercased. A wrong username and a wrong password get the same 401, with the `detail` "The username or password is incorrect.". A user with `must_change_password`
+        still signs in, with the flag set, and must then call `POST /api/v1/auth/change-password`. Throttled at 5 failed
+        attempts per minute per username and IP, and 20 per minute per IP. A request whose Origin or Referer is
+        not a web-app origin the server treats as stateful (SANCTUM_STATEFUL_DOMAINS) has no session to start and
+        answers 400 BAD_REQUEST before the credentials are checked.
+      security: []
+      parameters:
+        - $ref: '#/components/parameters/XsrfToken'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Signed in; the response sets the session cookie.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/AccountDisabled'
+        '419':
+          $ref: '#/components/responses/SessionExpired'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+        '429':
+          $ref: '#/components/responses/TooManyAttempts'
+  /api/v1/auth/mobile/login:
+    post:
+      tags: [Auth]
+      operationId: authMobileLogin
+      summary: Mobile sign-in
+      description: >-
+        Signs a field user in from the tablet and returns an opaque device token (CT-04). Checked in this order: the
+        `X-App-Version` (`x.y.z`) and `X-Device-Id` headers (422), the app version against `min_app_version` (426, no
+        token), the body (422), then the credentials exactly as the web sign-in (429, 401, 403 ACCOUNT_DISABLED). A
+        device the Port Admin revoked answers 403 DEVICE_REVOKED. The device row is created or updated, an older token of
+        the same device is revoked, and the new token is named with the device id. Each use moves `expires_at` to 30 days
+        later; an expired or revoked token answers 401. No `Idempotency-Key`: a token is never replayed.
+      security: []
+      parameters:
+        - $ref: '#/components/parameters/AppVersion'
+        - $ref: '#/components/parameters/DeviceId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MobileLoginRequest'
+      responses:
+        '200':
+          description: 'Signed in; send the token as `Authorization: Bearer` with `X-App-Version` and `X-Device-Id`.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MobileSignIn'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          description: '403 ACCOUNT_DISABLED, or 403 DEVICE_REVOKED for a device the Port Admin revoked.'
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              examples:
+                accountDisabled:
+                  value:
+                    type: https://atlantech.io/errors/account-disabled
+                    title: 'Account disabled'
+                    status: 403
+                    code: ACCOUNT_DISABLED
+                    message_key: errors.account_disabled
+                    detail: 'Your account has been disabled. Contact your port administrator.'
+                deviceRevoked:
+                  value:
+                    type: https://atlantech.io/errors/device-revoked
+                    title: 'Device revoked'
+                    status: 403
+                    code: DEVICE_REVOKED
+                    message_key: errors.device_revoked
+                    detail: 'This device has been revoked by your port administrator. Contact your port administrator to use it again.'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+        '426':
+          $ref: '#/components/responses/AppUpdateRequired'
+        '429':
+          $ref: '#/components/responses/TooManyAttempts'
+  /api/v1/auth/me:
+    get:
+      tags: [Auth]
+      operationId: authMe
+      summary: Signed-in user's profile
+      description: >-
+        The profile of the user the session belongs to, the same shape as the sign-in answer. The web app calls it
+        after a page reload to know who is signed in. It stays open while `must_change_password` is set, and a
+        deactivated user gets 403 and is signed out.
+      security:
+        - cookieAuth: []
+        - bearerAuth: []
+      responses:
+        '200':
+          description: The signed-in user.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/AccountDisabled'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+        '426':
+          $ref: '#/components/responses/AppUpdateRequired'
+  /api/v1/auth/change-password:
+    post:
+      tags: [Auth]
+      operationId: authChangePassword
+      summary: Change the signed-in user's password
+      description: >-
+        Saves the new password, clears `must_change_password` and starts a new session id. While the flag is set, every
+        signed-in route except this one, `auth/me` and logout answers 403 PASSWORD_CHANGE_REQUIRED. The new password
+        has at least 8 characters with letters and numbers, and differs from the current one. The user's other sessions close, as on the web: the other web sessions end by themselves, and every other
+        mobile token of the user is revoked (`revoked_at` is set, the rows stay). The token or session that made the
+        change stays valid. Throttled at 5 requests
+        per minute per user. A Bearer request needs an `Idempotency-Key` (CT-01 section 4).
+      security:
+        - cookieAuth: []
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/XsrfTokenWebOnly'
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangePasswordRequest'
+      responses:
+        '200':
+          description: >-
+            Changed; the updated profile, with `must_change_password` false. A retry with the same `Idempotency-Key` and body
+            gets this response again.
+          headers:
+            Idempotent-Replayed:
+              $ref: '#/components/headers/IdempotentReplayed'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/AccountDisabled'
+        '419':
+          $ref: '#/components/responses/SessionExpired'
+        '422':
+          description: >-
+            422 VALIDATION_FAILED (the fields, or the `Idempotency-Key` header missing or malformed on a Bearer request) or 422
+            IDEMPOTENCY_KEY_REUSED (the key was used for another request).
+          content:
+            application/problem+json:
+              schema:
+                anyOf:
+                  - $ref: '#/components/schemas/ValidationProblem'
+                  - $ref: '#/components/schemas/Problem'
+              examples:
+                validationFailed:
+                  value:
+                    type: https://atlantech.io/errors/validation-failed
+                    title: 'Validation failed'
+                    status: 422
+                    code: VALIDATION_FAILED
+                    message_key: errors.validation_failed
+                    detail: 'The Idempotency-Key field is required.'
+                    errors:
+                      Idempotency-Key:
+                        - validation.required
+                idempotencyKeyReused:
+                  value:
+                    type: https://atlantech.io/errors/idempotency-key-reused
+                    title: 'Idempotency key reused'
+                    status: 422
+                    code: IDEMPOTENCY_KEY_REUSED
+                    message_key: errors.idempotency_key_reused
+                    detail: 'This request key was already used for a different request. Send the request again with a new key.'
+        '429':
+          $ref: '#/components/responses/TooManyAttempts'
+        '426':
+          $ref: '#/components/responses/AppUpdateRequired'
+        '503':
+          description: >-
+            503 SERVICE_UNAVAILABLE. A Bearer request with an `Idempotency-Key` whose first request is still running answers
+            503 with `Retry-After`; send the same request again with the same key.
+          headers:
+            Retry-After:
+              $ref: '#/components/headers/RetryAfter'
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+  /api/v1/auth/logout:
+    post:
+      tags: [Auth]
+      operationId: authLogout
+      summary: Sign out
+      description: >-
+        Web: ends the session. Mobile: revokes the Bearer token the request carries (`revoked_at` is set, the row stays);
+        the user's other devices keep their tokens (CT-04). It stays open while `must_change_password` is set. The next
+        signed-in request with the same session or token is 401. A Bearer request needs an `Idempotency-Key`; a retry with
+        the same key replays the 204.
+      security:
+        - cookieAuth: []
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/XsrfTokenWebOnly'
+        - $ref: '#/components/parameters/IdempotencyKey'
+      responses:
+        '204':
+          description: >-
+            Signed out. A mobile retry with the same `Idempotency-Key` after a lost response gets 204 again (the token is
+            revoked by then, so without the key it would be 401).
+          headers:
+            Idempotent-Replayed:
+              $ref: '#/components/headers/IdempotentReplayed'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/AccountDisabled'
+        '419':
+          $ref: '#/components/responses/SessionExpired'
+        '422':
+          description: >-
+            422 VALIDATION_FAILED (the `Idempotency-Key` header missing or malformed on a Bearer request, or a missing or
+            malformed `X-Device-Id` or `X-App-Version`) or 422 IDEMPOTENCY_KEY_REUSED (the key was used for another request).
+          content:
+            application/problem+json:
+              schema:
+                anyOf:
+                  - $ref: '#/components/schemas/ValidationProblem'
+                  - $ref: '#/components/schemas/Problem'
+              examples:
+                validationFailed:
+                  value:
+                    type: https://atlantech.io/errors/validation-failed
+                    title: 'Validation failed'
+                    status: 422
+                    code: VALIDATION_FAILED
+                    message_key: errors.validation_failed
+                    detail: 'The Idempotency-Key field is required.'
+                    errors:
+                      Idempotency-Key:
+                        - validation.required
+                idempotencyKeyReused:
+                  value:
+                    type: https://atlantech.io/errors/idempotency-key-reused
+                    title: 'Idempotency key reused'
+                    status: 422
+                    code: IDEMPOTENCY_KEY_REUSED
+                    message_key: errors.idempotency_key_reused
+                    detail: 'This request key was already used for a different request. Send the request again with a new key.'
+        '426':
+          $ref: '#/components/responses/AppUpdateRequired'
+        '503':
+          description: >-
+            503 SERVICE_UNAVAILABLE. A Bearer request with an `Idempotency-Key` whose first request is still running answers
+            503 with `Retry-After`; send the same request again with the same key.
+          headers:
+            Retry-After:
+              $ref: '#/components/headers/RetryAfter'
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+  /api/v1/audit-logs:
+    get:
+      tags: [Audit]
+      operationId: auditLogsList
+      summary: Browse the audit log
+      description: >-
+        The port audit log, newest first (`occurred_at`, then `id`, descending), for the Port Admin (`PORT_GM`, ability
+        `audit.read`). Master-data history is the same list filtered by entity: `entity_type` is the table name and
+        `entity_id` the row, for example `?entity_type=berths&entity_id=3`. Rows written for a refused request have
+        `action` REJECTED_ATTEMPT; `actor` is null for the system or a worker. A read, so it is allowed in every licence mode.
+      security:
+        - cookieAuth: []
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/PerPage'
+        - name: entity_type
+          in: query
+          required: false
+          description: Table name of the changed record, for example `berths`.
+          schema:
+            type: string
+            maxLength: 60
+        - name: entity_id
+          in: query
+          required: false
+          description: Id of the changed record. Use with `entity_type`.
+          schema:
+            type: integer
+            minimum: 1
+        - name: actor_id
+          in: query
+          required: false
+          description: The user who made the change.
+          schema:
+            type: integer
+            minimum: 1
+        - name: action
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/AuditAction'
+        - name: from
+          in: query
+          required: false
+          description: Rows at or after this instant. ISO 8601 with `Z` or an offset; a time without one is 422. Not after `to`.
+          schema:
+            $ref: '#/components/schemas/DateTime'
+        - name: to
+          in: query
+          required: false
+          description: Rows at or before this instant. Same format as `from`.
+          schema:
+            $ref: '#/components/schemas/DateTime'
+        - name: q
+          in: query
+          required: false
+          description: Text search on the actor, a case-insensitive part of the username or name.
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 100
+      responses:
+        '200':
+          description: A page of audit rows.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [data, meta]
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/AuditLogEntry'
+                  meta:
+                    $ref: '#/components/schemas/PageMeta'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+        '426':
+          $ref: '#/components/responses/AppUpdateRequired'
+  /api/v1/system/info:
+    get:
+      tags: [System]
+      operationId: systemInfo
+      summary: Port and minimum app version
+      description: >-
+        Public: needs no sign-in, and is never refused with 426, because the app reads `min_app_version` here (CT-04).
+        The app calls it on first launch and as the connectivity check at the start of a sync cycle (DEC-58).
+        Until the licence work (DEC-54), `license_mode` is always `FULL` and `token_warning_days_left` is always null.
+        503 while the port is not provisioned yet (no port profile or no `min_app_version` setting).
+      security: []
+      responses:
+        '200':
+          description: The port this server belongs to.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SystemInfo'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+components:
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: atlantech_session
+      description: >-
+        Web app: Laravel session cookie (Sanctum SPA, CT-03). Writes also send the `X-XSRF-TOKEN` header
+        (parameter XsrfToken). The name is config session.cookie (SESSION_COOKIE, default atlantech_session).
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: >-
+        Mobile app: personal access token (CT-04). A Bearer request must send `X-App-Version` (`x.y.z`) and `X-Device-Id`:
+        either one missing or malformed is 422 VALIDATION_FAILED, another device or a revoked one is 401, and a version
+        older than `min_app_version` is 426. Web requests (session cookie) may omit `X-App-Version`. Writes send `Idempotency-Key`.
+  parameters:
+    Page:
+      name: page
+      in: query
+      required: false
+      description: Page number, from 1. A page past the end returns 200 with empty data; out of range is 422.
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 1000000
+        default: 1
+    PerPage:
+      name: per_page
+      in: query
+      required: false
+      description: Items per page. Out of range is 422 (never clamped).
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 25
+    XsrfToken:
+      name: X-XSRF-TOKEN
+      in: header
+      required: true
+      description: Web writes; the value of the XSRF-TOKEN cookie (Sanctum SPA).
+      schema:
+        type: string
+    XsrfTokenWebOnly:
+      name: X-XSRF-TOKEN
+      in: header
+      required: false
+      description: >-
+        Web session only: the value of the XSRF-TOKEN cookie (Sanctum SPA). A mobile request that authenticates with
+        `Authorization: Bearer` does not send it and is never refused for its absence.
+      schema:
+        type: string
+    AppVersion:
+      name: X-App-Version
+      in: header
+      required: true
+      description: >-
+        Mobile app version, `x.y.z`. Required on mobile sign-in and on every Bearer request (missing or malformed is 422);
+        older than the port's minimum gives 426 APP_UPDATE_REQUIRED. A web request (session cookie) may omit it.
+      schema:
+        type: string
+        example: '2.4.0'
+    DeviceId:
+      name: X-Device-Id
+      in: header
+      required: true
+      description: Stable id of the mobile device.
+      schema:
+        type: string
+    IdempotencyKey:
+      name: Idempotency-Key
+      in: header
+      required: false
+      description: >-
+        Required on every write (POST, PUT, PATCH, DELETE) made with `Authorization: Bearer`, except `POST /sync/events`
+        (CT-07, `client_event_id`); a missing or malformed key is 422 VALIDATION_FAILED. UUID v4, one per logical write,
+        reused on every retry of it, kept 24 h per token. Same key and same request (method, path and query, body): the first response
+        is replayed, with status, body and the header `Idempotent-Replayed: true`, and the write does not run again. Same
+        key with another request: 422 IDEMPOTENCY_KEY_REUSED. Not stored, so a retry runs again: 5xx, 401, 408, 423, 426,
+        429. A web session request does not send it and is never refused for its absence.
+      schema:
+        type: string
+        format: uuid
+  headers:
+    Allow:
+      description: Methods the path supports.
+      schema:
+        type: string
+        example: GET, HEAD
+    RetryAfter:
+      description: Seconds to wait before trying again.
+      schema:
+        type: integer
+        example: 60
+    IdempotentReplayed:
+      description: >-
+        `true` when the response is the stored first response of the same `Idempotency-Key` (Bearer writes); absent on the
+        first response. A stored 4xx is replayed with it too.
+      schema:
+        type: string
+        enum: ['true']
+  schemas:
+    DateTime:
+      type: string
+      format: date-time
+      description: ISO 8601 in UTC with microseconds on output; input must carry Z or an offset.
+      example: '2026-11-02T10:15:04.123456Z'
+    PageMeta:
+      type: object
+      required: [page, per_page, total]
+      properties:
+        page:
+          type: integer
+          minimum: 1
+        per_page:
+          type: integer
+          minimum: 1
+          maximum: 100
+        total:
+          type: integer
+          minimum: 0
+      example:
+        page: 1
+        per_page: 25
+        total: 132
+    ErrorCode:
+      type: string
+      description: Stable error code (CT-01 error-codes.md); never changes once CT-01 is approved.
+      enum:
+        - VALIDATION_FAILED
+        - VERSION_CONFLICT
+        - UNAUTHENTICATED
+        - SESSION_EXPIRED
+        - FORBIDDEN
+        - NOT_FOUND
+        - METHOD_NOT_ALLOWED
+        - ACCOUNT_DISABLED
+        - PASSWORD_CHANGE_REQUIRED
+        - DEVICE_REVOKED
+        - APP_UPDATE_REQUIRED
+        - LICENSE_READ_ONLY
+        - PLAN_LIMIT_EXCEEDED
+        - TOO_MANY_ATTEMPTS
+        - IDEMPOTENCY_KEY_REUSED
+        - SERVICE_UNAVAILABLE
+        - SERVER_ERROR
+        - BAD_REQUEST
+    Problem:
+      type: object
+      description: RFC 9457 problem body. `detail` is English; clients translate by `message_key`.
+      required: [type, title, status, code, message_key, detail]
+      properties:
+        type:
+          type: string
+          format: uri
+          description: Identifier of the problem (https://atlantech.io/errors/<kebab-code>), not a page.
+        title:
+          type: string
+          description: Short English title per code.
+        status:
+          type: integer
+          minimum: 400
+          maximum: 599
+        code:
+          $ref: '#/components/schemas/ErrorCode'
+        message_key:
+          type: string
+          pattern: '^errors\.[a-z0-9_]+(\.[a-z0-9_]+)?$'
+          description: Translation key, errors.<lower_snake code> or errors.<area>.<name> for feature keys.
+        detail:
+          type: string
+    ValidationProblem:
+      description: 422 VALIDATION_FAILED; `errors` maps each field to its failed rules as message keys.
+      allOf:
+        - $ref: '#/components/schemas/Problem'
+        - type: object
+          required: [errors]
+          properties:
+            errors:
+              type: object
+              additionalProperties:
+                type: array
+                minItems: 1
+                items:
+                  type: string
+                  example: validation.required
+    VersionConflictProblem:
+      description: 409 VERSION_CONFLICT; `current` is the stored record's id and version token.
+      allOf:
+        - $ref: '#/components/schemas/Problem'
+        - type: object
+          required: [current]
+          properties:
+            current:
+              type: object
+              required: [id, version]
+              properties:
+                id:
+                  type: integer
+                version:
+                  $ref: '#/components/schemas/DateTime'
+    AppUpdateRequiredProblem:
+      description: 426 APP_UPDATE_REQUIRED; `min_app_version` is the port's minimum mobile version.
+      allOf:
+        - $ref: '#/components/schemas/Problem'
+        - type: object
+          required: [min_app_version]
+          properties:
+            min_app_version:
+              type: string
+    ChangePasswordRequest:
+      type: object
+      required: [current_password, new_password, new_password_confirmation]
+      properties:
+        current_password:
+          type: string
+        new_password:
+          type: string
+          minLength: 8
+          maxLength: 255
+        new_password_confirmation:
+          type: string
+    LoginRequest:
+      type: object
+      required: [username, password]
+      properties:
+        username:
+          type: string
+          minLength: 3
+          maxLength: 50
+          description: Trimmed and lowercased by the server before it is checked.
+          example: staff.ahmed
+        password:
+          type: string
+          maxLength: 255
+          format: password
+    MobileLoginRequest:
+      type: object
+      required: [username, password, platform]
+      properties:
+        username:
+          type: string
+          minLength: 3
+          maxLength: 50
+          description: Trimmed and lowercased by the server before it is checked.
+          example: pilot.k
+        password:
+          type: string
+          maxLength: 255
+          format: password
+        platform:
+          type: string
+          enum: [ANDROID, IOS]
+          example: ANDROID
+    MobileSignIn:
+      type: object
+      description: The mobile sign-in answer (CT-04).
+      required: [token, expires_at, user]
+      properties:
+        token:
+          type: string
+          description: Opaque device token.
+          example: 12|Hk3s9QxV0pLw2mN8rT5yZb7cD1fG4jK6aE0uI3oP9s2a5b8c
+        expires_at:
+          type: string
+          format: date-time
+          description: The expiry at sign-in; each use moves it to 30 days later.
+          example: '2026-12-02T10:00:00.000000Z'
+        user:
+          $ref: '#/components/schemas/UserProfile'
+    SystemInfo:
+      type: object
+      description: Public port information (CT-04 v1.1).
+      required: [port_id, port_code, port_name, license_mode, token_warning_days_left, min_app_version]
+      properties:
+        port_id:
+          type: string
+          format: uuid
+          description: '`port_profiles.public_id`.'
+          example: 0d9f6a52-7c1b-4b7e-9a3e-5a2f1c8d7e10
+        port_code:
+          type: string
+          nullable: true
+          description: UN/LOCODE; may be null.
+          example: EGDAM
+        port_name:
+          type: string
+          example: Damietta Port
+        license_mode:
+          type: string
+          enum: [SETUP, FULL, READ_ONLY]
+          description: Always `FULL` until the licence work (DEC-54).
+          example: FULL
+        token_warning_days_left:
+          type: integer
+          nullable: true
+          description: Always null until the licence work (DEC-54).
+          example: null
+        min_app_version:
+          type: string
+          description: The oldest mobile app version the port accepts (`x.y.z`); older apps get 426.
+          example: 1.0.0
+    UserProfile:
+      type: object
+      description: The signed-in user (CT-03). One active role (DEC-36); `role` is null when the user has none.
+      required: [id, name, role, terminal_ids, must_change_password]
+      properties:
+        id:
+          type: integer
+          example: 41
+        name:
+          type: string
+          example: Port Staff
+        role:
+          type: string
+          nullable: true
+          enum: [PORT_GM, PORT_STAFF, MARINE_SAFETY_OFFICER, PILOTAGE_MANAGER, PILOTAGE_OFFICER, MARINE_PILOT, TUG_MANAGER, TUG_OFFICER, TUG_MASTER, TERMINAL_ADMIN, TERMINAL_OFFICER, TERMINAL_SUPERVISOR, null]
+          example: PORT_STAFF
+        terminal_ids:
+          type: array
+          description: The terminal of a TERMINAL role; empty for every other role.
+          items:
+            type: integer
+          example: []
+        must_change_password:
+          type: boolean
+          example: false
+    AuditAction:
+      type: string
+      enum: [CREATE, UPDATE, DELETE, STATUS_CHANGE, SAFETY_EXCEPTION, REJECTED_ATTEMPT]
+    AuditLogEntry:
+      type: object
+      description: One audit row. `before_state` and `after_state` hold the changed fields; CREATE has no before, DELETE no after, a refusal holds `route`, `status`, `code`, `reason` and `username` in `after_state`.
+      required: [id, actor, entity_type, entity_id, action, before_state, after_state, occurred_at]
+      properties:
+        id:
+          type: integer
+          example: 9012
+        actor:
+          type: object
+          nullable: true
+          description: Null for the system or a worker.
+          required: [id, name, username]
+          properties:
+            id:
+              type: integer
+              example: 41
+            name:
+              type: string
+              example: Port Admin
+            username:
+              type: string
+              example: port.admin
+        entity_type:
+          type: string
+          example: berths
+        entity_id:
+          type: integer
+          nullable: true
+          example: 3
+        action:
+          $ref: '#/components/schemas/AuditAction'
+        before_state:
+          type: object
+          nullable: true
+          additionalProperties: true
+          example: {name: 'Berth 3'}
+        after_state:
+          type: object
+          nullable: true
+          additionalProperties: true
+          example: {name: 'Berth 3 East'}
+        occurred_at:
+          $ref: '#/components/schemas/DateTime'
+  responses:
+    ValidationFailed:
+      description: '422 VALIDATION_FAILED'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ValidationProblem'
+          example:
+            type: https://atlantech.io/errors/validation-failed
+            title: 'Validation failed'
+            status: 422
+            code: VALIDATION_FAILED
+            message_key: errors.validation_failed
+            detail: 'The name field is required.'
+            errors:
+              name:
+                - validation.required
+    VersionConflict:
+      description: '409 VERSION_CONFLICT'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/VersionConflictProblem'
+          example:
+            type: https://atlantech.io/errors/version-conflict
+            title: 'Record changed'
+            status: 409
+            code: VERSION_CONFLICT
+            message_key: errors.version_conflict
+            detail: 'This record was changed by another user. Reload it and apply your changes again.'
+            current:
+              id: 7
+              version: '2026-11-02T10:15:04.123456Z'
+    Unauthenticated:
+      description: '401 UNAUTHENTICATED'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          example:
+            type: https://atlantech.io/errors/unauthenticated
+            title: 'Unauthenticated'
+            status: 401
+            code: UNAUTHENTICATED
+            message_key: errors.unauthenticated
+            detail: 'You are not signed in, or your session has expired. Sign in and try again.'
+    SessionExpired:
+      description: '419 SESSION_EXPIRED'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          example:
+            type: https://atlantech.io/errors/session-expired
+            title: 'Session expired'
+            status: 419
+            code: SESSION_EXPIRED
+            message_key: errors.session_expired
+            detail: 'Your session security token has expired. Reload the page and try again.'
+    Forbidden:
+      description: '403 FORBIDDEN'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          example:
+            type: https://atlantech.io/errors/forbidden
+            title: 'Forbidden'
+            status: 403
+            code: FORBIDDEN
+            message_key: errors.forbidden
+            detail: 'You do not have permission to do this.'
+    NotFound:
+      description: '404 NOT_FOUND'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          example:
+            type: https://atlantech.io/errors/not-found
+            title: 'Not found'
+            status: 404
+            code: NOT_FOUND
+            message_key: errors.not_found
+            detail: 'The requested item was not found. It may have been removed.'
+    MethodNotAllowed:
+      description: '405 METHOD_NOT_ALLOWED'
+      headers:
+        Allow:
+          $ref: '#/components/headers/Allow'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          example:
+            type: https://atlantech.io/errors/method-not-allowed
+            title: 'Method not allowed'
+            status: 405
+            code: METHOD_NOT_ALLOWED
+            message_key: errors.method_not_allowed
+            detail: 'This action is not supported at this address.'
+    AccountDisabled:
+      description: '403 ACCOUNT_DISABLED'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          example:
+            type: https://atlantech.io/errors/account-disabled
+            title: 'Account disabled'
+            status: 403
+            code: ACCOUNT_DISABLED
+            message_key: errors.account_disabled
+            detail: 'Your account has been disabled. Contact your port administrator.'
+    DeviceRevoked:
+      description: '403 DEVICE_REVOKED'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          example:
+            type: https://atlantech.io/errors/device-revoked
+            title: 'Device revoked'
+            status: 403
+            code: DEVICE_REVOKED
+            message_key: errors.device_revoked
+            detail: 'This device has been revoked by your port administrator. Contact your port administrator to use it again.'
+    PasswordChangeRequired:
+      description: '403 PASSWORD_CHANGE_REQUIRED'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          example:
+            type: https://atlantech.io/errors/password-change-required
+            title: 'Password change required'
+            status: 403
+            code: PASSWORD_CHANGE_REQUIRED
+            message_key: errors.password_change_required
+            detail: 'You must change your password before you continue.'
+    AppUpdateRequired:
+      description: '426 APP_UPDATE_REQUIRED'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/AppUpdateRequiredProblem'
+          example:
+            type: https://atlantech.io/errors/app-update-required
+            title: 'App update required'
+            status: 426
+            code: APP_UPDATE_REQUIRED
+            message_key: errors.app_update_required
+            detail: 'This version of the app is no longer supported. Update the app to continue.'
+            min_app_version: '2.4.0'
+    LicenseReadOnly:
+      description: '423 LICENSE_READ_ONLY. Reserved: the licence guard is future work (DEC-54).'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          example:
+            type: https://atlantech.io/errors/license-read-only
+            title: 'License is read-only'
+            status: 423
+            code: LICENSE_READ_ONLY
+            message_key: errors.license_read_only
+            detail: 'The port license is read-only: you can view data, but changes are blocked. Contact your port administrator.'
+    PlanLimitExceeded:
+      description: '422 PLAN_LIMIT_EXCEEDED. Reserved: the plan-limit service is future work (DEC-54).'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          example:
+            type: https://atlantech.io/errors/plan-limit-exceeded
+            title: 'Plan limit exceeded'
+            status: 422
+            code: PLAN_LIMIT_EXCEEDED
+            message_key: errors.plan_limit_exceeded
+            detail: 'This would exceed a limit of the port plan. Contact your port administrator.'
+    TooManyAttempts:
+      description: '429 TOO_MANY_ATTEMPTS. Sign-in and password-change throttling only.'
+      headers:
+        Retry-After:
+          $ref: '#/components/headers/RetryAfter'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          example:
+            type: https://atlantech.io/errors/too-many-attempts
+            title: 'Too many attempts'
+            status: 429
+            code: TOO_MANY_ATTEMPTS
+            message_key: errors.too_many_attempts
+            detail: 'Too many attempts. Wait a moment and try again.'
+    IdempotencyKeyReused:
+      description: '422 IDEMPOTENCY_KEY_REUSED'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          example:
+            type: https://atlantech.io/errors/idempotency-key-reused
+            title: 'Idempotency key reused'
+            status: 422
+            code: IDEMPOTENCY_KEY_REUSED
+            message_key: errors.idempotency_key_reused
+            detail: 'This request key was already used for a different request. Send the request again with a new key.'
+    ServiceUnavailable:
+      description: '503 SERVICE_UNAVAILABLE'
+      headers:
+        Retry-After:
+          $ref: '#/components/headers/RetryAfter'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          example:
+            type: https://atlantech.io/errors/service-unavailable
+            title: 'Service unavailable'
+            status: 503
+            code: SERVICE_UNAVAILABLE
+            message_key: errors.service_unavailable
+            detail: 'The service is temporarily unavailable. Try again in a few minutes.'
+    ServerError:
+      description: '500 SERVER_ERROR. Generic; never carries internals (NFR-UX-4).'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          example:
+            type: https://atlantech.io/errors/server-error
+            title: 'Server error'
+            status: 500
+            code: SERVER_ERROR
+            message_key: errors.server_error
+            detail: 'Something went wrong on our side. Try again; if the problem continues, contact support.'
+    BadRequest:
+      description: '400 BAD_REQUEST. Any other client error the framework raises (413, 415 …); always 400.'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          example:
+            type: https://atlantech.io/errors/bad-request
+            title: 'Bad request'
+            status: 400
+            code: BAD_REQUEST
+            message_key: errors.bad_request
+            detail: 'The request could not be processed. Check what you sent and try again.'

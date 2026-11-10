@@ -1,6 +1,14 @@
 // Test data for the mock API (FE-034), shaped like port-api.yaml. Test use only.
 
-export const PORT = Object.freeze({ port_name: 'Alexandria Port' })
+// GET /system/info (SystemInfo in the contract).
+export const PORT = Object.freeze({
+  port_id: '0d9f6a52-7c1b-4b7e-9a3e-5a2f1c8d7e10',
+  port_code: 'EGALY',
+  port_name: 'Alexandria Port',
+  license_mode: 'FULL',
+  token_warning_days_left: null,
+  min_app_version: '1.0.0',
+})
 
 // Seeded-style accounts (backend DemoUserSeeder): every one starts on a one-time password.
 export const TEMP_PASSWORD = 'Temp12345'

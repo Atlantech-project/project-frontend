@@ -22,7 +22,7 @@ beforeEach(() => {
 
 describe('sign-in against the mock API', () => {
   it('reads the port name', async () => {
-    await expect(fetchSystemInfo()).resolves.toEqual({ port_name: 'Alexandria Port' })
+    await expect(fetchSystemInfo()).resolves.toMatchObject({ port_name: 'Alexandria Port' })
   })
 
   it('rejects a wrong password with the API error code', async () => {
