@@ -1,7 +1,7 @@
 <script setup>
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import AtlIcon from '@/components/AtlIcon.vue'
+import AppIcon from '@/components/AppIcon.vue'
 import AtlButton from '@/components/ui/AtlButton.vue'
 import { fieldChanges, humanize } from './audit'
 import { useAuditLabels } from './useAuditLabels'
@@ -33,7 +33,7 @@ const facts = computed(() => [
   <div class="flex flex-col gap-3">
     <div class="flex justify-end">
       <AtlButton variant="secondary" size="sm" @click="emit('back')">
-        <AtlIcon name="back" :size="16" class="rtl:-scale-x-100" />
+        <AppIcon name="arrowleft" />
         {{ t('audit.details.back') }}
       </AtlButton>
     </div>

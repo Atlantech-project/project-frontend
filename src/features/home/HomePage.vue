@@ -2,7 +2,7 @@
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import AtlIcon from '@/components/AtlIcon.vue'
+import AppIcon from '@/components/AppIcon.vue'
 import { navigationFor } from '@/app/navigation'
 import { useRoleName } from '@/app/useRoleName'
 import { useSessionStore } from '@/stores/session'
@@ -79,7 +79,7 @@ const shortcuts = computed(() =>
             :to="item.path"
             class="flex h-9 items-center justify-center gap-1.5 rounded-control border border-edge-strong bg-card px-3 type-label-m text-fg transition-colors hover:bg-subtle focus-visible:shadow-focus focus-visible:outline-none"
           >
-            <AtlIcon name="eye" :size="16" />
+            <AppIcon name="eye" />
             {{ t('home.actions.view', { page: t(item.labelKey) }) }}
           </RouterLink>
         </li>

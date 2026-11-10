@@ -1,0 +1,31 @@
+// Menu icon of each page (FE-018), as in the Figma sidebar ("Navigation item" instances).
+export const PAGE_ICONS = Object.freeze({
+  'P-17': 'home',
+  'P-18': 'anchor',
+  'P-19': 'bell',
+  'P-21': 'wind',
+  'P-23': 'users',
+  'P-25': 'devices',
+  'P-26': 'map',
+  'P-27': 'building',
+  'P-28': 'ship',
+  'P-29': 'history',
+  'P-30': 'cpu',
+  'P-31': 'file',
+  'P-33': 'package',
+  'P-34': 'request',
+  'P-39': 'plans',
+  'P-41': 'alert',
+  'P-43': 'users',
+  'P-44': 'request',
+  'P-45': 'wrench',
+  'P-46': 'users',
+  'P-47': 'request',
+  'P-48': 'wrench',
+  'P-49': 'grid',
+  'P-50': 'sparkles',
+  'P-59': 'shield',
+  'P-62': 'sliders',
+})
+
+export const pageIcon = (pageId) => PAGE_ICONS[pageId] ?? 'dashboard'

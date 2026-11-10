@@ -2,7 +2,7 @@
 import { computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import AtlIcon from '@/components/AtlIcon.vue'
+import AppIcon from '@/components/AppIcon.vue'
 import AtlButton from '@/components/ui/AtlButton.vue'
 import { useSessionStore } from '@/stores/session'
 import { ACCESS_DENIED_REASONS } from '@/app/router/guard'
@@ -57,11 +57,11 @@ async function signOut() {
       <p class="type-body-s text-fg-muted">{{ t(`accessDenied.help.${reason}`) }}</p>
       <div class="flex flex-col items-start gap-2">
         <AtlButton v-if="mobileOnly" :loading="signingOut" @click="signOut">
-          <AtlIcon name="back" :size="16" class="rtl:-scale-x-100" />
+          <AppIcon name="arrowleft" />
           {{ t('accessDenied.signOut') }}
         </AtlButton>
         <AtlButton v-else @click="router.replace(HOME)">
-          <AtlIcon name="back" :size="16" class="rtl:-scale-x-100" />
+          <AppIcon name="arrowleft" />
           {{ t('accessDenied.backHome') }}
         </AtlButton>
         <p class="type-caption text-fg-muted">{{ t(`accessDenied.next.${reason}`) }}</p>

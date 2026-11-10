@@ -1,6 +1,6 @@
 <script setup>
 import { useI18n } from 'vue-i18n'
-import AtlIcon from '@/components/AtlIcon.vue'
+import AppIcon from '@/components/AppIcon.vue'
 import AtlWave from '@/components/AtlWave.vue'
 
 const { t } = useI18n()
@@ -50,7 +50,7 @@ const { t } = useI18n()
         to="/"
         class="inline-flex items-center gap-2 rounded-control bg-brand px-5 py-3 font-semibold text-fg-inverse transition-colors hover:bg-brand-hover focus-visible:shadow-focus focus-visible:outline-none"
       >
-        <AtlIcon name="home" :size="18" />
+        <AppIcon name="home" :size="18" />
         {{ t('notFound.back') }}
       </RouterLink>
     </div>

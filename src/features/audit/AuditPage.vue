@@ -1,6 +1,7 @@
 <script setup>
 import { computed, reactive, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
+import AppIcon from '@/components/AppIcon.vue'
 import AtlIcon from '@/components/AtlIcon.vue'
 import AtlEmptyState from '@/components/states/AtlEmptyState.vue'
 import AtlErrorState from '@/components/states/AtlErrorState.vue'
@@ -211,7 +212,7 @@ const selectClass = [...inputClasses(), 'appearance-none pe-8']
                       class="inline-flex h-7 items-center gap-1.5 rounded-control border border-edge-strong bg-card px-3 type-label-s whitespace-nowrap text-fg transition-colors hover:bg-subtle focus-visible:shadow-focus focus-visible:outline-none"
                       @click="selected = entry"
                     >
-                      <AtlIcon name="eye" :size="16" />
+                      <AppIcon name="eye" />
                       {{ t('audit.table.view') }}
                     </button>
                   </td>
