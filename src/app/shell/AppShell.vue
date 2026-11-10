@@ -2,7 +2,7 @@
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import AtlIcon from '@/components/AtlIcon.vue'
+import AppIcon from '@/components/AppIcon.vue'
 import { usePortName } from '@/app/useSystemInfo'
 import AppSidebar from './AppSidebar.vue'
 
@@ -31,7 +31,7 @@ const title = computed(() => (route.meta.titleKey ? t(route.meta.titleKey) : '')
           :aria-label="t('shell.notifications')"
           disabled
         >
-          <AtlIcon name="bell" :size="18" />
+          <AppIcon name="bell" :size="20" />
         </button>
       </header>
       <main class="flex-1 px-8 py-6">

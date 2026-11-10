@@ -1,6 +1,6 @@
 <script setup>
 import { useI18n } from 'vue-i18n'
-import AtlIcon from '@/components/AtlIcon.vue'
+import AppIcon from '@/components/AppIcon.vue'
 import AtlWave from '@/components/AtlWave.vue'
 
 const { t } = useI18n()
@@ -41,14 +41,14 @@ function reload() {
           class="inline-flex items-center gap-2 rounded-control bg-brand-accent px-5 py-3 font-semibold text-brand transition-colors hover:bg-gold-400 focus-visible:shadow-focus focus-visible:outline-none"
           @click="reload"
         >
-          <AtlIcon name="refresh" :size="18" />
+          <AppIcon name="refresh" :size="18" />
           {{ t('states.retry') }}
         </button>
         <RouterLink
           to="/"
           class="inline-flex items-center gap-2 rounded-control border border-fg-inverse/30 px-5 py-3 font-semibold transition hover:bg-fg-inverse/10"
         >
-          <AtlIcon name="home" :size="18" />
+          <AppIcon name="home" :size="18" />
           {{ t('error.back') }}
         </RouterLink>
       </div>

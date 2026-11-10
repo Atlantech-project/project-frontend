@@ -3,9 +3,11 @@ import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import AtlantechLogo from '@/brand/AtlantechLogo.vue'
+import AppIcon from '@/components/AppIcon.vue'
 import AtlIcon from '@/components/AtlIcon.vue'
 import { setLocale } from '@/i18n'
 import { navigationFor } from '@/app/navigation'
+import { pageIcon } from '@/app/pageIcons'
 import { useSessionStore } from '@/stores/session'
 import { useRoleName } from '@/app/useRoleName'
 
@@ -16,9 +18,6 @@ defineProps({
 const { t, locale } = useI18n()
 const router = useRouter()
 const session = useSessionStore()
-
-// Menu icons until the approved icon set (FE-018).
-const ICONS = { 'P-17': 'home', 'P-18': 'anchor', 'P-19': 'bell', 'P-21': 'pulse' }
 
 // The role's menu as one list (Figma has no section headings). Pages appear once their route
 // exists, so the menu never leads to Not Found.
@@ -72,7 +71,7 @@ function toggleLocale() {
             class="flex h-11 items-center gap-3 rounded-control px-3 type-body-m text-fg-inverse transition-colors hover:bg-navy-700 focus-visible:shadow-focus focus-visible:outline-none"
             active-class="!bg-brand-secondary type-strong-m !text-card"
           >
-            <AtlIcon :name="ICONS[item.pageId] ?? 'grid'" :size="18" />
+            <AppIcon :name="pageIcon(item.pageId)" />
             {{ t(item.labelKey) }}
           </RouterLink>
         </li>

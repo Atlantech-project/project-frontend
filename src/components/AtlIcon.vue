@@ -6,7 +6,7 @@ const props = defineProps({
   size: { type: [Number, String], default: 24 },
 })
 
-// Open, round-jointed line icons, as the brand asks. Replaced by the approved set in FE-018.
+// Open, round-jointed line icons for the landing page. App screens use AppIcon (FE-018).
 const ICONS = {
   ship: [
     'M3 17l2 4h14l2-4',
