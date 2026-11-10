@@ -25,7 +25,15 @@ const MESSAGE_KEYS = {
 
 export function problem(status, code, extra = {}) {
   return HttpResponse.json(
-    { type: 'about:blank', title: code, status, code, message_key: MESSAGE_KEYS[code], ...extra },
+    {
+      type: `https://atlantech.io/errors/${code.toLowerCase().replaceAll('_', '-')}`,
+      title: code,
+      status,
+      code,
+      message_key: MESSAGE_KEYS[code] ?? `errors.${code.toLowerCase()}`,
+      detail: code,
+      ...extra,
+    },
     { status, headers: { 'Content-Type': 'application/problem+json' } },
   )
 }
