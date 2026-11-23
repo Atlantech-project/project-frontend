@@ -66,7 +66,7 @@ function fill(record) {
     name: record?.name ?? '',
     username: record?.username ?? '',
     role: record?.active_role?.role ?? '',
-    terminalId: record?.active_role?.terminal_id ?? '',
+    terminalId: String(record?.active_role?.terminal_id ?? ''),
     status: record && !record.is_active ? 'inactive' : 'active',
   })
   errors.value = {}
@@ -76,6 +76,15 @@ watch(
   () => user.value?.id,
   () => fill(user.value),
   { immediate: true },
+)
+
+// Terminal Scope takes digits only; the browser's number spinner is left out on purpose.
+watch(
+  () => form.terminalId,
+  (value) => {
+    const digits = String(value).replace(/\D/g, '')
+    if (digits !== value) form.terminalId = digits
+  },
 )
 
 const isSelf = computed(() => !!user.value && user.value.id === session.user?.id)
@@ -352,9 +361,9 @@ const selectClass = (field) => [
                 <AtlInput
                   id="user-terminal"
                   v-model="form.terminalId"
-                  type="number"
-                  min="1"
                   inputmode="numeric"
+                  autocomplete="off"
+                  maxlength="9"
                   :label="`${t('users.form.terminal')} *`"
                   :hint="t('users.form.terminalHint')"
                   :error="errors.terminal_id"

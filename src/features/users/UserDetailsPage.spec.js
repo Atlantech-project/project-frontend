@@ -38,7 +38,9 @@ describe('P-24 User Details', () => {
     await w.find('#user-name').setValue('Omar Hassan')
     await w.find('#user-username').setValue('omar.hassan')
     await w.find('#user-role').setValue('TERMINAL_OFFICER')
-    await w.find('#user-terminal').setValue('2')
+    await w.find('#user-terminal').setValue('2a')
+    await flushPromises()
+    expect(w.find('#user-terminal').element.value).toBe('2')
     await w.find('form').trigger('submit')
     await vi.waitFor(() => expect(document.body.textContent).toContain(en.users.created.title))
     expect(document.querySelector('[data-testid="one-time-password"]').textContent).toBe(
