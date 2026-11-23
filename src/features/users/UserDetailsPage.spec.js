@@ -72,6 +72,14 @@ describe('P-24 User Details', () => {
     expect(w.text()).toContain(en.users.history.current)
   })
 
+  it('shows the role history when opened from the list', async () => {
+    const { wrapper: w, router } = await mountAt('/admin/users')
+    await vi.waitFor(() => expect(w.findAll('tbody tr')).toHaveLength(5))
+    await router.push('/admin/users/3')
+    await vi.waitFor(() => expect(w.text()).toContain(en.users.history.title))
+    expect(w.text()).toContain(en.users.history.current)
+  })
+
   it('changes the role and goes back to the list', async () => {
     const { wrapper: w, router } = await mountAt('/admin/users/2')
     await vi.waitFor(() => expect(w.find('#user-role').exists()).toBe(true))
