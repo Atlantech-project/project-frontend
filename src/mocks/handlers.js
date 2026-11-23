@@ -2,15 +2,16 @@
 // (RFC 9457, `code` + `message_key`) as the backend, from in-memory data. Test use only:
 // never imported by the app.
 import { http, HttpResponse } from 'msw'
-import { PORT, apiUserOf, profileOf, seedAuditLogs, seedUsers } from './fixtures'
+import { PORT, apiUserOf, profileOf, seedAuditLogs, seedDevices, seedUsers } from './fixtures'
 
 const API = '*/api/v1'
 
 // In-memory server state; resetMockDb() runs after every test.
-export const db = { users: [], auditLogs: [], currentUserId: null }
+export const db = { users: [], auditLogs: [], devices: [], currentUserId: null }
 export function resetMockDb() {
   db.users = seedUsers()
   db.auditLogs = seedAuditLogs()
+  db.devices = seedDevices()
   db.currentUserId = null
 }
 resetMockDb()
@@ -114,6 +115,7 @@ export const handlers = [
   }),
 
   ...usersHandlers(),
+  ...devicesHandlers(),
 ]
 
 // Signs a fixture user in without a login request, for tests that start signed in.
@@ -270,6 +272,64 @@ function usersHandlers() {
         bump(user)
       }
       return HttpResponse.json(apiUserOf(user, { history: true }))
+    }),
+  ]
+}
+
+// /users/{user}/devices (FE-046): list, revoke, restore and revoke-all, newest first.
+function devicesHandlers() {
+  const guard = (params) => {
+    const me = currentUser()
+    if (!me) return { refused: problem(401, 'UNAUTHENTICATED') }
+    if (me.role !== 'PORT_GM') return { refused: problem(403, 'FORBIDDEN') }
+    const user = db.users.find((u) => u.id === Number(params.user))
+    if (!user) return { refused: problem(404, 'NOT_FOUND') }
+    const device = params.device
+      ? db.devices.find((d) => d.id === Number(params.device) && d.user_id === user.id)
+      : null
+    if (params.device && !device) return { refused: problem(404, 'NOT_FOUND') }
+    return { user, device }
+  }
+  const shape = (device) =>
+    Object.fromEntries(Object.entries(device).filter(([k]) => k !== 'user_id'))
+  const NOW = '2026-11-23T12:00:00Z'
+
+  return [
+    http.get(`${API}/users/:user/devices`, ({ request, params }) => {
+      const { refused, user } = guard(params)
+      if (refused) return refused
+      const query = new URL(request.url).searchParams
+      const page = Number(query.get('page') ?? 1)
+      const perPage = Number(query.get('per_page') ?? 25)
+      const rows = db.devices.filter((d) => d.user_id === user.id).sort((a, b) => b.id - a.id)
+      return HttpResponse.json({
+        data: rows.slice((page - 1) * perPage, page * perPage).map(shape),
+        meta: { page, per_page: perPage, total: rows.length },
+      })
+    }),
+
+    http.post(`${API}/users/:user/devices/revoke-all`, ({ params }) => {
+      const { refused, user } = guard(params)
+      if (refused) return refused
+      const live = db.devices.filter((d) => d.user_id === user.id && !d.revoked_at)
+      const tokens = live.reduce((sum, d) => sum + d.live_token_count, 0)
+      live.forEach((d) => Object.assign(d, { revoked_at: NOW, live_token_count: 0 }))
+      return HttpResponse.json({ devices_revoked: live.length, tokens_revoked: tokens })
+    }),
+
+    http.post(`${API}/users/:user/devices/:device/revoke`, ({ params }) => {
+      const { refused, device } = guard(params)
+      if (refused) return refused
+      if (!device.revoked_at)
+        Object.assign(device, { revoked_at: NOW, live_token_count: 0, has_push_token: false })
+      return HttpResponse.json(shape(device))
+    }),
+
+    http.post(`${API}/users/:user/devices/:device/restore`, ({ params }) => {
+      const { refused, device } = guard(params)
+      if (refused) return refused
+      device.revoked_at = null
+      return HttpResponse.json(shape(device))
     }),
   ]
 }

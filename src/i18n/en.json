@@ -750,5 +750,68 @@
       "to": "To (UTC)",
       "current": "Current"
     }
+  },
+  "devices": {
+    "title": "Registered Devices",
+    "intro": "Review devices connected to user sessions.",
+    "back": "Back to User Details",
+    "backTo": "Back to {name}'s User Details",
+    "platforms": {
+      "ANDROID": "Android device",
+      "IOS": "iOS device"
+    },
+    "columns": {
+      "device": "Device Type",
+      "deviceId": "Device ID",
+      "appVersion": "App Version",
+      "lastSeen": "Last Seen (UTC)",
+      "status": "Session Status",
+      "actions": "Actions"
+    },
+    "table": {
+      "title": "Registered device sessions",
+      "count": "{count} registered device | {count} registered devices",
+      "active": "{count} active session | {count} active sessions",
+      "revoked": "{count} revoked session | {count} revoked sessions",
+      "shown": "Showing {count} registered device | Showing all {count} registered devices"
+    },
+    "revoke": "Revoke Token",
+    "revokeAll": "Revoke all tokens",
+    "restore": "Restore",
+    "empty": {
+      "title": "No registered devices",
+      "body": "No device sessions are recorded for {name}."
+    },
+    "error": "Could not load the registered devices",
+    "failed": "The change was not saved",
+    "confirm": {
+      "title": "Revoke Session Token?",
+      "allTitle": "Revoke all tokens?",
+      "version": "App Version {version}",
+      "lastSeen": "Last Seen: {time} UTC",
+      "body": "Revoke the token for this {device}? Only this device is signed out. It does not delete the device or wipe its data.",
+      "allBody": "Revoke every device of this user? All their mobile sessions end. Web sign-ins aren't affected.",
+      "cancel": "Cancel"
+    },
+    "done": {
+      "revokeTitle": "Session token revoked",
+      "revokeBody": "The {device} was signed out. It must be restored before it can sign in again.",
+      "allTitle": "All tokens revoked",
+      "allBody": "No device was active. | 1 device was signed out. | {count} devices were signed out.",
+      "restoreTitle": "Device restored",
+      "restoreBody": "The {device} can sign in again."
+    },
+    "notes": {
+      "title": "Reading these records",
+      "lastSeen": "Last Seen is the last time the device reached the server, not a live connection indicator.",
+      "revoke": "Revoke Token signs the selected device out and stops its notifications. No device is deleted and no data on it is touched."
+    },
+    "card": {
+      "count": "{count} registered device | {count} registered devices",
+      "body": "Mobile sessions of {name}. Manage them on Registered Devices.",
+      "unsavedTitle": "Available after the user is created",
+      "unsavedBody": "Save the user before viewing their devices.",
+      "view": "View Registered Devices"
+    }
   }
 }
