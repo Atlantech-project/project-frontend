@@ -284,7 +284,8 @@
     "idempotency_key_reused": "This request was already sent.",
     "service_unavailable": "The service isn't ready yet. Try again later.",
     "server_error": "Something went wrong on our side. Try again.",
-    "bad_request": "The request couldn't be processed."
+    "bad_request": "The request couldn't be processed.",
+    "conflict": "This change isn't allowed right now."
   },
   "validation": {
     "invalid": "This value isn't valid.",
@@ -647,6 +648,107 @@
       "before": "Before",
       "after": "After",
       "none": "This entry has no field changes."
+    }
+  },
+  "users": {
+    "title": "User Management",
+    "intro": "Manage user accounts and access within this port.",
+    "create": "Create User",
+    "subject": "user",
+    "noRole": "No role",
+    "terminalNumber": "Terminal {id}",
+    "filters": {
+      "search": "Search name or username",
+      "searchPlaceholder": "Search name or username",
+      "status": "Account status",
+      "statuses": {
+        "all": "All statuses",
+        "active": "Active",
+        "inactive": "Inactive"
+      }
+    },
+    "columns": {
+      "name": "Name",
+      "username": "Username",
+      "role": "Role",
+      "terminal": "Terminal",
+      "active": "Active?",
+      "actions": "Actions"
+    },
+    "table": {
+      "title": "Port user accounts",
+      "count": "{count} user | {count} users",
+      "shown": "Showing {from}–{to} of {total}",
+      "open": "Open Details",
+      "deactivate": "Deactivate",
+      "page": "Page {page} of {pages}",
+      "previous": "Previous",
+      "next": "Next"
+    },
+    "empty": {
+      "title": "No user accounts yet",
+      "body": "Create the first user account for this port.",
+      "filteredTitle": "No matching users",
+      "filteredBody": "Try another name, username or status.",
+      "clear": "Clear filters"
+    },
+    "error": "Could not load the user accounts",
+    "deactivate": {
+      "title": "Deactivate User?",
+      "body": "Deactivate {name}'s account? This removes their access within this port. The user record is kept; this is not deletion.",
+      "confirm": "Deactivate",
+      "cancel": "Cancel",
+      "refusedTitle": "Cannot deactivate this account",
+      "refusedBody": "You cannot deactivate your own account, and the last active Port Admin cannot be deactivated. Create or activate another Port Admin first.",
+      "close": "Close"
+    },
+    "details": {
+      "title": "User Details",
+      "breadcrumb": "Breadcrumb",
+      "back": "Back to User Management",
+      "loadError": "Could not load this user",
+      "newHeading": "Create User · Unsaved identity",
+      "newBadge": "New user",
+      "newHint": "The account gets a one-time password when you save.",
+      "existingHeading": "{name} · Existing user"
+    },
+    "form": {
+      "createTitle": "Create user account",
+      "editTitle": "Edit user account",
+      "required": "* Required",
+      "name": "Full Name",
+      "namePlaceholder": "Enter full name",
+      "username": "Username",
+      "usernamePlaceholder": "Enter username",
+      "usernameHint": "3 to 50 lowercase letters, numbers, dots, dashes or underscores.",
+      "usernameRule": "Use 3 to 50 lowercase letters, numbers, dots, dashes or underscores.",
+      "fixed": "Can't be changed after the account is created.",
+      "status": "Account Status",
+      "selfHint": "You can't deactivate your own account.",
+      "role": "Role",
+      "rolePlaceholder": "Select one role",
+      "roleHint": "Assign exactly one project role.",
+      "terminal": "Terminal Scope",
+      "terminalHint": "Terminal number. Required for this terminal-restricted role.",
+      "terminalAppears": "Terminal Scope appears when a terminal-restricted role is selected.",
+      "save": "Save",
+      "cancel": "Cancel",
+      "ruleRefused": "This change isn't allowed: the port must keep at least one active Port Admin, and you can't remove your own access."
+    },
+    "created": {
+      "title": "Account created",
+      "password": "Temporary password:",
+      "hint": "Shown once only. Give it to the user securely. They must change it at first sign-in.",
+      "roleFailed": "The account was created, but the role was not saved. Set it on the user details.",
+      "done": "Done"
+    },
+    "history": {
+      "title": "Role history",
+      "role": "Role",
+      "terminal": "Terminal",
+      "from": "From (UTC)",
+      "to": "To (UTC)",
+      "current": "Current"
     }
   }
 }

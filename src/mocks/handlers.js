@@ -2,7 +2,7 @@
 // (RFC 9457, `code` + `message_key`) as the backend, from in-memory data. Test use only:
 // never imported by the app.
 import { http, HttpResponse } from 'msw'
-import { PORT, profileOf, seedAuditLogs, seedUsers } from './fixtures'
+import { PORT, apiUserOf, profileOf, seedAuditLogs, seedUsers } from './fixtures'
 
 const API = '*/api/v1'
 
@@ -21,6 +21,7 @@ const MESSAGE_KEYS = {
   VALIDATION_FAILED: 'errors.validation_failed',
   VERSION_CONFLICT: 'errors.version_conflict',
   NOT_FOUND: 'errors.not_found',
+  CONFLICT: 'errors.conflict',
 }
 
 export function problem(status, code, extra = {}) {
@@ -111,6 +112,8 @@ export const handlers = [
       meta: { page, per_page: perPage, total: rows.length },
     })
   }),
+
+  ...usersHandlers(),
 ]
 
 // Signs a fixture user in without a login request, for tests that start signed in.
@@ -118,4 +121,155 @@ export function signInAs(username) {
   const user = db.users.find((u) => u.username === username)
   db.currentUserId = user.id
   return profileOf(user)
+}
+
+// /users (FE-045): the Port Admin's user management, with version tokens and the two 409s.
+const TERMINAL_ROLES = ['TERMINAL_ADMIN', 'TERMINAL_OFFICER', 'TERMINAL_SUPERVISOR']
+const bump = (user) => {
+  const [, n = '0'] = (user.version ?? `v${user.id}-1`).split('-')
+  user.version = `v${user.id}-${Number(n) + 1}`
+}
+const isLastAdmin = (user) =>
+  user.role === 'PORT_GM' &&
+  user.active &&
+  db.users.filter((u) => u.role === 'PORT_GM' && u.active).length === 1
+
+function usersHandlers() {
+  const admin = () => {
+    const me = currentUser()
+    if (!me) return problem(401, 'UNAUTHENTICATED')
+    if (me.role !== 'PORT_GM') return problem(403, 'FORBIDDEN')
+    return null
+  }
+  const find = (params) => db.users.find((u) => u.id === Number(params.user))
+  // Checks shared by the writes: signed in as Port Admin, the user exists, the version is current.
+  async function write(request, params, { versioned = true } = {}) {
+    const refused = admin()
+    if (refused) return { refused }
+    const user = find(params)
+    if (!user) return { refused: problem(404, 'NOT_FOUND') }
+    const body = await request.json().catch(() => ({}))
+    if (versioned && body.version !== apiUserOf(user).version)
+      return {
+        refused: problem(409, 'VERSION_CONFLICT', {
+          current: { id: user.id, version: apiUserOf(user).version },
+        }),
+      }
+    return { user, body }
+  }
+
+  return [
+    http.get(`${API}/users`, ({ request }) => {
+      const refused = admin()
+      if (refused) return refused
+      const query = new URL(request.url).searchParams
+      const page = Number(query.get('page') ?? 1)
+      const perPage = Number(query.get('per_page') ?? 25)
+      let rows = [...db.users].sort((a, b) => a.name.localeCompare(b.name))
+      if (query.has('is_active'))
+        rows = rows.filter((u) => u.active === (query.get('is_active') === '1'))
+      if (query.get('q')) {
+        const text = query.get('q').toLowerCase()
+        rows = rows.filter((u) => [u.name, u.username].some((v) => v.toLowerCase().includes(text)))
+      }
+      return HttpResponse.json({
+        data: rows.slice((page - 1) * perPage, page * perPage).map((u) => apiUserOf(u)),
+        meta: { page, per_page: perPage, total: rows.length },
+      })
+    }),
+
+    http.get(`${API}/users/:user`, ({ params }) => {
+      const refused = admin()
+      if (refused) return refused
+      const user = find(params)
+      return user
+        ? HttpResponse.json(apiUserOf(user, { history: true }))
+        : problem(404, 'NOT_FOUND')
+    }),
+
+    http.post(`${API}/users`, async ({ request }) => {
+      const refused = admin()
+      if (refused) return refused
+      const { name, username } = await request.json()
+      const errors = {}
+      if (!name) errors.name = ['validation.required']
+      if (!username) errors.username = ['validation.required']
+      else if (db.users.some((u) => u.username === username))
+        errors.username = ['validation.unique']
+      if (Object.keys(errors).length) return problem(422, 'VALIDATION_FAILED', { errors })
+      const user = {
+        id: Math.max(...db.users.map((u) => u.id)) + 1,
+        username,
+        name,
+        role: null,
+        terminal_ids: [],
+        must_change_password: true,
+        password: 'OneTime-Pass-2026-xyz',
+        active: true,
+      }
+      db.users.push(user)
+      return HttpResponse.json(
+        { ...apiUserOf(user), one_time_password: user.password },
+        { status: 201 },
+      )
+    }),
+
+    http.post(`${API}/users/:user/deactivate`, async ({ request, params }) => {
+      const { refused, user } = await write(request, params)
+      if (refused) return refused
+      if (user.id === db.currentUserId || isLastAdmin(user)) return problem(409, 'CONFLICT')
+      if (user.active) {
+        user.active = false
+        bump(user)
+      }
+      return HttpResponse.json(apiUserOf(user))
+    }),
+
+    http.post(`${API}/users/:user/activate`, async ({ request, params }) => {
+      const { refused, user } = await write(request, params)
+      if (refused) return refused
+      if (!user.active) {
+        user.active = true
+        bump(user)
+      }
+      return HttpResponse.json(apiUserOf(user))
+    }),
+
+    http.post(`${API}/users/:user/roles`, async ({ request, params }) => {
+      const { refused, user, body } = await write(request, params)
+      if (refused) return refused
+      const terminal = TERMINAL_ROLES.includes(body.role)
+      if (terminal !== (body.terminal_id != null))
+        return problem(422, 'VALIDATION_FAILED', {
+          errors: { terminal_id: [terminal ? 'validation.required' : 'validation.prohibited'] },
+        })
+      if (body.role !== 'PORT_GM' && isLastAdmin(user)) return problem(409, 'CONFLICT')
+      if (user.role)
+        user.past_roles = [
+          { ...apiUserOf(user).active_role, active_to: '2026-11-23T10:00:00Z' },
+          ...(user.past_roles ?? []),
+        ]
+      user.role = body.role
+      user.terminal_ids = terminal ? [body.terminal_id] : []
+      user.role_from = '2026-11-23T10:00:00Z'
+      bump(user)
+      return HttpResponse.json(apiUserOf(user, { history: true }))
+    }),
+
+    http.post(`${API}/users/:user/roles/end`, async ({ request, params }) => {
+      const { refused, user } = await write(request, params)
+      if (refused) return refused
+      if (isLastAdmin(user)) return problem(409, 'CONFLICT')
+      if (user.role) {
+        user.past_roles = [
+          { ...apiUserOf(user).active_role, active_to: '2026-11-23T10:00:00Z' },
+          ...(user.past_roles ?? []),
+        ]
+        user.role = null
+        user.terminal_ids = []
+        bump(user)
+      }
+      return HttpResponse.json(apiUserOf(user, { history: true }))
+    }),
+  ]
 }

@@ -33,6 +33,34 @@ export const routes = [
     component: () => import('@/features/audit/AuditPage.vue'),
   },
   {
+    path: '/admin/users',
+    name: 'users',
+    meta: { layout: 'app', pageId: 'P-23', titleKey: 'users.title', roles: [ROLES.PORT_GM] },
+    component: () => import('@/features/users/UsersPage.vue'),
+  },
+  {
+    path: '/admin/users/new',
+    name: 'user-new',
+    meta: {
+      layout: 'app',
+      pageId: 'P-24',
+      titleKey: 'users.details.title',
+      roles: [ROLES.PORT_GM],
+    },
+    component: () => import('@/features/users/UserDetailsPage.vue'),
+  },
+  {
+    path: '/admin/users/:id(\\d+)',
+    name: 'user-details',
+    meta: {
+      layout: 'app',
+      pageId: 'P-24',
+      titleKey: 'users.details.title',
+      roles: [ROLES.PORT_GM],
+    },
+    component: () => import('@/features/users/UserDetailsPage.vue'),
+  },
+  {
     path: '/change-password',
     name: 'change-password',
     meta: { ownHeader: true, pageId: 'P-16' },

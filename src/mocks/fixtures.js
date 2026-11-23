@@ -39,6 +39,35 @@ export function seedUsers() {
   ]
 }
 
+// A user as GET /users returns it (port-api.yaml User), with the role history of UserDetail.
+const TERMINAL_ROLES = ['TERMINAL_ADMIN', 'TERMINAL_OFFICER', 'TERMINAL_SUPERVISOR']
+export function apiUserOf(u, { history = false } = {}) {
+  const assignment = (role, terminalId, from, to = null) => ({
+    role,
+    organization_unit_id: terminalId ?? 1,
+    unit_type: terminalId ? 'TERMINAL' : 'HARBOUR_AUTHORITY',
+    terminal_id: terminalId,
+    active_from: from,
+    active_to: to,
+  })
+  const terminalId = TERMINAL_ROLES.includes(u.role) ? (u.terminal_ids[0] ?? null) : null
+  const active = u.role
+    ? assignment(u.role, terminalId, u.role_from ?? '2026-10-01T08:00:00Z')
+    : null
+  return {
+    id: u.id,
+    name: u.name,
+    username: u.username,
+    phone: null,
+    is_active: u.active,
+    must_change_password: u.must_change_password,
+    version: u.version ?? `v${u.id}-1`,
+    created_at: '2026-10-01T08:00:00Z',
+    active_role: active,
+    ...(history ? { role_history: [...(active ? [active] : []), ...(u.past_roles ?? [])] } : {}),
+  }
+}
+
 // The signed-in profile the API returns (CT-03): no username, password or status.
 export function profileOf({ id, name, role, terminal_ids, must_change_password }) {
   return { id, name, role, terminal_ids, must_change_password }
