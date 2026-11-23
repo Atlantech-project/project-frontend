@@ -44,6 +44,16 @@ const isNew = computed(() => route.name === 'user-new')
 const userId = computed(() => (isNew.value ? null : route.params.id))
 const { data: user, isPending, isError, error: loadError, refetch } = useResourceItem(users, userId)
 
+// A user opened from the list shows at once from the list's copy, which has no role history
+// (User, not UserDetail): ask the server for the full record then.
+watch(
+  user,
+  (record) => {
+    if (record && !('role_history' in record)) refetch()
+  },
+  { immediate: true },
+)
+
 const form = reactive({ name: '', username: '', role: '', terminalId: '', status: 'active' })
 const errors = ref({})
 const formError = ref('')
