@@ -1,7 +1,7 @@
 // GENERATED from contracts/port-api.yaml by scripts/api-types.mjs. Do not edit by hand:
 // change the contract file and run `pnpm api:types`. Types are JSDoc only (no TypeScript).
 
-export const API_VERSION = '1.8.0'
+export const API_VERSION = '1.11.1'
 
 // ---- Schemas ----
 
@@ -19,7 +19,7 @@ export const API_VERSION = '1.8.0'
 
 /**
  * Stable error code (CT-01 error-codes.md); never changes once CT-01 is approved.
- * @typedef {'VALIDATION_FAILED' | 'VERSION_CONFLICT' | 'UNAUTHENTICATED' | 'SESSION_EXPIRED' | 'FORBIDDEN' | 'NOT_FOUND' | 'METHOD_NOT_ALLOWED' | 'ACCOUNT_DISABLED' | 'PASSWORD_CHANGE_REQUIRED' | 'DEVICE_REVOKED' | 'APP_UPDATE_REQUIRED' | 'LICENSE_READ_ONLY' | 'PLAN_LIMIT_EXCEEDED' | 'TOO_MANY_ATTEMPTS' | 'IDEMPOTENCY_KEY_REUSED' | 'SERVICE_UNAVAILABLE' | 'SERVER_ERROR' | 'BAD_REQUEST'} ErrorCode
+ * @typedef {'VALIDATION_FAILED' | 'VERSION_CONFLICT' | 'UNAUTHENTICATED' | 'SESSION_EXPIRED' | 'FORBIDDEN' | 'NOT_FOUND' | 'METHOD_NOT_ALLOWED' | 'ACCOUNT_DISABLED' | 'PASSWORD_CHANGE_REQUIRED' | 'DEVICE_REVOKED' | 'APP_UPDATE_REQUIRED' | 'LICENSE_READ_ONLY' | 'PLAN_LIMIT_EXCEEDED' | 'TOO_MANY_ATTEMPTS' | 'IDEMPOTENCY_KEY_REUSED' | 'SERVICE_UNAVAILABLE' | 'SERVER_ERROR' | 'BAD_REQUEST' | 'CONFLICT'} ErrorCode
  */
 export const ERROR_CODES = Object.freeze([
   'VALIDATION_FAILED',
@@ -40,6 +40,7 @@ export const ERROR_CODES = Object.freeze([
   'SERVICE_UNAVAILABLE',
   'SERVER_ERROR',
   'BAD_REQUEST',
+  'CONFLICT',
 ])
 
 /**
@@ -115,6 +116,74 @@ export const ERROR_CODES = Object.freeze([
  * @property {'PORT_GM' | 'PORT_STAFF' | 'MARINE_SAFETY_OFFICER' | 'PILOTAGE_MANAGER' | 'PILOTAGE_OFFICER' | 'MARINE_PILOT' | 'TUG_MANAGER' | 'TUG_OFFICER' | 'TUG_MASTER' | 'TERMINAL_ADMIN' | 'TERMINAL_OFFICER' | 'TERMINAL_SUPERVISOR' | null} role
  * @property {Array<number>} terminal_ids The terminal of a TERMINAL role; empty for every other role.
  * @property {boolean} must_change_password
+ */
+
+/**
+ * @typedef {object} RoleAssignment
+ * @property {'PORT_GM' | 'PORT_STAFF' | 'MARINE_SAFETY_OFFICER' | 'PILOTAGE_MANAGER' | 'PILOTAGE_OFFICER' | 'MARINE_PILOT' | 'TUG_MANAGER' | 'TUG_OFFICER' | 'TUG_MASTER' | 'TERMINAL_ADMIN' | 'TERMINAL_OFFICER' | 'TERMINAL_SUPERVISOR'} role
+ * @property {number} organization_unit_id
+ * @property {'HARBOUR_AUTHORITY' | 'MARINE_SERVICES' | 'TERMINAL'} unit_type
+ * @property {number | null} terminal_id
+ * @property {DateTime} active_from
+ * @property {DateTime | null} active_to
+ */
+
+/**
+ * @typedef {object} User
+ * @property {number} id
+ * @property {string} name
+ * @property {string} username
+ * @property {string | null} phone
+ * @property {boolean} is_active
+ * @property {boolean} must_change_password
+ * @property {string} version Opaque version token; send it back with every update.
+ * @property {DateTime} created_at
+ * @property {RoleAssignment | null} active_role
+ */
+
+/**
+ * @typedef {User & { role_history: Array<RoleAssignment> }} UserDetail
+ */
+
+/**
+ * @typedef {User & { one_time_password: string }} CreatedUser
+ */
+
+/**
+ * @typedef {object} CreateUserRequest
+ * @property {string} name
+ * @property {string} username Lowercased by the server; unique.
+ * @property {string | null} [phone]
+ */
+
+/**
+ * @typedef {object} VersionRequest
+ * @property {string} version The user's `version` as last read.
+ */
+
+/**
+ * @typedef {object} AssignRoleRequest
+ * @property {'PORT_GM' | 'PORT_STAFF' | 'MARINE_SAFETY_OFFICER' | 'PILOTAGE_MANAGER' | 'PILOTAGE_OFFICER' | 'MARINE_PILOT' | 'TUG_MANAGER' | 'TUG_OFFICER' | 'TUG_MASTER' | 'TERMINAL_ADMIN' | 'TERMINAL_OFFICER' | 'TERMINAL_SUPERVISOR'} role
+ * @property {number} [terminal_id] Required for TERMINAL_ADMIN, TERMINAL_OFFICER and TERMINAL_SUPERVISOR; refused for any other role.
+ * @property {string} version
+ */
+
+/**
+ * @typedef {object} UserDevice
+ * @property {number} id
+ * @property {string} device_id
+ * @property {'ANDROID' | 'IOS'} platform
+ * @property {string} app_version
+ * @property {DateTime | null} last_seen_at
+ * @property {DateTime | null} revoked_at
+ * @property {boolean} has_push_token
+ * @property {number} live_token_count Tokens that are neither revoked nor expired.
+ */
+
+/**
+ * @typedef {object} RevokeAllResult
+ * @property {number} devices_revoked
+ * @property {number} tokens_revoked
  */
 
 /**
@@ -201,6 +270,106 @@ export const AUDIT_ACTIONS = Object.freeze([
  */
 
 /**
+ * Query of GET /users.
+ * @typedef {object} UsersListQuery
+ * @property {number} [page] Page number, from 1. A page past the end returns 200 with empty data; out of range is 422.
+ * @property {number} [per_page] Items per page. Out of range is 422 (never clamped).
+ * @property {boolean} [is_active]
+ * @property {string} [q]
+ */
+
+/**
+ * Answer of GET /users (200).
+ * @typedef {object} UsersListResponse
+ * @property {Array<User>} data
+ * @property {PageMeta} meta
+ */
+
+/**
+ * Body of POST /users.
+ * @typedef {CreateUserRequest} UsersCreateBody
+ */
+
+/**
+ * Answer of POST /users (201).
+ * @typedef {CreatedUser} UsersCreateResponse
+ */
+
+/**
+ * Answer of GET /users/{user} (200).
+ * @typedef {UserDetail} UsersShowResponse
+ */
+
+/**
+ * Body of POST /users/{user}/deactivate.
+ * @typedef {VersionRequest} UsersDeactivateBody
+ */
+
+/**
+ * Answer of POST /users/{user}/deactivate (200).
+ * @typedef {User} UsersDeactivateResponse
+ */
+
+/**
+ * Body of POST /users/{user}/activate.
+ * @typedef {VersionRequest} UsersActivateBody
+ */
+
+/**
+ * Answer of POST /users/{user}/activate (200).
+ * @typedef {User} UsersActivateResponse
+ */
+
+/**
+ * Body of POST /users/{user}/roles.
+ * @typedef {AssignRoleRequest} UsersAssignRoleBody
+ */
+
+/**
+ * Answer of POST /users/{user}/roles (200).
+ * @typedef {UserDetail} UsersAssignRoleResponse
+ */
+
+/**
+ * Body of POST /users/{user}/roles/end.
+ * @typedef {VersionRequest} UsersEndRoleBody
+ */
+
+/**
+ * Answer of POST /users/{user}/roles/end (200).
+ * @typedef {UserDetail} UsersEndRoleResponse
+ */
+
+/**
+ * Query of GET /users/{user}/devices.
+ * @typedef {object} UserDevicesListQuery
+ * @property {number} [page] Page number, from 1. A page past the end returns 200 with empty data; out of range is 422.
+ * @property {number} [per_page] Items per page. Out of range is 422 (never clamped).
+ */
+
+/**
+ * Answer of GET /users/{user}/devices (200).
+ * @typedef {object} UserDevicesListResponse
+ * @property {Array<UserDevice>} data
+ * @property {PageMeta} meta
+ */
+
+/**
+ * Answer of POST /users/{user}/devices/revoke-all (200).
+ * @typedef {RevokeAllResult} UserDevicesRevokeAllResponse
+ */
+
+/**
+ * Answer of POST /users/{user}/devices/{device}/revoke (200).
+ * @typedef {UserDevice} UserDevicesRevokeResponse
+ */
+
+/**
+ * Answer of POST /users/{user}/devices/{device}/restore (200).
+ * @typedef {UserDevice} UserDevicesRestoreResponse
+ */
+
+/**
  * Answer of GET /system/info (200).
  * @typedef {SystemInfo} SystemInfoResponse
  */
@@ -212,5 +381,16 @@ export const OPERATIONS = Object.freeze({
   authChangePassword: { method: 'POST', path: '/auth/change-password' },
   authLogout: { method: 'POST', path: '/auth/logout' },
   auditLogsList: { method: 'GET', path: '/audit-logs' },
+  usersList: { method: 'GET', path: '/users' },
+  usersCreate: { method: 'POST', path: '/users' },
+  usersShow: { method: 'GET', path: '/users/{user}' },
+  usersDeactivate: { method: 'POST', path: '/users/{user}/deactivate' },
+  usersActivate: { method: 'POST', path: '/users/{user}/activate' },
+  usersAssignRole: { method: 'POST', path: '/users/{user}/roles' },
+  usersEndRole: { method: 'POST', path: '/users/{user}/roles/end' },
+  userDevicesList: { method: 'GET', path: '/users/{user}/devices' },
+  userDevicesRevokeAll: { method: 'POST', path: '/users/{user}/devices/revoke-all' },
+  userDevicesRevoke: { method: 'POST', path: '/users/{user}/devices/{device}/revoke' },
+  userDevicesRestore: { method: 'POST', path: '/users/{user}/devices/{device}/restore' },
   systemInfo: { method: 'GET', path: '/system/info' },
 })
