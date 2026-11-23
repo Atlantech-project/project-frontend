@@ -61,6 +61,17 @@ export const routes = [
     component: () => import('@/features/users/UserDetailsPage.vue'),
   },
   {
+    path: '/admin/users/:id(\\d+)/devices',
+    name: 'user-devices',
+    meta: {
+      layout: 'app',
+      pageId: 'P-25',
+      titleKey: 'devices.title',
+      roles: [ROLES.PORT_GM],
+    },
+    component: () => import('@/features/devices/DevicesPage.vue'),
+  },
+  {
     path: '/change-password',
     name: 'change-password',
     meta: { ownHeader: true, pageId: 'P-16' },

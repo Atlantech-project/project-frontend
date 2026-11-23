@@ -18,6 +18,7 @@ import { describedBy, inputClasses } from '@/components/ui/inputClasses'
 import { errorMessage, fieldMessages } from '@/api/errors'
 import { resourceKeys, useResourceItem } from '@/composables/useResource'
 import { useSessionStore } from '@/stores/session'
+import DevicesCard from '@/features/devices/DevicesCard.vue'
 import DeactivateUserDialog from './DeactivateUserDialog.vue'
 import { useDeactivate } from './useDeactivate'
 import { useUserLabels } from './useUserLabels'
@@ -185,7 +186,7 @@ const selectClass = (field) => [
 
 <!-- P-24 User Details (FE-045), Figma "P-24 / User Details": create a user (the one-time
      password is shown once), or change an existing user's role and account status. Name and
-     username are fixed after creation (decided 2026-11-23). Registered devices come with FE-046. -->
+     username are fixed after creation (decided 2026-11-23). The Registered Devices card is FE-046. -->
 <template>
   <div class="flex flex-col gap-3">
     <nav class="flex flex-col gap-2" :aria-label="t('users.details.breadcrumb')">
@@ -231,181 +232,195 @@ const selectClass = (field) => [
         </p>
       </div>
 
-      <form
-        class="max-w-[784px] overflow-hidden rounded-control border border-edge bg-card"
-        novalidate
-        @submit.prevent="save"
-      >
-        <header class="flex items-center justify-between border-b border-edge bg-subtle px-5 py-4">
-          <h2 class="type-h3 text-fg">
-            {{ t(isNew ? 'users.form.createTitle' : 'users.form.editTitle') }}
-          </h2>
-          <p class="type-caption text-fg-muted">{{ t('users.form.required') }}</p>
-        </header>
-
-        <div class="grid grid-cols-1 gap-x-4 gap-y-5 p-5 md:grid-cols-2">
-          <AtlAlert v-if="formError" tone="danger" live="assertive" class="md:col-span-2">
-            {{ formError }}
-          </AtlAlert>
-
-          <AtlInput
-            id="user-name"
-            v-model="form.name"
-            :label="`${t('users.form.name')} *`"
-            :placeholder="t('users.form.namePlaceholder')"
-            :error="errors.name"
-            :disabled="!isNew"
-            :hint="isNew ? '' : t('users.form.fixed')"
-            autocomplete="off"
-            maxlength="120"
-          />
-          <AtlInput
-            id="user-username"
-            v-model="form.username"
-            :label="`${t('users.form.username')} *`"
-            :placeholder="t('users.form.usernamePlaceholder')"
-            :error="errors.username"
-            :disabled="!isNew"
-            :hint="isNew ? t('users.form.usernameHint') : t('users.form.fixed')"
-            autocomplete="off"
-            autocapitalize="none"
-            spellcheck="false"
-            maxlength="50"
-          />
-
-          <AtlField
-            v-if="!isNew"
-            id="user-status"
-            :label="`${t('users.form.status')} *`"
-            :hint="isSelf ? t('users.form.selfHint') : ''"
+      <div class="grid grid-cols-1 items-start gap-5 xl:grid-cols-[minmax(0,1fr)_340px]">
+        <div class="flex flex-col gap-3">
+          <form
+            class="overflow-hidden rounded-control border border-edge bg-card"
+            novalidate
+            @submit.prevent="save"
           >
-            <div class="relative">
-              <select
-                id="user-status"
-                v-model="form.status"
-                :class="selectClass('status')"
-                :disabled="isSelf"
-                :aria-describedby="
-                  describedBy('user-status', { hint: isSelf ? t('users.form.selfHint') : '' })
-                "
-              >
-                <option value="active">{{ t('status.ACTIVE') }}</option>
-                <option value="inactive">{{ t('status.INACTIVE') }}</option>
-              </select>
-              <AtlIcon
-                name="chevron"
-                :size="16"
-                class="pointer-events-none absolute end-3 top-1/2 -translate-y-1/2 text-fg-muted"
-              />
-            </div>
-          </AtlField>
-
-          <AtlField
-            id="user-role"
-            :label="t('users.form.role')"
-            :hint="t('users.form.roleHint')"
-            :error="errors.role"
-          >
-            <div class="relative">
-              <select
-                id="user-role"
-                v-model="form.role"
-                :class="selectClass('role')"
-                :aria-describedby="
-                  describedBy('user-role', { error: errors.role, hint: t('users.form.roleHint') })
-                "
-              >
-                <option value="">
-                  {{ t(isNew ? 'users.form.rolePlaceholder' : 'users.noRole') }}
-                </option>
-                <option v-for="code in ASSIGNABLE_ROLES" :key="code" :value="code">
-                  {{ labels.role(code) }}
-                </option>
-              </select>
-              <AtlIcon
-                name="chevron"
-                :size="16"
-                class="pointer-events-none absolute end-3 top-1/2 -translate-y-1/2 text-fg-muted"
-              />
-            </div>
-          </AtlField>
-
-          <div v-if="needsTerminal(form.role)" class="md:col-span-2">
-            <AtlInput
-              id="user-terminal"
-              v-model="form.terminalId"
-              type="number"
-              min="1"
-              inputmode="numeric"
-              :label="`${t('users.form.terminal')} *`"
-              :hint="t('users.form.terminalHint')"
-              :error="errors.terminal_id"
-            />
-          </div>
-          <p v-else class="type-caption text-fg-muted md:col-span-2">
-            {{ t('users.form.terminalAppears') }}
-          </p>
-        </div>
-
-        <footer class="flex flex-wrap items-center gap-3 border-t border-edge bg-subtle px-5 py-4">
-          <AtlButton type="submit" :loading="saving">
-            <AppIcon name="save" />
-            {{ t('users.form.save') }}
-          </AtlButton>
-          <RouterLink
-            :to="{ name: 'users' }"
-            class="inline-flex h-control items-center rounded-control border border-edge-strong bg-card px-4 type-strong-m text-fg transition-colors hover:bg-subtle focus-visible:shadow-focus focus-visible:outline-none"
-          >
-            {{ t('users.form.cancel') }}
-          </RouterLink>
-          <AtlButton
-            v-if="!isNew && user.is_active"
-            variant="secondary"
-            class="ms-auto"
-            @click="deactivate.ask(user)"
-          >
-            <AppIcon name="ban" />
-            {{ t('users.table.deactivate') }}
-          </AtlButton>
-        </footer>
-      </form>
-
-      <section
-        v-if="!isNew && user.role_history?.length"
-        class="max-w-[784px] overflow-hidden rounded-control border border-edge bg-card"
-      >
-        <header class="px-4 py-3">
-          <h2 class="type-strong-m text-fg">{{ t('users.history.title') }}</h2>
-        </header>
-        <table class="w-full text-start">
-          <thead class="border-y border-edge bg-subtle">
-            <tr class="h-10">
-              <th
-                v-for="column in ['role', 'terminal', 'from', 'to']"
-                :key="column"
-                scope="col"
-                class="px-4 text-start type-strong-s text-fg"
-              >
-                {{ t(`users.history.${column}`) }}
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr
-              v-for="entry in user.role_history"
-              :key="`${entry.role}-${entry.active_from}`"
-              class="h-11 border-b border-edge last:border-0"
+            <header
+              class="flex items-center justify-between border-b border-edge bg-subtle px-5 py-4"
             >
-              <td class="px-4 type-body-s text-fg">{{ labels.role(entry.role) }}</td>
-              <td class="px-4 type-body-s text-fg">{{ labels.terminal(entry.terminal_id) }}</td>
-              <td class="px-4 type-body-s text-fg">{{ labels.date(entry.active_from) }}</td>
-              <td class="px-4 type-body-s text-fg">
-                {{ entry.active_to ? labels.date(entry.active_to) : t('users.history.current') }}
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </section>
+              <h2 class="type-h3 text-fg">
+                {{ t(isNew ? 'users.form.createTitle' : 'users.form.editTitle') }}
+              </h2>
+              <p class="type-caption text-fg-muted">{{ t('users.form.required') }}</p>
+            </header>
+
+            <div class="grid grid-cols-1 gap-x-4 gap-y-5 p-5 md:grid-cols-2">
+              <AtlAlert v-if="formError" tone="danger" live="assertive" class="md:col-span-2">
+                {{ formError }}
+              </AtlAlert>
+
+              <AtlInput
+                id="user-name"
+                v-model="form.name"
+                :label="`${t('users.form.name')} *`"
+                :placeholder="t('users.form.namePlaceholder')"
+                :error="errors.name"
+                :disabled="!isNew"
+                :hint="isNew ? '' : t('users.form.fixed')"
+                autocomplete="off"
+                maxlength="120"
+              />
+              <AtlInput
+                id="user-username"
+                v-model="form.username"
+                :label="`${t('users.form.username')} *`"
+                :placeholder="t('users.form.usernamePlaceholder')"
+                :error="errors.username"
+                :disabled="!isNew"
+                :hint="isNew ? t('users.form.usernameHint') : t('users.form.fixed')"
+                autocomplete="off"
+                autocapitalize="none"
+                spellcheck="false"
+                maxlength="50"
+              />
+
+              <AtlField
+                v-if="!isNew"
+                id="user-status"
+                :label="`${t('users.form.status')} *`"
+                :hint="isSelf ? t('users.form.selfHint') : ''"
+              >
+                <div class="relative">
+                  <select
+                    id="user-status"
+                    v-model="form.status"
+                    :class="selectClass('status')"
+                    :disabled="isSelf"
+                    :aria-describedby="
+                      describedBy('user-status', { hint: isSelf ? t('users.form.selfHint') : '' })
+                    "
+                  >
+                    <option value="active">{{ t('status.ACTIVE') }}</option>
+                    <option value="inactive">{{ t('status.INACTIVE') }}</option>
+                  </select>
+                  <AtlIcon
+                    name="chevron"
+                    :size="16"
+                    class="pointer-events-none absolute end-3 top-1/2 -translate-y-1/2 text-fg-muted"
+                  />
+                </div>
+              </AtlField>
+
+              <AtlField
+                id="user-role"
+                :label="t('users.form.role')"
+                :hint="t('users.form.roleHint')"
+                :error="errors.role"
+              >
+                <div class="relative">
+                  <select
+                    id="user-role"
+                    v-model="form.role"
+                    :class="selectClass('role')"
+                    :aria-describedby="
+                      describedBy('user-role', {
+                        error: errors.role,
+                        hint: t('users.form.roleHint'),
+                      })
+                    "
+                  >
+                    <option value="">
+                      {{ t(isNew ? 'users.form.rolePlaceholder' : 'users.noRole') }}
+                    </option>
+                    <option v-for="code in ASSIGNABLE_ROLES" :key="code" :value="code">
+                      {{ labels.role(code) }}
+                    </option>
+                  </select>
+                  <AtlIcon
+                    name="chevron"
+                    :size="16"
+                    class="pointer-events-none absolute end-3 top-1/2 -translate-y-1/2 text-fg-muted"
+                  />
+                </div>
+              </AtlField>
+
+              <div v-if="needsTerminal(form.role)" class="md:col-span-2">
+                <AtlInput
+                  id="user-terminal"
+                  v-model="form.terminalId"
+                  type="number"
+                  min="1"
+                  inputmode="numeric"
+                  :label="`${t('users.form.terminal')} *`"
+                  :hint="t('users.form.terminalHint')"
+                  :error="errors.terminal_id"
+                />
+              </div>
+              <p v-else class="type-caption text-fg-muted md:col-span-2">
+                {{ t('users.form.terminalAppears') }}
+              </p>
+            </div>
+
+            <footer
+              class="flex flex-wrap items-center gap-3 border-t border-edge bg-subtle px-5 py-4"
+            >
+              <AtlButton type="submit" :loading="saving">
+                <AppIcon name="save" />
+                {{ t('users.form.save') }}
+              </AtlButton>
+              <RouterLink
+                :to="{ name: 'users' }"
+                class="inline-flex h-control items-center rounded-control border border-edge-strong bg-card px-4 type-strong-m text-fg transition-colors hover:bg-subtle focus-visible:shadow-focus focus-visible:outline-none"
+              >
+                {{ t('users.form.cancel') }}
+              </RouterLink>
+              <AtlButton
+                v-if="!isNew && user.is_active"
+                variant="secondary"
+                class="ms-auto"
+                @click="deactivate.ask(user)"
+              >
+                <AppIcon name="ban" />
+                {{ t('users.table.deactivate') }}
+              </AtlButton>
+            </footer>
+          </form>
+
+          <section
+            v-if="!isNew && user.role_history?.length"
+            class="overflow-hidden rounded-control border border-edge bg-card"
+          >
+            <header class="px-4 py-3">
+              <h2 class="type-strong-m text-fg">{{ t('users.history.title') }}</h2>
+            </header>
+            <table class="w-full text-start">
+              <thead class="border-y border-edge bg-subtle">
+                <tr class="h-10">
+                  <th
+                    v-for="column in ['role', 'terminal', 'from', 'to']"
+                    :key="column"
+                    scope="col"
+                    class="px-4 text-start type-strong-s text-fg"
+                  >
+                    {{ t(`users.history.${column}`) }}
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  v-for="entry in user.role_history"
+                  :key="`${entry.role}-${entry.active_from}`"
+                  class="h-11 border-b border-edge last:border-0"
+                >
+                  <td class="px-4 type-body-s text-fg">{{ labels.role(entry.role) }}</td>
+                  <td class="px-4 type-body-s text-fg">{{ labels.terminal(entry.terminal_id) }}</td>
+                  <td class="px-4 type-body-s text-fg">{{ labels.date(entry.active_from) }}</td>
+                  <td class="px-4 type-body-s text-fg">
+                    {{
+                      entry.active_to ? labels.date(entry.active_to) : t('users.history.current')
+                    }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </section>
+        </div>
+        <DevicesCard :user-id="isNew ? null : user.id" :user-name="isNew ? '' : user.name" />
+      </div>
     </template>
 
     <AtlDialog :visible="!!created" :title="t('users.created.title')" :closable="false">

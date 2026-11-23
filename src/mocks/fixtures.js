@@ -86,3 +86,28 @@ export function seedAuditLogs() {
     occurred_at: new Date(Date.UTC(2026, 9, 9, 10, 30 - (i % 30))).toISOString(),
   }))
 }
+
+// Registered mobile devices (port-api.yaml UserDevice) with the user they belong to.
+export function seedDevices() {
+  const device = (id, user_id, platform, app_version, extra = {}) => ({
+    id,
+    user_id,
+    device_id: `${platform.toLowerCase()}-${id}a7f3c9`,
+    platform,
+    app_version,
+    last_seen_at: `2026-10-0${id}T11:58:00Z`,
+    revoked_at: null,
+    has_push_token: true,
+    live_token_count: 1,
+    ...extra,
+  })
+  return [
+    device(1, 4, 'ANDROID', '2.4.0'),
+    device(2, 4, 'IOS', '2.4.1'),
+    device(3, 4, 'ANDROID', '2.3.9', {
+      revoked_at: '2026-10-05T09:00:00Z',
+      live_token_count: 0,
+      has_push_token: false,
+    }),
+  ]
+}
