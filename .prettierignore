@@ -4,3 +4,4 @@ pnpm-lock.yaml
 src/brand
 public/brand
 *.md
+contracts

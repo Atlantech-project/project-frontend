@@ -6,7 +6,7 @@ const props = defineProps({
   size: { type: [Number, String], default: 24 },
 })
 
-// Open, round-jointed line icons, as the brand asks. Replaced by the approved set in FE-018.
+// Open, round-jointed line icons for the landing page. App screens use AppIcon (FE-018).
 const ICONS = {
   ship: [
     'M3 17l2 4h14l2-4',
@@ -30,8 +30,12 @@ const ICONS = {
   grid: ['M4 4h6v6H4z', 'M14 4h6v6h-6z', 'M4 14h6v6H4z', 'M14 14h6v6h-6z'],
   pulse: ['M3 12h4l3-7 4 14 3-7h4'],
   check: ['M20 6L9 17l-5-5'],
+  chevron: ['M6 9l6 6 6-6'],
   shield: ['M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z', 'M9 12l2 2 4-4'],
   arrow: ['M12 5v14', 'M6 13l6 6 6-6'],
+  back: ['M19 12H5', 'M11 6l-6 6 6 6'],
+  bell: ['M6 9a6 6 0 0 1 12 0c0 6 2.5 7.5 2.5 7.5h-17S6 15 6 9z', 'M10 20a2 2 0 0 0 4 0'],
+  logout: ['M10 4H5v16h5', 'M15 8l4 4-4 4', 'M19 12H9'],
   'arrow-up': ['M12 19V5', 'M6 11l6-6 6 6'],
   refresh: ['M20 11a8 8 0 1 0-2.3 5.7', 'M20 4v7h-7'],
   home: ['M3 11l9-7 9 7', 'M5 10v10h14V10', 'M10 20v-6h4v6'],
