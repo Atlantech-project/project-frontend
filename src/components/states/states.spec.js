@@ -1,12 +1,13 @@
 import { describe, it, expect } from 'vitest'
 import { mount } from '@vue/test-utils'
+import PrimeVue from 'primevue/config'
 import { i18n } from '@/i18n'
 import en from '@/i18n/en.json'
 import AtlLoadingState from './AtlLoadingState.vue'
 import AtlEmptyState from './AtlEmptyState.vue'
 import AtlErrorState from './AtlErrorState.vue'
 
-const opts = { global: { plugins: [i18n] } }
+const opts = { global: { plugins: [i18n, [PrimeVue, { unstyled: true }]] } }
 
 describe('screen states', () => {
   it('loading announces itself with the default message', () => {

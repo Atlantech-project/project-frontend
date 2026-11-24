@@ -2,7 +2,7 @@
 const props = defineProps({
   animated: { type: Boolean, default: false },
   // Colour of the lowest layer; set it to the next section's background to blend into it.
-  base: { type: String, default: 'var(--atl-deep-navy)' },
+  base: { type: String, default: 'var(--color-navy-800)' },
 })
 
 // The brand wave motif: four layers in the palette (light teal, gold, mid teal, navy).
@@ -10,19 +10,19 @@ const props = defineProps({
 const layers = [
   {
     d: 'M0 38 C 200 10, 400 10, 600 32 S 1000 56, 1200 38',
-    fill: 'var(--atl-light-teal)',
+    fill: 'var(--color-teal-200)',
     opacity: 0.55,
     speed: 18,
   },
   {
     d: 'M0 46 C 220 22, 420 24, 640 40 S 1010 58, 1200 46',
-    fill: 'var(--atl-muted-gold)',
+    fill: 'var(--color-gold-500)',
     opacity: 1,
     speed: 14,
   },
   {
     d: 'M0 52 C 240 34, 460 36, 680 48 S 1030 62, 1200 52',
-    fill: 'var(--atl-mid-teal)',
+    fill: 'var(--color-teal-500)',
     opacity: 1,
     speed: 11,
   },

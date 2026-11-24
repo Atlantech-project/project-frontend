@@ -17,10 +17,10 @@ const { t } = useI18n()
       <!-- The ATLANTECH symbol as a quiet, single-colour silhouette -->
       <span class="atl-empty__mark" :style="{ '--atl-mark': `url(${mark})` }" aria-hidden="true" />
     </slot>
-    <h2 class="font-display text-lg font-semibold text-text">
+    <h2 class="type-h3 text-fg">
       {{ title || t('states.emptyTitle') }}
     </h2>
-    <p class="max-w-md text-muted">{{ message || t('states.emptyBody') }}</p>
+    <p class="max-w-md text-fg-secondary">{{ message || t('states.emptyBody') }}</p>
     <div v-if="$slots.default" class="mt-2 flex flex-wrap justify-center gap-2">
       <slot />
     </div>
@@ -33,7 +33,7 @@ const { t } = useI18n()
   display: block;
   width: 120px;
   aspect-ratio: 640 / 489;
-  background: var(--atl-text-muted);
+  background: var(--color-fg-secondary);
   opacity: 0.35;
   mask: var(--atl-mark) center / contain no-repeat;
 }

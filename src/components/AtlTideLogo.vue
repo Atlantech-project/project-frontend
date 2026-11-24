@@ -30,23 +30,23 @@ defineProps({
 }
 
 .atl-tide--light {
-  background: color-mix(in srgb, var(--atl-deep-navy) 12%, transparent);
+  background: color-mix(in srgb, var(--color-navy-800) 12%, transparent);
 }
 
 .atl-tide--dark {
-  background: color-mix(in srgb, var(--atl-off-white) 16%, transparent);
+  background: color-mix(in srgb, var(--color-neutral-200) 16%, transparent);
 }
 
 .atl-tide__water {
   position: absolute;
   inset: auto 0 0;
   height: 70%;
-  background: linear-gradient(var(--atl-mid-teal), var(--atl-deep-navy));
+  background: linear-gradient(var(--color-teal-500), var(--color-navy-800));
   animation: atl-tide 3.2s ease-in-out infinite alternate;
 }
 
 .atl-tide--dark .atl-tide__water {
-  background: linear-gradient(var(--atl-light-teal), var(--atl-mid-teal));
+  background: linear-gradient(var(--color-teal-200), var(--color-teal-500));
 }
 
 /* The moving surface: a gold crest over a teal swell, tiled so it can slide forever. */

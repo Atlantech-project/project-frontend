@@ -1,18 +1,92 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { ROLES } from '@/app/roles'
 import { applyTheme } from '@/composables/useTheme'
+import { useSessionStore } from '@/stores/session'
+import { createAuthGuard } from './guard'
 
 // Each feature exports its own routes; meta.pageId links a route to the Screens spec (P-xx).
-// Role guards and P-20 Access Denied come with FE-021.
+// Pages need a signed-in web user unless meta.public; meta.roles narrows them further (FE-021).
+// meta.layout 'app' opens the page inside the app shell (FE-020) with meta.titleKey as its title.
 export const routes = [
   {
     path: '/',
     name: 'landing',
-    meta: { ownHeader: true },
+    meta: { ownHeader: true, public: true },
     component: () => import('@/app/pages/LandingPage.vue'),
+  },
+  {
+    path: '/login',
+    name: 'login',
+    meta: { ownHeader: true, pageId: 'P-16', public: true },
+    component: () => import('@/features/auth/PortLoginPage.vue'),
+  },
+  {
+    path: '/home',
+    name: 'home',
+    meta: { layout: 'app', pageId: 'P-17', titleKey: 'nav.home' },
+    component: () => import('@/features/home/HomePage.vue'),
+  },
+  {
+    path: '/admin/audit',
+    name: 'audit',
+    meta: { layout: 'app', pageId: 'P-29', titleKey: 'audit.title', roles: [ROLES.PORT_GM] },
+    component: () => import('@/features/audit/AuditPage.vue'),
+  },
+  {
+    path: '/admin/users',
+    name: 'users',
+    meta: { layout: 'app', pageId: 'P-23', titleKey: 'users.title', roles: [ROLES.PORT_GM] },
+    component: () => import('@/features/users/UsersPage.vue'),
+  },
+  {
+    path: '/admin/users/new',
+    name: 'user-new',
+    meta: {
+      layout: 'app',
+      pageId: 'P-24',
+      titleKey: 'users.details.title',
+      roles: [ROLES.PORT_GM],
+    },
+    component: () => import('@/features/users/UserDetailsPage.vue'),
+  },
+  {
+    path: '/admin/users/:id(\\d+)',
+    name: 'user-details',
+    meta: {
+      layout: 'app',
+      pageId: 'P-24',
+      titleKey: 'users.details.title',
+      roles: [ROLES.PORT_GM],
+    },
+    component: () => import('@/features/users/UserDetailsPage.vue'),
+  },
+  {
+    path: '/admin/users/:id(\\d+)/devices',
+    name: 'user-devices',
+    meta: {
+      layout: 'app',
+      pageId: 'P-25',
+      titleKey: 'devices.title',
+      roles: [ROLES.PORT_GM],
+    },
+    component: () => import('@/features/devices/DevicesPage.vue'),
+  },
+  {
+    path: '/change-password',
+    name: 'change-password',
+    meta: { ownHeader: true, pageId: 'P-16' },
+    component: () => import('@/features/auth/ChangePasswordPage.vue'),
+  },
+  {
+    path: '/access-denied',
+    name: 'access-denied',
+    meta: { ownHeader: true, pageId: 'P-20' },
+    component: () => import('@/features/auth/AccessDeniedPage.vue'),
   },
   {
     path: '/error',
     name: 'error',
+    meta: { public: true },
     component: () => import('@/app/pages/ErrorPage.vue'),
   },
   // Dev builds only: preview of the shared loading, empty and error states.
@@ -21,6 +95,7 @@ export const routes = [
         {
           path: '/dev/states',
           name: 'dev-states',
+          meta: { public: true },
           component: () => import('@/app/pages/StatesPreviewPage.vue'),
         },
       ]
@@ -28,6 +103,7 @@ export const routes = [
   {
     path: '/:pathMatch(.*)*',
     name: 'not-found',
+    meta: { public: true },
     component: () => import('@/app/pages/NotFoundPage.vue'),
   },
 ]
@@ -42,6 +118,8 @@ export const router = createRouter({
     return { top: 0 }
   },
 })
+
+router.beforeEach(createAuthGuard(() => useSessionStore()))
 
 // Every page shows the visitor's chosen look, light or dark.
 router.afterEach(() => applyTheme())

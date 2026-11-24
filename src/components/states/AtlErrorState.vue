@@ -1,5 +1,6 @@
 <script setup>
 import { useI18n } from 'vue-i18n'
+import AtlButton from '@/components/ui/AtlButton.vue'
 
 defineProps({
   title: { type: String, default: '' },
@@ -15,7 +16,7 @@ const { t } = useI18n()
 <template>
   <div role="alert" class="grid justify-items-center gap-3 px-4 py-12 text-center">
     <svg
-      class="text-danger"
+      class="text-status-danger-fg"
       width="48"
       height="48"
       viewBox="0 0 24 24"
@@ -30,19 +31,12 @@ const { t } = useI18n()
       <path d="M12 7.5v5.5" />
       <path d="M12 16.5h.01" />
     </svg>
-    <h2 class="font-display text-lg font-semibold text-text">
+    <h2 class="type-h3 text-fg">
       {{ title || t('states.errorTitle') }}
     </h2>
-    <p class="max-w-md text-muted">{{ message || t('states.errorBody') }}</p>
+    <p class="max-w-md text-fg-secondary">{{ message || t('states.errorBody') }}</p>
     <div class="mt-2 flex flex-wrap justify-center gap-2">
-      <button
-        v-if="retryable"
-        type="button"
-        class="rounded-[var(--atl-radius-sm)] bg-primary px-4 py-2 font-semibold text-on-primary"
-        @click="emit('retry')"
-      >
-        {{ t('states.retry') }}
-      </button>
+      <AtlButton v-if="retryable" :label="t('states.retry')" @click="emit('retry')" />
       <slot />
     </div>
   </div>
